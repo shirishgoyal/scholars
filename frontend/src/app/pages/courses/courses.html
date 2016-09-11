@@ -1,0 +1,47 @@
+<div class="horizontal-scroll">
+
+    <!--<pre>{{vm.courses|json}}</pre>-->
+
+  <table class="table" st-table="vm.courses">
+    <thead>
+    <tr class="sortable ">
+      <th >#</th>
+      <th st-sort="name">Name</th>
+      <th st-sort="status">Status</th>
+      <th st-sort="owner.username">Owner</th>
+    </tr>
+    <!--<tr>-->
+      <!--<th></th>-->
+      <!--<th><input st-search="name" placeholder="Search Name" class="input-sm form-control search-input"-->
+                 <!--type="search"/></th>-->
+      <!--<th><input st-search="status" placeholder="Search Status" class="input-sm form-control search-input"-->
+                 <!--type="search"/></th>-->
+      <!--<th><input st-search="owner" placeholder="Search Owner" class="input-sm form-control search-input"-->
+                 <!--type="search"/></th>-->
+    <!--</tr>-->
+    </thead>
+    <tbody>
+    <tr ng-repeat="item in vm.courses">
+      <td>{{$index+1}}</td>
+      <td><a ui-sref="course({id:item.id})">{{item.name}}</a></td>
+      <td>{{item.status}}</td>
+      <td>{{item.owner.username}}</td>
+    </tr>
+    </tbody>
+    <tfoot>
+    <!--<tr>-->
+      <!--<td colspan="4" class="text-center">-->
+        <!--<div st-pagination="" st-items-by-page="pageSize" st-displayed-pages="5"></div>-->
+      <!--</td>-->
+    <!--</tr>-->
+    </tfoot>
+  </table>
+
+  <!--<div class="form-group select-page-size-wrap ">-->
+    <!--<label>Rows on page-->
+      <!--<select class="form-control selectpicker show-tick" title="Rows on page" selectpicker-->
+              <!--ng-model="vm.pageSize" ng-options="i for i in [5,10,15,20,25]">-->
+      <!--</select>-->
+    <!--</label>-->
+  <!--</div>-->
+</div>

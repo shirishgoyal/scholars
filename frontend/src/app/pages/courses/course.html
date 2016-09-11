@@ -1,0 +1,127 @@
+<div class="row" ng-cloak>
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div ba-panel ba-panel-title="{{vm.course.name}}" ba-panel-class="with-scroll">
+
+            <div class="row">
+                <div class="col-lg-8 col-md-12 col-sm-12">
+                    <div class="slider-box">
+                        <div uib-carousel active="vm.activeSlideIndex" interval="0" no-wrap="noWrapSlides">
+                            <div uib-slide ng-repeat="slide in vm.course.slides track by slide.id"
+                                 index="slide.position">
+                                <img ng-src="{{slide.image}}" style="margin:auto;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12 col-sm-12">
+
+                    <ul class="list-inline list-unstyled" style="text-align: center">
+                        <li><button type="button" class="btn-warning" ng-click="vm.back(5)" ng-disabled="vm.activeSlideIndex < 5"><i class="ion-ios-rewind"></i></button></li>
+                        <li><button type="button" class="btn-warning" ng-click="vm.back(1)" ng-disabled="vm.activeSlideIndex < 1"><i class="ion-arrow-left-b"></i></button></li>
+                        <li>Slide {{vm.activeSlideIndex + 1 }} of {{vm.course.slides.length}}</li>
+                        <li><button type="button" class="btn-warning" ng-click="vm.forward(1)" ng-disabled="vm.activeSlideIndex >= vm.course.slides.length - 1"><i class="ion-arrow-right-b"></i></button></li>
+                        <li><button type="button" class="btn-warning" ng-click="vm.forward(5)" ng-disabled="vm.activeSlideIndex >= vm.course.slides.length - 5"><i class="ion-ios-fastforward"></i></button></li>
+                    </ul>
+
+                    <h5 ng-bind-html="vm.activeSlide.notes"></h5>
+
+                    <div ng-if="vm.activeSlide.status==0">
+                        <button class="btn btn-primary" ng-click="vm.assign()"><i class="ion-user"></i> Assign
+                        </button>
+                    </div>
+
+                    <div ng-if="vm.activeSlide.status>2">
+                        <audio controls ngf-src="vm.activeSlide.audio"></audio>
+                    </div>
+                    <div ng-if="vm.activeSlide.status==2">
+                        <div class="alert bg-warning"><h4>Slide is ready. Please move to next slide.</h4></div>
+                    </div>
+                    <div ng-if="vm.activeSlide.status==1 && vm.activeSlide.assigned_to.id!=vm.user.id">
+                        <h4>Recording in progress...</h4>
+                    </div>
+                    <div ng-if="vm.activeSlide.status==1 && vm.activeSlide.assigned_to.id==vm.user.id">
+                        <button class="btn btn-warning" ng-click="vm.release()" style="margin-bottom:10px;"><i
+                                class="ion-user"></i> Release
+                        </button>
+
+                        <ng-audio-recorder id='audioInput'
+                                           audio-model='vm.recordedInput'
+                                           show-player="true"
+                                           convert-mp3="true"
+                                           on-conversion-complete="vm.submit(blob)"
+                        >
+                            <!-- Start controls, exposed via recorder-->
+                            <div ng-if="recorder.isAvailable">
+                                <div ng-if="recorder.status.isDenied === true" style="color: red;">
+                                    You need to grant permission for this application to use your microphone.
+                                </div>
+                                <button ng-click="recorder.startRecord()" type="button" class="btn btn-primary"
+                                        ng-hide="recorder.status.isDenied === true || recorder.status.isRecording">
+                                    <i class="ion-record"></i> Record
+                                </button>
+                                <button ng-click="recorder.stopRecord()" type="button" class="btn btn-primary"
+                                        ng-hide="recorder.status.isRecording === false">
+                                    <i class="ion-stop"></i> Stop
+                                </button>
+                                <!--<button ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()"-->
+                                <!--type="button" class="btn btn-primary" ng-disabled="recorder.status.isRecording || !recorder.audioModel">-->
+                                <!--<i class="ion-play" ng-if="recorder.status.isStopped || recorder.status.isPaused"></i>-->
+                                <!--<i class="ion-pause" ng-if="recorder.status.isPlaying"></i> {{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}}-->
+                                <!--</button>-->
+                                <button ng-click="recorder.save('audio.mp3')" class="btn btn-primary"
+                                        ng-hide="recorder.status.isRecording || !recorder.audioModel">
+                                    <i class="ion-download"></i> Download
+                                </button>
+
+
+                            </div>
+
+                            <div ng-if="!recorder.isAvailable">
+                                Your browser does not support this feature natively, please use latest version of <a
+                                    href="https://www.google.com/chrome/browser" target="_blank">Google Chrome</a> or <a
+                                    href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Mozilla
+                                Firefox</a>.
+                                If you're on
+                                Safari or Internet Explorer, you can install <a
+                                    href="https://get.adobe.com/flashplayer/">Adobe
+                                Flash</a> to
+                                use this feature.
+                            </div>
+
+                            <div>
+                                <div ng-show="recorder.status.isConverting">
+                                    Please wait while your recording is processed.
+                                </div>
+
+                                <div ng-show="recorder.isHtml5 && recorder.status.isRecording">
+                                    <ng-audio-recorder-analyzer></ng-audio-recorder-analyzer>
+                                </div>
+                                <!--<div ng-show="!recorder.status.isRecording && recorder.audioModel">-->
+                                <!--<ng-audio-recorder-wave-view wave-color="#8C1515"-->
+                                <!--bar-color="black"></ng-audio-recorder-wave-view>-->
+                                <!--</div>-->
+                            </div>
+
+                            <h2 style="font-family: sans-serif; text-align: center; width: 60px; border-radius: 5px;
+        border: solid 2px #8C1515; padding: 10px 5px;" ng-if="recorder.status.isRecording">
+                                {{recorder.elapsedTime > 9 ? recorder.elapsedTime : ('0'+recorder.elapsedTime)}}
+                            </h2>
+                            <!-- End controls-->
+                        </ng-audio-recorder>
+
+                        <form name="form" style="margin-top: 10px;">
+                            <button class="btn btn-primary" ngf-select="vm.upload(file)" ng-model="file" name="file"
+                                    ngf-pattern="'audio/mp3'"
+                                    ngf-accept="'audio/mp3'" ngf-max-size="20MB"><i class="ion-upload"></i> Upload
+                            </button>
+                            <audio controls ngf-src="file"></audio>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--<pre>{{vm.course|json}}</pre>-->
