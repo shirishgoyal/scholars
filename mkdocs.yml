@@ -1,0 +1,11 @@
+site_name: scholars
+site_description: Crowdsourcing Education and Research
+repo_url: https://github.com/shirishgoyal/scholars
+site_dir: site
+copyright: Copyright &copy; 2015, <a href="https://github.com/shirishgoyal">shirishgoyal</a>.
+
+pages:
+  - Home: 'index.md'
+  - API:
+    - Authentication: 'api/authentication.md'
+    - Users: 'api/users.md'

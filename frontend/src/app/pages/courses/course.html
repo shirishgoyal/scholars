@@ -48,7 +48,7 @@
                                            audio-model='vm.recordedInput'
                                            show-player="true"
                                            convert-mp3="true"
-                                           on-conversion-complete="vm.submit(blob)"
+                                           on-conversion-complete="vm.updateAudio(recorder)"
                         >
                             <!-- Start controls, exposed via recorder-->
                             <div ng-if="recorder.isAvailable">
@@ -68,10 +68,10 @@
                                 <!--<i class="ion-play" ng-if="recorder.status.isStopped || recorder.status.isPaused"></i>-->
                                 <!--<i class="ion-pause" ng-if="recorder.status.isPlaying"></i> {{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}}-->
                                 <!--</button>-->
-                                <button ng-click="recorder.save('audio.mp3')" class="btn btn-primary"
-                                        ng-hide="recorder.status.isRecording || !recorder.audioModel">
-                                    <i class="ion-download"></i> Download
-                                </button>
+                                <!--<button ng-click="recorder.save('audio.mp3')" class="btn btn-primary"-->
+                                        <!--ng-hide="recorder.status.isRecording || !recorder.audioModel">-->
+                                    <!--<i class="ion-download"></i> Download-->
+                                <!--</button>-->
 
 
                             </div>
@@ -110,9 +110,11 @@
                         </ng-audio-recorder>
 
                         <form name="form" style="margin-top: 10px;">
-                            <button class="btn btn-primary" ngf-select="vm.upload(file)" ng-model="file" name="file"
-                                    ngf-pattern="'audio/mp3'"
-                                    ngf-accept="'audio/mp3'" ngf-max-size="20MB"><i class="ion-upload"></i> Upload
+                            <!--<button class="btn btn-primary" ngf-select="vm.upload(file)" ng-model="file" name="file"-->
+                                    <!--ngf-pattern="'audio/mp3'"-->
+                                    <!--ngf-accept="'audio/mp3'" ngf-max-size="20MB"><i class="ion-upload"></i> Upload-->
+                            <!--</button>-->
+                            <button class="btn btn-primary" ng-click="vm.submit()" ng-disabled="vm.audio==null"><i class="ion-upload"></i> Submit
                             </button>
                             <audio controls ngf-src="file"></audio>
                         </form>
