@@ -1,7 +1,7 @@
 import io
 import os
-
 import subprocess
+
 from apiclient import discovery
 from apiclient.http import MediaIoBaseDownload
 from django.conf import settings
@@ -54,6 +54,8 @@ def export(model_id, file_id):
 
     total = generate_images(pdf, folder, model_id)
     generate_notes(pptx, folder, model_id)
+    generate_video_slides(total, folder, model_id)
+    merge_video(folder)
 
 
 def export_file(service, model_id, file_id, mime_type, name):
@@ -122,7 +124,6 @@ def generate_images(pdf, folder, model_id):
     return total
 
 
-
 def slide_number_from_xml_file(filename):
     """
     Integer slide number from filename
@@ -168,7 +169,7 @@ def generate_notes(pptx, folder, model_id):
 
         for node in noteslist:
             xmlTag = node.toxml()
-            xmlData = xmlTag # .replace('<a:t>', '').replace('</a:t>', '').replace('<a:t/>', '')
+            xmlData = xmlTag.replace('<a:t>', '').replace('</a:t>', '').replace('<a:t/>', '')
             # concatenate the xmlData to the tempstring for the particular slideNumber index.
             tempstring = tempstring + xmlData + '\n\n'
 
@@ -188,37 +189,44 @@ def generate_notes(pptx, folder, model_id):
         with open(filename, 'w') as f:
             f.write(tempstring.encode('utf-8', 'ignore'))
 
-    def generate_video_slides(total, folder, model_id):
-        video_folder = os.path.join(folder, 'videos')
-        if not os.path.exists(video_folder):
-            os.makedirs(video_folder)
 
-        clear_folder(video_folder)
+def generate_video_slides(total, folder, model_id):
+    video_folder = os.path.join(folder, 'videos')
+    if not os.path.exists(video_folder):
+        os.makedirs(video_folder)
 
-        filename = os.path.join(folder, "video.txt")
-        file = open(filename, "w")
+    clear_folder(video_folder)
 
-        for count in range(total):
-            sequence = '%03d' % count
-            generate_video(sequence)
-            file.write("file 'videos/%s.mp4'\n" % sequence)
+    filename = os.path.join(folder, "videos", "video.txt")
+    file = open(filename, "w")
 
-        file.close()
+    for count in range(total):
+        sequence = '%03d' % count
+        generate_video(folder, sequence)
+
+        video_seq = os.path.join(folder, 'videos/%s.mp4' % sequence)
+        file.write("file '%s'\n" % video_seq)
+
+    file.close()
 
 
-def generate_video(sequence):
+def generate_video(folder, sequence):
     print "Generating frames..."
 
     # ffmpeg -r 25 -i %02d.png -c:v libx264 -r 30 -pix_fmt yuv420p slideshow.mp4
     # ffmpeg -loop 1 -i image.jpg -i audio.wav -c:v libx264 -tune stillimage -c:a aac -strict experimental -b:a 192k -pix_fmt yuv420p -shortest out.mp4
 
+    audio_seq = os.path.join(folder, 'audio/%s.mp3' % sequence)
+    image_seq = os.path.join(folder, 'images/%s.png' % sequence)
+    video_seq = os.path.join(folder, 'videos/%s.mp4' % sequence)
+
     # check if audio exists for slide
-    if os.path.exists('audio/%s.mp3' % sequence):
+    if os.path.exists(audio_seq):
         command = [FFMPEG_BIN,
                    '-y',  # (optional) overwrite output file if it exists
                    '-loop', '1',
-                   '-i', 'images/%s.png' % sequence,  # input comes from a
-                   '-i', 'audio/%s.mp3' % sequence,  # input comes from a folder
+                   '-i', image_seq,  # input comes from a
+                   '-i', audio_seq,  # input comes from a folder
                    '-strict', 'experimental',
                    '-tune', 'stillimage',
                    '-c:v', 'libx264',  # video encoder
@@ -227,17 +235,34 @@ def generate_video(sequence):
                    '-ac', '2',  # audio channels
                    '-pix_fmt', 'yuv420p',
                    '-shortest',  # map audio to full video length
-                   'videos/%s.mp4' % sequence]
+                   video_seq]
     else:
         command = [FFMPEG_BIN,
                    '-y',  # (optional) overwrite output file if it exists
                    '-loop', '1',
-                   '-i', 'images/%s.png' % sequence,  # input comes from a folder
+                   '-i', image_seq,  # input comes from a folder
                    '-c:v', 'libx264',
                    '-t', '5',  # duration
                    '-pix_fmt', 'yuv420p',
                    '-an',  # Tells FFMPEG not to expect any audio
-                   'videos/%s.mp4' % sequence]
+                   video_seq]
+
+    subprocess.call(command, stdout=None, stderr=subprocess.STDOUT)
+
+
+def merge_video(folder):
+    print "Generating video..."
+
+    video_spec = os.path.join(folder, "videos", "video.txt")
+    video_path = os.path.join(folder, "videos", "video.mp4")
+
+    # ffmpeg -f concat -i mylist.txt -c copy output
+    command = [FFMPEG_BIN,
+               '-f', 'concat',
+               '-safe', '0',
+               '-i', video_spec,
+               '-c', 'copy',
+               video_path]
 
     subprocess.call(command, stdout=None, stderr=subprocess.STDOUT)
 
