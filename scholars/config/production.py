@@ -20,7 +20,7 @@ class Production(Common):
     INSTALLED_APPS = Common.INSTALLED_APPS
     SECRET_KEY = values.SecretValue()
 
-    DATABASES = values.DatabaseURLValue(os.environ.get('DATABASE', 'postgres://localhost/scholars'))
+    DATABASES = values.DatabaseURLValue()
 
     # django-secure
     # http://django-secure.readthedocs.org/en/v0.1.2/settings.html

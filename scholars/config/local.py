@@ -33,10 +33,10 @@ class Local(Common):
     VERSATILEIMAGEFIELD_SETTINGS['create_images_on_demand'] = True
 
     # Django RQ local settings
-    RQ_QUEUES = {
-        'default': {
-            'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379'),
-            'DB': 0,
-            'DEFAULT_TIMEOUT': 500,
-        },
-    }
+    # RQ_QUEUES = {
+    #     'default': {
+    #         'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379'),
+    #         'DB': 0,
+    #         'DEFAULT_TIMEOUT': 500,
+    #     },
+    # }
