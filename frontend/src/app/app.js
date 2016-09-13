@@ -4,6 +4,7 @@ angular.module('BlurAdmin', [
     'ngAnimate',
     'ngCookies',
     'ngMessages',
+    'ngSanitize',
     'ngLodash',
     'ui.bootstrap',
     'ui.sortable',

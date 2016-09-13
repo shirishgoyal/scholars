@@ -9,7 +9,7 @@
         .controller('CoursePageCtrl', CoursePageCtrl);
 
     /** @ngInject */
-    function CoursePageCtrl($scope, $state, $stateParams, $log, lodash, Auth, Course, Slide) {
+    function CoursePageCtrl($scope, $state, $stateParams, $log, $sce, lodash, Auth, Course, Slide) {
         var vm = this;
 
         vm.user = Auth.getAccount();
@@ -21,7 +21,7 @@
 
             if (newVal != null && newVal != oldVal && vm.course != null && vm.course.hasOwnProperty('slides') && vm.course.slides) {
                 vm.activeSlide = vm.course.slides[newVal];
-                vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br>");
+                vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
             }
         });
 
