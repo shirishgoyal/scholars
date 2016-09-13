@@ -1,14 +1,14 @@
 from django.conf import settings
 from django.db import models
 
-from gdstorage.storage import GoogleDriveStorage
+# from gdstorage.storage import GoogleDriveStorage
 from model_utils import Choices
 
 from users.models import User
 from utils.models import TimeStampable
 
 
-gd_storage = GoogleDriveStorage()
+# gd_storage = GoogleDriveStorage()
 
 
 class Course(TimeStampable):

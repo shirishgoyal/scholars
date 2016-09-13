@@ -20,9 +20,9 @@ class Common(Configuration):
         # Third party apps
         'rest_framework',            # utilities for rest apis
         'rest_framework.authtoken',  # token authentication
-        'django_rq',                 # asynchronous queuing
+        # 'django_rq',                 # asynchronous queuing
         'versatileimagefield',       # image manipulation
-        'gdstorage',                 # google drive storage
+        # 'gdstorage',                 # google drive storage
 
         # Your apps
         'authentication',
