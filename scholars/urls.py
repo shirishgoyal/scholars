@@ -18,7 +18,7 @@ router.register(r'slides', SlideViewSet)
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^django-rq/', include('django_rq.urls')),
+    # url(r'^django-rq/', include('django_rq.urls')),
     url(r'^api/', include('authentication.urls')),
     url(r'^api/', include(router.urls)),
 
