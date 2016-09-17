@@ -15,7 +15,7 @@ class Production(Common):
 
     # Honor the 'X-Forwarded-Proto' header for request.is_secure()
     # https://devcenter.heroku.com/articles/getting-started-with-django
-    # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
     INSTALLED_APPS = Common.INSTALLED_APPS
     SECRET_KEY = values.SecretValue()
@@ -24,16 +24,16 @@ class Production(Common):
 
     # django-secure
     # http://django-secure.readthedocs.org/en/v0.1.2/settings.html
-    # INSTALLED_APPS += ("djangosecure", )
-    #
-    # SECURE_HSTS_SECONDS = 60
-    # SECURE_HSTS_INCLUDE_SUBDOMAINS = values.BooleanValue(True)
-    # SECURE_FRAME_DENY = values.BooleanValue(True)
-    # SECURE_CONTENT_TYPE_NOSNIFF = values.BooleanValue(True)
-    # SECURE_BROWSER_XSS_FILTER = values.BooleanValue(True)
-    # SESSION_COOKIE_SECURE = values.BooleanValue(False)
-    # SESSION_COOKIE_HTTPONLY = values.BooleanValue(True)
-    # SECURE_SSL_REDIRECT = values.BooleanValue(True)
+    INSTALLED_APPS += ("djangosecure", )
+
+    SECURE_HSTS_SECONDS = 60
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = values.BooleanValue(True)
+    SECURE_FRAME_DENY = values.BooleanValue(True)
+    SECURE_CONTENT_TYPE_NOSNIFF = values.BooleanValue(True)
+    SECURE_BROWSER_XSS_FILTER = values.BooleanValue(True)
+    SESSION_COOKIE_SECURE = values.BooleanValue(False)
+    SESSION_COOKIE_HTTPONLY = values.BooleanValue(True)
+    SECURE_SSL_REDIRECT = values.BooleanValue(True)
 
     # Site
     # https://docs.djangoproject.com/en/1.6/ref/settings/#allowed-hosts
