@@ -11,8 +11,8 @@
     /** @ngInject */
     function themeRun($timeout, $rootScope, $state, $log, layoutPaths, preloader, $q, baSidebarService, themeLayoutSettings, Auth) {
         var whatToWait = [
-            preloader.loadAmCharts(),
-            $timeout(3000)
+            // preloader.loadAmCharts(),
+            $timeout(1000)
         ];
 
         var theme = themeLayoutSettings;
