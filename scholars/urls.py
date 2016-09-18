@@ -5,6 +5,7 @@ from django.conf.urls import include, url
 from django.core.urlresolvers import reverse_lazy
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.views.generic import TemplateView
 from django.views.generic.base import RedirectView
 from rest_framework.routers import DefaultRouter, SimpleRouter
 
@@ -24,6 +25,7 @@ urlpatterns = [
 
     # the 'api-root' from django rest-frameworks default router
     # http://www.django-rest-framework.org/api-guide/routers/#defaultrouter
-    url(r'^$', RedirectView.as_view(url=reverse_lazy('api-root'), permanent=False)),
+    # url(r'^$', RedirectView.as_view(url=reverse_lazy('api-root'), permanent=False)),
+    url(r'^$', TemplateView.as_view(template_name='index.html')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
