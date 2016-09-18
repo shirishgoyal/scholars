@@ -7,7 +7,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class Common(Configuration):
-
     INSTALLED_APPS = (
         'django.contrib.admin',
         'django.contrib.auth',
@@ -16,12 +15,11 @@ class Common(Configuration):
         'django.contrib.messages',
         'django.contrib.staticfiles',
 
-
         # Third party apps
-        'rest_framework',            # utilities for rest apis
+        'rest_framework',  # utilities for rest apis
         'rest_framework.authtoken',  # token authentication
         # 'django_rq',                 # asynchronous queuing
-        'versatileimagefield',       # image manipulation
+        'versatileimagefield',  # image manipulation
         # 'gdstorage',                 # google drive storage
 
         # Your apps
@@ -88,7 +86,7 @@ class Common(Configuration):
     TEMPLATES = [
         {
             'BACKEND': 'django.template.backends.django.DjangoTemplates',
-            'APP_DIRS':False,
+            'APP_DIRS': False,
             'DIRS': [TEMPLATES_DIR],
             'OPTIONS': {
                 'context_processors': [
@@ -100,7 +98,7 @@ class Common(Configuration):
                     'django.template.context_processors.tz',
                     'django.contrib.messages.context_processors.messages'
                 ],
-                'loaders':[
+                'loaders': [
                     ('django.template.loaders.cached.Loader', [
                         'django.template.loaders.filesystem.Loader',
                         'django.template.loaders.app_directories.Loader',
@@ -113,6 +111,7 @@ class Common(Configuration):
     # Set DEBUG to False as a default for safety
     # https://docs.djangoproject.com/en/dev/ref/settings/#debug
     DEBUG = values.BooleanValue(False)
+
     for config in TEMPLATES:
         config['OPTIONS']['debug'] = DEBUG
 
