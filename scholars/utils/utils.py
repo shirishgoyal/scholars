@@ -139,12 +139,16 @@ def generate_notes(pptx, folder, model_id):
     from xml.dom.minidom import parse
     from courses.models import Slide
 
+    tmp_folder = os.path.join(folder, 'tmp')
+    if not os.path.exists(tmp_folder):
+        os.makedirs(tmp_folder)
+
     # extract the pptx file as a zip archive
     # note: only extract from pptx files that you trust. they could potentially overwrite your important files.
-    clear_folder('/tmp/')
+    clear_folder(tmp_folder)
 
-    ZipFile(pptx).extractall(path='/tmp/', pwd=None)
-    path = '/tmp/ppt/notesSlides/'
+    ZipFile(pptx).extractall(path=tmp_folder, pwd=None)
+    path = os.path.join(tmp_folder, "ppt", "notesSlides")
 
     notes_folder = os.path.join(folder, 'notes')
     if not os.path.exists(notes_folder):
