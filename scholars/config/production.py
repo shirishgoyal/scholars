@@ -44,12 +44,12 @@ class Production(Common):
 
     # Template
     # https://docs.djangoproject.com/en/dev/ref/settings/#template-dirs
-    TEMPLATE_LOADERS = (
-        ('django.template.loaders.cached.Loader', (
-            'django.template.loaders.filesystem.Loader',
-            'django.template.loaders.app_directories.Loader',
-        )),
-    )
+    # TEMPLATE_LOADERS = (
+    #     ('django.template.loaders.cached.Loader', (
+    #         'django.template.loaders.filesystem.Loader',
+    #         'django.template.loaders.app_directories.Loader',
+    #     )),
+    # )
 
     # Media files
     # http://django-storages.readthedocs.org/en/latest/index.html
