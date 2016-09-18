@@ -84,10 +84,12 @@ class Common(Configuration):
     MEDIA_ROOT = join(os.path.dirname(BASE_DIR), 'media')
     MEDIA_URL = '/media/'
 
+    TEMPLATES_DIR = join(os.path.dirname(BASE_DIR), 'frontend', 'release')
     TEMPLATES = [
         {
             'BACKEND': 'django.template.backends.django.DjangoTemplates',
-            'DIRS': [STATICFILES_DIRS],
+            'APP_DIRS':False,
+            'DIRS': [TEMPLATES_DIR],
             'OPTIONS': {
                 'context_processors': [
                     'django.contrib.auth.context_processors.auth',
