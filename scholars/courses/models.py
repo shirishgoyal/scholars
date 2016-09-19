@@ -30,11 +30,11 @@ def get_audio_path(instance, filename):
     return full_name
 
 
-def get_video_path(instance):
+def get_video_path(id):
     import os
     media_path = None
     full_name = os.path.join(
-        "%d" % instance.id, "videos", "video.mp4")
+        "%d" % id, "videos", "video.mp4")
     if os.path.exists(full_name):
         media_path = os.path.join(settings.MEDIA_ROOT, full_name)
     return media_path
