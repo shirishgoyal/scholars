@@ -37,7 +37,7 @@ def get_video_path(id):
     media_path = os.path.join(settings.MEDIA_ROOT, full_name)
 
     if os.path.exists(media_path):
-        return media_path
+        return os.path.join(settings.MEDIA_URL, full_name)
     return None
 
 
