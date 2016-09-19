@@ -51,6 +51,8 @@
             Slide.assign(vm.activeSlide.id, vm.course.id)
                 .then(function (response) {
                     vm.activeSlide = response.data;
+                    vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
+
                     vm.course.slides[vm.activeSlideIndex] = response.data;
                 });
         };
@@ -59,6 +61,8 @@
             Slide.release(vm.activeSlide.id, vm.course.id)
                 .then(function (response) {
                     vm.activeSlide = response.data;
+                    vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
+
                     vm.course.slides[vm.activeSlideIndex] = response.data;
                 });
         };
@@ -82,6 +86,8 @@
             Slide.update(vm.activeSlide.id, vm.course.id, file)
                 .then(function (response) {
                     vm.activeSlide = response.data;
+                    vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
+                    
                     vm.course.slides[vm.activeSlideIndex] = response.data;
                 });
 
