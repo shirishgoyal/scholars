@@ -28,7 +28,7 @@
 <body>
 <div ui-view="full_screen" class="full-screen">
     <div class="body-bg"></div>
-    <main ng-if="$pageFinishedLoading" ng-class="{ 'menu-collapsed': $baSidebarService.isMenuCollapsed() }">
+    <main ng-if="pageFinishedLoading" ng-class="{ 'menu-collapsed': $baSidebarService.isMenuCollapsed() }">
 
         <ba-sidebar></ba-sidebar>
         <page-top></page-top>
@@ -59,7 +59,7 @@
     </main>
 </div>
 
-<div id="preloader" ng-hide="$pageFinishedLoading">
+<div id="preloader" ng-hide="pageFinishedLoading">
     <div></div>
 </div>
 
