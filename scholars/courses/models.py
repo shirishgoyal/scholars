@@ -32,12 +32,13 @@ def get_audio_path(instance, filename):
 
 def get_video_path(id):
     import os
-    media_path = None
     full_name = os.path.join(
         "%d" % id, "videos", "video.mp4")
-    if os.path.exists(full_name):
-        media_path = os.path.join(settings.MEDIA_ROOT, full_name)
-    return media_path
+    media_path = os.path.join(settings.MEDIA_ROOT, full_name)
+
+    if os.path.exists(media_path):
+        return media_path
+    return None
 
 
 class Course(TimeStampable):
