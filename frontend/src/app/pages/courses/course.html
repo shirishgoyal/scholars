@@ -90,7 +90,7 @@
                                     <!--<i class="ion-download"></i> Download-->
                                     <!--</button>-->
 
-                                    <button type="button" class="btn btn-info"
+                                    <button type="button" class="btn btn-info" style="margin-left: 5px"
                                             ng-hide="recorder.status.isDenied || !recorder.status.isRecording"
                                             ng-disabled="true">
                                         {{recorder.elapsedTime > 9 ? recorder.elapsedTime : ('0'+recorder.elapsedTime)}}
@@ -136,7 +136,7 @@
                                 <button class="btn btn-primary" ng-click="vm.submit()" ng-hide="vm.audio==null"><i
                                         class="ion-upload"></i> Submit
                                 </button>
-                                <audio controls ngf-src="file" ng-hide="vm.audio==null"></audio>
+                                <audio controls ngf-src="file" ng-hide="file==null"></audio>
                             </form>
                         </div>
                     </div>
