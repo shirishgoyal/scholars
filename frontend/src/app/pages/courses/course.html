@@ -4,7 +4,7 @@
 
             <div class="row">
                 <div class="col-lg-8 col-md-12 col-sm-12">
-                    <div class="slider-box">
+                    <div class="slider-box" style="margin-bottom: 10px">
                         <div uib-carousel active="vm.activeSlideIndex" interval="0" no-wrap="noWrapSlides">
                             <div uib-slide ng-repeat="slide in vm.course.slides track by slide.id"
                                  index="slide.position">
@@ -90,7 +90,11 @@
                                     <!--<i class="ion-download"></i> Download-->
                                     <!--</button>-->
 
-
+                                    <button type="button" class="btn btn-info"
+                                            ng-hide="recorder.status.isDenied || !recorder.status.isRecording"
+                                            ng-disabled="true">
+                                        {{recorder.elapsedTime > 9 ? recorder.elapsedTime : ('0'+recorder.elapsedTime)}}
+                                    </button>
                                 </div>
 
                                 <div ng-if="!recorder.isAvailable">
@@ -120,10 +124,7 @@
                                     <!--</div>-->
                                 </div>
 
-                                <h2 style="font-family: sans-serif; text-align: center; width: 60px; border-radius: 5px;
-        border: solid 2px #8C1515; padding: 10px 5px;" ng-if="recorder.status.isRecording">
-                                    {{recorder.elapsedTime > 9 ? recorder.elapsedTime : ('0'+recorder.elapsedTime)}}
-                                </h2>
+
                                 <!-- End controls-->
                             </ng-audio-recorder>
 
@@ -132,10 +133,10 @@
                                 <!--ngf-pattern="'audio/mp3'"-->
                                 <!--ngf-accept="'audio/mp3'" ngf-max-size="20MB"><i class="ion-upload"></i> Upload-->
                                 <!--</button>-->
-                                <button class="btn btn-primary" ng-click="vm.submit()" ng-disabled="vm.audio==null"><i
+                                <button class="btn btn-primary" ng-click="vm.submit()" ng-hide="vm.audio==null"><i
                                         class="ion-upload"></i> Submit
                                 </button>
-                                <audio controls ngf-src="file"></audio>
+                                <audio controls ngf-src="file" ng-hide="vm.audio==null"></audio>
                             </form>
                         </div>
                     </div>
