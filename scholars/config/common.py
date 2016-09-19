@@ -53,6 +53,11 @@ class Common(Configuration):
         ('Author', 'shirish.goyal@gmail.com'),
     )
 
+    ADMINS = [
+        ('Shirish', 'shirish.goyal@gmail.com'),
+        ('Crowd Course Admin', 'stanfordcrowdcourse@gmail.com')
+    ]
+
     # Postgres
     DATABASES = values.DatabaseURLValue('postgres://localhost/scholars')
 
