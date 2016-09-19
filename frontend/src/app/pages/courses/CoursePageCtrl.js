@@ -87,7 +87,6 @@
                 .then(function (response) {
                     vm.activeSlide = response.data;
                     vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
-                    
                     vm.course.slides[vm.activeSlideIndex] = response.data;
                 });
 
