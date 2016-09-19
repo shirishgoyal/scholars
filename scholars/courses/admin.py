@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from utils.utils import export
+from utils.utils import export_video, import_presentation
 from .models import Course, Slide
 
 
@@ -18,11 +18,20 @@ class CourseAdmin(admin.ModelAdmin):
     actions = ['generate']
     list_display = ('name', 'get_video_url', 'total_slides', 'pending_slides')
 
-    def generate(self, request, queryset):
+    def import_from_google(self, request, queryset):
         courses = queryset.all()
 
         for instance in courses:
             if instance.id is not None and instance.gid is not None:
-                export(instance.id, instance.gid)
+                import_presentation(instance.id, instance.gid)
 
-    generate.short_description = "Generate"
+    import_from_google.short_description = "Import"
+
+    def export_to_video(self, request, queryset):
+        courses = queryset.all()
+
+        for instance in courses:
+            if instance.id is not None and instance.gid is not None:
+                export_video(instance.id)
+
+    export_video.short_description = "Export"

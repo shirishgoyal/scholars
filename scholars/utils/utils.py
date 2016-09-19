@@ -31,7 +31,7 @@ def get_credentials(scopes=SCOPES):
     return credentials
 
 
-def export(model_id, file_id):
+def import_presentation(model_id, file_id):
     credentials = get_credentials()
     http = credentials.authorize(Http())
     service = discovery.build('drive', 'v3', http=http)
@@ -52,9 +52,19 @@ def export(model_id, file_id):
                 mime_type='application/vnd.openxmlformats-officedocument.presentationml.presentation',
                 name="slides.pptx")
 
-    total = generate_images(pdf, folder, model_id)
+    generate_images(pdf, folder, model_id)
     generate_notes(pptx, folder, model_id)
-    generate_video_slides(total, folder, model_id)
+
+
+def export_video(model_id):
+    folder = os.path.join(settings.MEDIA_ROOT, '%d' % model_id)
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+
+    images_folder = os.path.join(folder, "images")
+    total = len([name for name in os.listdir(images_folder) if os.path.isfile(name)])
+
+    generate_video_slides(total, folder)
     merge_video(folder)
 
 
@@ -194,7 +204,7 @@ def generate_notes(pptx, folder, model_id):
             f.write(tempstring.encode('utf-8', 'ignore'))
 
 
-def generate_video_slides(total, folder, model_id):
+def generate_video_slides(total, folder):
     video_folder = os.path.join(folder, 'videos')
     if not os.path.exists(video_folder):
         os.makedirs(video_folder)
