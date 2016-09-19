@@ -73,11 +73,11 @@
                                     </div>
 
                                     <button ng-click="recorder.startRecord()" type="button" class="btn btn-primary"
-                                            ng-hide="recorder.status.isDenied || recorder.status.isRecording">
+                                            ng-disabled="recorder.status.isDenied || recorder.status.isRecording">
                                         <i class="ion-record"></i> Record
                                     </button>
                                     <button ng-click="recorder.stopRecord()" type="button" class="btn btn-primary"
-                                            ng-hide="recorder.status.isDenied || !recorder.status.isRecording">
+                                            ng-disabled="recorder.status.isDenied || !recorder.status.isRecording">
                                         <i class="ion-stop"></i> Stop
                                     </button>
                                     <!--<button ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()"-->
