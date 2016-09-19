@@ -64,7 +64,7 @@
                                                convert-mp3="true"
                                                on-conversion-complete="vm.updateAudio(recorder)"
                             >
-                                <pre>{{recorder.status|json}}</pre>
+                                <!--<pre>{{recorder.status|json}}</pre>-->
 
                                 <!-- Start controls, exposed via recorder-->
                                 <div ng-if="recorder.isAvailable">
@@ -107,11 +107,11 @@
                                 </div>
 
                                 <div>
-                                    <div ng-show="recorder.status.isConverting">
+                                    <div ng-hide="!recorder.status.isConverting">
                                         Please wait while your recording is processed.
                                     </div>
 
-                                    <div ng-show="recorder.isHtml5 && recorder.status.isRecording">
+                                    <div ng-hide="!recorder.status.isRecording">
                                         <ng-audio-recorder-analyzer></ng-audio-recorder-analyzer>
                                     </div>
                                     <!--<div ng-show="!recorder.status.isRecording && recorder.audioModel">-->
