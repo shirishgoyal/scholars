@@ -48,7 +48,9 @@
                         <audio controls ngf-src="vm.activeSlide.audio"></audio>
                     </div>
                     <div ng-if="vm.activeSlide.status==2">
-                        <div class="alert bg-warning"><h4>Slide is ready. Please move to next slide.</h4></div>
+                        <div class="alert bg-warning">
+                            <p style="font-weight: 500;font-size: 16px;">Slide is ready. Please move to next slide.</p>
+                        </div>
                     </div>
                     <div ng-if="vm.activeSlide.status==1">
                         <h4 ng-if="vm.activeSlide.assigned_to.id!=vm.user.id">Recording in progress...</h4>
