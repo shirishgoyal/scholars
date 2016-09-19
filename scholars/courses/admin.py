@@ -7,7 +7,7 @@ from .models import Course, Slide
 class SlideInline(admin.TabularInline):
     model = Slide
     extra = 0
-    fields = ('image_url', 'notes', 'audio_url', 'status')
+    fields = ('image_url', 'notes', 'audio_url', 'status', 'assigned_to')
     readonly_fields = ('image_url', 'audio_url')
     ordering = ['position']
 
