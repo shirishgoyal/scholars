@@ -15,6 +15,10 @@
             $timeout(1000)
         ];
 
+        $rootScope.page = {
+            finishedLoading:false
+        };
+
         var theme = themeLayoutSettings;
         if (theme.blur) {
             if (theme.mobile) {
@@ -26,12 +30,12 @@
         }
         //
         $q.all(whatToWait).then(function () {
-            $rootScope.pageFinishedLoading = true;
+            $rootScope.page.finishedLoading = true;
         });
 
         $timeout(function () {
-            if (!$rootScope.pageFinishedLoading) {
-                $rootScope.pageFinishedLoading = true;
+            if (!$rootScope.page.finishedLoading) {
+                $rootScope.page.finishedLoading = true;
             }
         }, 1000);
 
