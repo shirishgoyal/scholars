@@ -75,7 +75,7 @@ class Course(TimeStampable):
 
     def pending_slides(self):
         return self.slides.filter(status__lt=3).count()
-    total_slides.short_description = 'Pending Slides'
+    pending_slides.short_description = 'Pending Slides'
 
 
 class Slide(TimeStampable):
