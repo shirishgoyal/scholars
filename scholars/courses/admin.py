@@ -7,7 +7,7 @@ from .models import Course, Slide
 class SlideInline(admin.TabularInline):
     model = Slide
     extra = 0
-    fields = ('image_url', 'notes', 'audio_url','status')
+    fields = ('image_url', 'notes', 'audio_url', 'status')
     readonly_fields = ('image_url', 'audio_url')
     ordering = ['position']
 
@@ -16,6 +16,7 @@ class SlideInline(admin.TabularInline):
 class CourseAdmin(admin.ModelAdmin):
     inlines = [SlideInline]
     actions = ['generate']
+    list_display = ('id', 'get_video_url', 'name')
 
     def generate(self, request, queryset):
         courses = queryset.all()

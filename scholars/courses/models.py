@@ -10,6 +10,35 @@ from utils.models import TimeStampable
 
 # gd_storage = GoogleDriveStorage()
 
+def get_image_path(instance, filename):
+    import os
+    full_name = os.path.join(
+        "%d" % instance.course.id, "images", "%03d.png" % instance.position)
+    media_path = os.path.join(settings.MEDIA_ROOT, full_name)
+    if os.path.exists(media_path):
+        os.remove(media_path)
+    return full_name
+
+
+def get_audio_path(instance, filename):
+    import os
+    full_name = os.path.join(
+        "%d" % instance.course.id, "audio", "%03d.mp3" % instance.position)
+    media_path = os.path.join(settings.MEDIA_ROOT, full_name)
+    if os.path.exists(media_path):
+        os.remove(media_path)
+    return full_name
+
+
+def get_video_path(instance):
+    import os
+    media_path = None
+    full_name = os.path.join(
+        "%d" % instance.id, "videos", "video.mp4")
+    if os.path.exists(full_name):
+        media_path = os.path.join(settings.MEDIA_ROOT, full_name)
+    return media_path
+
 
 class Course(TimeStampable):
     STATUS = Choices(
@@ -30,25 +59,13 @@ class Course(TimeStampable):
     def __str__(self):
         return "%s (%d slides)" % (self.name, self.slides.count())
 
+    def get_video_url(self):
+        video_url = get_video_path(self.id)
 
-def get_image_path(instance, filename):
-    import os
-    full_name = os.path.join(
-        "%d" % instance.course.id, "images", "%03d.png" % instance.position)
-    media_path = os.path.join(settings.MEDIA_ROOT, full_name)
-    if os.path.exists(media_path):
-        os.remove(media_path)
-    return full_name
-
-
-def get_audio_path(instance, filename):
-    import os
-    full_name = os.path.join(
-        "%d" % instance.course.id, "audio", "%03d.mp3" % instance.position)
-    media_path = os.path.join(settings.MEDIA_ROOT, full_name)
-    if os.path.exists(media_path):
-        os.remove(media_path)
-    return full_name
+        if video_url is not None:
+            return u'<video width="320" height="240" controls><source src="%s" type="video/mp4">Your browser does not support the video tag.</video>' % video_url
+        return None
+    get_video_url.short_description = 'Video'
 
 
 class Slide(TimeStampable):
