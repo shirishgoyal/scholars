@@ -69,6 +69,14 @@ class Course(TimeStampable):
     get_video_url.short_description = 'Video'
     get_video_url.allow_tags = True
 
+    def total_slides(self):
+        return self.slides.count()
+    total_slides.short_description = 'Total Slides'
+
+    def pending_slides(self):
+        return self.slides.filter(status__lt=3).count()
+    total_slides.short_description = 'Pending Slides'
+
 
 class Slide(TimeStampable):
     STATUS = Choices(

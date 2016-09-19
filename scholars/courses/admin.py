@@ -16,7 +16,7 @@ class SlideInline(admin.TabularInline):
 class CourseAdmin(admin.ModelAdmin):
     inlines = [SlideInline]
     actions = ['generate']
-    list_display = ('id', 'get_video_url', 'name')
+    list_display = ('name', 'get_video_url', 'total_slides', 'pending_slides')
 
     def generate(self, request, queryset):
         courses = queryset.all()
