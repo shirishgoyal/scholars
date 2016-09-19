@@ -104,4 +104,11 @@ class Production(Common):
 
     Common.VERSATILEIMAGEFIELD_SETTINGS['create_images_on_demand'] = False
 
+    EMAIL_USE_TLS = True
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_HOST_USER = 'stanfordcrowdcourse@gmail.com'
+    EMAIL_HOST_PASSWORD = values.Value('DJANGO_EMAIL_HOST_PASSWORD')
+    EMAIL_PORT = 587
+    DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
 
