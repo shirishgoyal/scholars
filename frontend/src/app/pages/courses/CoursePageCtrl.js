@@ -17,8 +17,6 @@
         $scope.$watch(function ($scope) {
             return vm.course != null ? vm.activeSlideIndex : null;
         }, function (newVal, oldVal) {
-            $log.log(newVal);
-
             if (newVal != null && newVal != oldVal && vm.course != null && vm.course.hasOwnProperty('slides') && vm.course.slides) {
                 vm.activeSlide = vm.course.slides[newVal];
                 vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
@@ -34,11 +32,19 @@
             });
 
         vm.back = function (position) {
-            vm.activeSlideIndex -= position;
+            if ((vm.activeSlideIndex - position) <= 0) {
+                vm.activeSlideIndex = 0;
+            } else {
+                vm.activeSlideIndex -= position;
+            }
         };
 
         vm.forward = function (position) {
-            vm.activeSlideIndex += position;
+            if ((vm.activeSlideIndex + position) >= (vm.course.slides.length - 1)) {
+                vm.activeSlideIndex = vm.course.slides.length - 1;
+            } else {
+                vm.activeSlideIndex += position;
+            }
         };
 
         vm.assign = function () {
@@ -68,7 +74,7 @@
             vm.audio = blobToFile(recorder.audioModel, vm.activeSlideIndex + ".mp3");
         };
 
-        vm.submit = function(){
+        vm.submit = function () {
             vm.upload(vm.audio);
         };
 

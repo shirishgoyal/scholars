@@ -29,13 +29,11 @@
         //     $rootScope.$pageFinishedLoading = true;
         // });
 
-        // $timeout(function () {
-        //     if (!$rootScope.$pageFinishedLoading) {
-        //         $rootScope.$pageFinishedLoading = true;
-        //     }
-        // }, 1000);
-
-        $rootScope.$pageFinishedLoading = true;
+        $timeout(function () {
+            if (!$rootScope.$pageFinishedLoading) {
+                $rootScope.$pageFinishedLoading = true;
+            }
+        }, 1000);
 
         $rootScope.$baSidebarService = baSidebarService;
 
