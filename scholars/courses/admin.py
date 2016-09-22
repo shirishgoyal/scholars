@@ -15,7 +15,7 @@ class SlideInline(admin.TabularInline):
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
     inlines = [SlideInline]
-    actions = ['generate']
+    actions = ['generate', 'import_from_google', 'export_to_video']
     list_display = ('name', 'get_video_url', 'total_slides', 'pending_slides')
 
     def import_from_google(self, request, queryset):
