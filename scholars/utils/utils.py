@@ -12,6 +12,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 SCOPES = ['https://www.googleapis.com/auth/drive.metadata.readonly', 'https://www.googleapis.com/auth/drive',
           'https://www.googleapis.com/auth/drive.file']
 FFMPEG_BIN = "ffmpeg"
+MENCODER_BIN = "mencoder"
 
 
 def get_credentials(scopes=SCOPES):
@@ -219,7 +220,8 @@ def generate_video_slides(total, folder):
         generate_video(folder, sequence)
 
         video_seq = os.path.join(folder, 'videos/%s.mp4' % sequence)
-        file.write("file '%s'\n" % video_seq)
+        file.write("%s " % video_seq)
+        # file.write("file '%s'\n" % video_seq)
 
     file.close()
 
@@ -270,13 +272,23 @@ def merge_video(folder):
     video_spec = os.path.join(folder, "videos", "video.txt")
     video_path = os.path.join(folder, "videos", "video.mp4")
 
+    with open(video_spec, "r") as videos:
+        video_list = videos.read()
+
+    # mencoder -oac pcm -ovc copy <<filenames separated by spaces>> -o video_path
+    command = [MENCODER_BIN,
+               '-oac', 'pcm',
+               '-ovc', 'copy',
+               video_list,
+               '-o', video_path]
+
     # ffmpeg -f concat -i mylist.txt -c copy output
-    command = [FFMPEG_BIN,
-               '-f', 'concat',
-               '-safe', '0',
-               '-i', video_spec,
-               '-c', 'copy',
-               video_path]
+    # command = [FFMPEG_BIN,
+    #            '-f', 'concat',
+    #            '-safe', '0',
+    #            '-i', video_spec,
+    #            '-c', 'copy',
+    #            video_path]
 
     subprocess.call(command, stdout=None, stderr=subprocess.STDOUT)
 
