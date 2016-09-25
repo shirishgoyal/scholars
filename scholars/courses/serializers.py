@@ -1,11 +1,12 @@
 from rest_framework import serializers
 
 from users.serializers import UserSerializer
+from utils.dynamic import DynamicFieldsModelSerializer
 from utils.serializers import ChoicesField
 from .models import Course, Slide
 
 
-class SlideSerializer(serializers.ModelSerializer):
+class SlideSerializer(DynamicFieldsModelSerializer):
     assigned_to = UserSerializer(read_only=True)
     status_text = serializers.SerializerMethodField()
 
@@ -18,7 +19,7 @@ class SlideSerializer(serializers.ModelSerializer):
         return obj.get_status_display()
 
 
-class CourseSerializer(serializers.ModelSerializer):
+class CourseSerializer(DynamicFieldsModelSerializer):
     slides = SlideSerializer(many=True)
     status = ChoicesField(choices=Course.STATUS)
     owner = UserSerializer()

@@ -31,13 +31,29 @@ class CourseViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
-    # @detail_route(methods=['post'], url_path='generate')
-    # def generate(self, request, *args, **kwargs):
-    #     instance = self.get_object()
-    #     if instance.id is not None and instance.gid is not None:
-    #         import_presentation(instance.id, instance.gid)
-    #     serializer = self.get_serializer(instance=instance, context={'request': request})
-    #     return Response(serializer.data, status.HTTP_200_OK)
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        # page = self.paginate_queryset(queryset)
+        # if page is not None:
+        #     serializer = self.get_serializer(page, many=True)
+        #     return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True, fields=('id', 'name', 'status', 'owner'))
+        return Response(serializer.data)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+        # @detail_route(methods=['post'], url_path='generate')
+        # def generate(self, request, *args, **kwargs):
+        #     instance = self.get_object()
+        #     if instance.id is not None and instance.gid is not None:
+        #         import_presentation(instance.id, instance.gid)
+        #     serializer = self.get_serializer(instance=instance, context={'request': request})
+        #     return Response(serializer.data, status.HTTP_200_OK)
 
 
 class SlideViewSet(viewsets.ModelViewSet):
