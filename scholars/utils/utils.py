@@ -63,7 +63,7 @@ def export_video(model_id):
         os.makedirs(folder)
 
     images_folder = os.path.join(folder, "images")
-    total = len([name for name in os.listdir(images_folder) if os.path.isfile(name)])
+    total = len([name for name in os.listdir(images_folder) if '.png' in name])
 
     generate_video_slides(total, folder)
     merge_video(folder)
