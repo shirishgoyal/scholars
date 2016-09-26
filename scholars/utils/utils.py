@@ -219,9 +219,9 @@ def generate_video_slides(total, folder):
         sequence = '%03d' % count
         generate_video(folder, sequence)
 
-        video_seq = os.path.join(folder, 'videos/%s.mp4' % sequence)
-        # file.write("%s " % video_seq)
-        file.write("file '%s'\n" % video_seq)
+        video_seq = os.path.join(folder, 'videos/%s.mpg' % sequence)
+        file.write(" %s" % video_seq)
+        # file.write("file '%s'\n" % video_seq)
 
     file.close()
 
@@ -271,9 +271,15 @@ def merge_video(folder):
 
     video_spec = os.path.join(folder, "videos", "video.txt")
     video_path = os.path.join(folder, "videos", "video.mpg")
+    video_mp4_path = os.path.join(folder, "videos", "video.mp4")
 
-    # with open(video_spec, "r") as videos:
-    #     video_list = videos.read()
+    with open(video_spec, "r") as videos:
+        video_list = videos.read()
+
+    command = ["cat",
+               video_list,
+               '>',
+               video_path]
 
     # mencoder -oac pcm -ovc copy <<filenames separated by spaces>> -o video_path
     # command = [MENCODER_BIN,
@@ -283,12 +289,20 @@ def merge_video(folder):
     #            '-o', video_path]
 
     # ffmpeg -f concat -i mylist.txt -c copy output
+    # command = [FFMPEG_BIN,
+    #            '-f', 'concat',
+    #            '-safe', '0',
+    #            '-i', video_spec,
+    #            '-c', 'copy',
+    #            video_path]
+
+    subprocess.call(command, stdout=None, stderr=subprocess.STDOUT)
+
+    # ffmpeg -i inter.mpg -qscale:v 2 output.mp4
     command = [FFMPEG_BIN,
-               '-f', 'concat',
-               '-safe', '0',
-               '-i', video_spec,
-               '-c', 'copy',
-               video_path]
+               '-i', video_path,
+               '-qscale:v', '2',
+               video_mp4_path]
 
     subprocess.call(command, stdout=None, stderr=subprocess.STDOUT)
 
