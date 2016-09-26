@@ -234,7 +234,7 @@ def generate_video(folder, sequence):
 
     audio_seq = os.path.join(folder, 'audio/%s.mp3' % sequence)
     image_seq = os.path.join(folder, 'images/%s.png' % sequence)
-    video_seq = os.path.join(folder, 'videos/%s.mp4' % sequence)
+    video_seq = os.path.join(folder, 'videos/%s.mpg' % sequence)
 
     # check if audio exists for slide
     if os.path.exists(audio_seq):
@@ -270,7 +270,7 @@ def merge_video(folder):
     print "Generating video..."
 
     video_spec = os.path.join(folder, "videos", "video.txt")
-    video_path = os.path.join(folder, "videos", "video.mp4")
+    video_path = os.path.join(folder, "videos", "video.mpg")
 
     # with open(video_spec, "r") as videos:
     #     video_list = videos.read()
@@ -285,7 +285,6 @@ def merge_video(folder):
     # ffmpeg -f concat -i mylist.txt -c copy output
     command = [FFMPEG_BIN,
                '-f', 'concat',
-               '-movflags', 'faststart',
                '-safe', '0',
                '-i', video_spec,
                '-c', 'copy',
