@@ -220,8 +220,8 @@ def generate_video_slides(total, folder):
         generate_video(folder, sequence)
 
         video_seq = os.path.join(folder, 'videos/%s.mp4' % sequence)
-        file.write("%s " % video_seq)
-        # file.write("file '%s'\n" % video_seq)
+        # file.write("%s " % video_seq)
+        file.write("file '%s'\n" % video_seq)
 
     file.close()
 
@@ -241,12 +241,12 @@ def generate_video(folder, sequence):
         command = [FFMPEG_BIN,
                    '-y',  # (optional) overwrite output file if it exists
                    '-loop', '1',
-                   '-i', image_seq,  # input comes from a
+                   '-i', image_seq,  # input comes from a folder
                    '-i', audio_seq,  # input comes from a folder
                    '-strict', 'experimental',
                    '-tune', 'stillimage',
-                   '-c:v', 'libx264',  # video encoder
-                   '-c:a', 'aac',  # audio format
+                   '-c:v', 'mpeg2video',  # video encoder
+                   '-c:a', 'mp2',  # audio format
                    '-b:a', '192k',  # audio rate
                    '-ac', '2',  # audio channels
                    '-pix_fmt', 'yuv420p',
@@ -257,7 +257,7 @@ def generate_video(folder, sequence):
                    '-y',  # (optional) overwrite output file if it exists
                    '-loop', '1',
                    '-i', image_seq,  # input comes from a folder
-                   '-c:v', 'libx264',
+                   '-c:v', 'mpeg2video',
                    '-t', '5',  # duration
                    '-pix_fmt', 'yuv420p',
                    '-an',  # Tells FFMPEG not to expect any audio
@@ -272,23 +272,24 @@ def merge_video(folder):
     video_spec = os.path.join(folder, "videos", "video.txt")
     video_path = os.path.join(folder, "videos", "video.mp4")
 
-    with open(video_spec, "r") as videos:
-        video_list = videos.read()
+    # with open(video_spec, "r") as videos:
+    #     video_list = videos.read()
 
     # mencoder -oac pcm -ovc copy <<filenames separated by spaces>> -o video_path
-    command = [MENCODER_BIN,
-               '-oac', 'pcm',
-               '-ovc', 'copy',
-               video_list,
-               '-o', video_path]
+    # command = [MENCODER_BIN,
+    #            '-oac', 'pcm',
+    #            '-ovc', 'copy',
+    #            video_list,
+    #            '-o', video_path]
 
     # ffmpeg -f concat -i mylist.txt -c copy output
-    # command = [FFMPEG_BIN,
-    #            '-f', 'concat',
-    #            '-safe', '0',
-    #            '-i', video_spec,
-    #            '-c', 'copy',
-    #            video_path]
+    command = [FFMPEG_BIN,
+               '-f', 'concat',
+               '-movflags', 'faststart',
+               '-safe', '0',
+               '-i', video_spec,
+               '-c', 'copy',
+               video_path]
 
     subprocess.call(command, stdout=None, stderr=subprocess.STDOUT)
 
