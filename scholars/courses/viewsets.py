@@ -82,7 +82,9 @@ class SlideViewSet(viewsets.ModelViewSet):
 
         partial = kwargs.pop('partial', False)
 
-        if instance.assigned_to is not None and 'audio' in request.FILES:
+        if instance.assigned_to == request.user \
+            and instance.status == Slide.STATUS.in_progress \
+                and 'audio' in request.FILES:
             audio = request.FILES['audio']
             data['audio'] = audio
             data['status'] = Slide.STATUS.pending_approval
