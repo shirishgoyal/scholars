@@ -298,13 +298,15 @@ def merge_video(folder):
     #            '-c', 'copy',
     #            video_path]
 
-    subprocess.call(command, stdout=None, stderr=subprocess.STDOUT, shell=True)
+    os.system(' '.join(command))
+
+    # subprocess.call(command, stdout=None, stderr=subprocess.STDOUT, shell=True)
 
     # ffmpeg -i inter.mpg -qscale:v 2 output.mp4
     command = [FFMPEG_BIN,
                '-i', video_path,
                '-strict', 'experimental',
-               '-preset', 'medium',
+               '-preset', 'fast',
                video_mp4_path]
 
     subprocess.call(command, stdout=None, stderr=subprocess.STDOUT)
