@@ -36,10 +36,10 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = self.get_serializer(page, many=True, fields=('id', 'name', 'status'))
+            serializer = self.get_serializer(page, many=True, fields=('id', 'name', 'status','owner'))
             return self.get_paginated_response(serializer.data)
 
-        serializer = self.get_serializer(queryset, many=True, fields=('id', 'name', 'status'))
+        serializer = self.get_serializer(queryset, many=True, fields=('id', 'name', 'status', 'owner'))
         return Response(serializer.data)
 
     def retrieve(self, request, *args, **kwargs):
@@ -82,6 +82,8 @@ class SlideViewSet(viewsets.ModelViewSet):
 
         partial = kwargs.pop('partial', False)
 
+        print request.FILES
+
         if instance.assigned_to == request.user \
             and instance.status == Slide.STATUS.in_progress \
                 and 'audio' in request.FILES:
@@ -91,6 +93,8 @@ class SlideViewSet(viewsets.ModelViewSet):
             data['assigned_to'] = User.objects.get(username='admin')
 
         data['course'] = instance.course.id
+
+        print data
 
         serializer = self.get_serializer(instance=instance, data=data, partial=partial, context={'request': request})
         serializer.is_valid(raise_exception=True)

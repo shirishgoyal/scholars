@@ -31,7 +31,7 @@
         return Auth;
 
         function register(account) {
-            return $http.post('/api/auth/register/', account);
+            return $http.post('/api/users/', account);
         }
 
         function login(account) {
