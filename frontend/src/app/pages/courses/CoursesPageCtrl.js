@@ -11,16 +11,26 @@
     /** @ngInject */
     function CoursesPageCtrl($scope, $state, $log, lodash, Course) {
         var vm = this;
-        
+
         vm.pageSize = 10;
 
         Course.list()
-            .then(function(response, status){
-                $log.log(response.data);
+            .then(function (response, status) {
+                // $log.log(response.data);
                 vm.courses = response.data.results;
-            }, function(response, status){
+            }, function (response, status) {
                 $log.log(response);
             });
+
+        // vm.watch('pageSize', function (newValue, oldValue) {
+        //     Course.list()
+        //         .then(function (response, status) {
+        //             // $log.log(response.data);
+        //             vm.courses = response.data.results;
+        //         }, function (response, status) {
+        //             $log.log(response);
+        //         });
+        // });
     }
 
 })();
