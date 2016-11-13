@@ -15,8 +15,8 @@ def get_image_path(instance, filename):
     full_name = os.path.join(
         "%d" % instance.course.id, "images", "%03d.png" % instance.position)
     media_path = os.path.join(settings.MEDIA_ROOT, full_name)
-    if os.path.exists(media_path):
-        os.remove(media_path)
+    # if os.path.exists(media_path):
+    #     return os.path.join(settings.MEDIA_URL, full_name)
     return full_name
 
 
@@ -25,8 +25,8 @@ def get_audio_path(instance, filename):
     full_name = os.path.join(
         "%d" % instance.course.id, "audio", "%03d.mp3" % instance.position)
     media_path = os.path.join(settings.MEDIA_ROOT, full_name)
-    if os.path.exists(media_path):
-        os.remove(media_path)
+    # if os.path.exists(media_path):
+    #     return os.path.join(settings.MEDIA_URL, full_name)
     return full_name
 
 

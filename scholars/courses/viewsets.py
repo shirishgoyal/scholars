@@ -80,26 +80,22 @@ class SlideViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         data = copy.copy(request.data)
 
-        partial = kwargs.pop('partial', False)
-
-        print request.FILES
+        partial = kwargs.pop('partial', True)
 
         if instance.assigned_to == request.user \
             and instance.status == Slide.STATUS.in_progress \
-                and 'audio' in request.FILES:
-            audio = request.FILES['audio']
+                and 'audio' in request.data:
+            audio = request.data['audio']
+
             data['audio'] = audio
             data['status'] = Slide.STATUS.pending_approval
             data['assigned_to'] = User.objects.get(username='admin')
 
         data['course'] = instance.course.id
 
-        print data
-
         serializer = self.get_serializer(instance=instance, data=data, partial=partial, context={'request': request})
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
-
         return Response(serializer.data)
 
     @detail_route(methods=['put'], url_path='assign')
