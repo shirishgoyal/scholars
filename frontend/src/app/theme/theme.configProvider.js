@@ -22,12 +22,20 @@
   };
 
   // dashboard colors for charts
+  // var dashboardColors = {
+  //   blueStone: '#005562',
+  //   surfieGreen: '#0e8174',
+  //   silverTree: '#6eba8c',
+  //   gossip: '#b9f2a1',
+  //   white: '#10c4b5',
+  // };
+
   var dashboardColors = {
-    blueStone: '#005562',
-    surfieGreen: '#0e8174',
-    silverTree: '#6eba8c',
-    gossip: '#b9f2a1',
-    white: '#10c4b5',
+    darkest: '#3C0000',
+    darker: '#640000',
+    dark: '#AF3333',
+    lightDark: '#D55F5F',
+    lightest: '#FF9898',
   };
 
   angular.module('BlurAdmin.theme')
@@ -64,12 +72,20 @@
         dangerDark: colorHelper.shade(colorScheme.danger, 15),
 
         dashboard: {
-          blueStone: dashboardColors.blueStone,
-          surfieGreen: dashboardColors.surfieGreen,
-          silverTree: dashboardColors.silverTree,
-          gossip: dashboardColors.gossip,
-          white: dashboardColors.white,
+          blueStone: dashboardColors.darkest,
+          surfieGreen: dashboardColors.darker,
+          silverTree: dashboardColors.dark,
+          gossip: dashboardColors.lightDark,
+          white: dashboardColors.lightest,
         },
+
+        gradation:{
+          darkest: dashboardColors.darkest,
+          darker: dashboardColors.darker,
+          dark: dashboardColors.dark,
+          lightDark: dashboardColors.lightDark,
+          lightest: dashboardColors.lightest,
+        }
       }
     };
 

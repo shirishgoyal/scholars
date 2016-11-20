@@ -12,7 +12,7 @@
     function SlideChartCtrl($scope, baConfig, colorHelper, lodash, Slide) {
 
         $scope.transparent = baConfig.theme.blur;
-        var dashboardColors = baConfig.colors.dashboard;
+        var dashboardColors = baConfig.colors.gradation;
 
         Slide.list()
             .then(function (response, status) {
@@ -42,29 +42,29 @@
                 $scope.doughnutData = [
                     {
                         value: slides["Draft"].length,
-                        color: dashboardColors.white,
-                        highlight: colorHelper.shade(dashboardColors.white, 15),
+                        color: dashboardColors.lightDark,
+                        highlight: colorHelper.shade(dashboardColors.lightest, 15),
                         label: 'Draft',
                         percentage: slides["Draft"].length * 100 / $scope.total,
                         order: 1,
                     }, {
                         value: slides["In Progress"].length,
-                        color: dashboardColors.blueStone,
-                        highlight: colorHelper.shade(dashboardColors.blueStone, 15),
+                        color: dashboardColors.dark,
+                        highlight: colorHelper.shade(dashboardColors.lightDark, 15),
                         label: 'In Progress',
                         percentage: slides["In Progress"].length * 100 / $scope.total,
                         order: 2,
                     }, {
                         value: slides["Pending Approval"].length,
-                        color: dashboardColors.surfieGreen,
-                        highlight: colorHelper.shade(dashboardColors.surfieGreen, 15),
+                        color: dashboardColors.darker,
+                        highlight: colorHelper.shade(dashboardColors.dark, 15),
                         label: 'Pending Approval',
                         percentage: slides["Pending Approval"].length * 100 / $scope.total,
                         order: 3,
                     },{
                         value: slides["Published"].length,
-                        color: dashboardColors.silverTree,
-                        highlight: colorHelper.shade(dashboardColors.silverTree, 15),
+                        color: dashboardColors.darkest,
+                        highlight: colorHelper.shade(dashboardColors.darker, 15),
                         label: 'Completed',
                         percentage: slides["Published"].length * 100 / $scope.total,
                         order: 4,

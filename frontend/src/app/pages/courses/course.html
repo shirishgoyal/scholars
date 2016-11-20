@@ -51,6 +51,19 @@
                         <div class="alert bg-warning">
                             <p style="font-weight: 500;font-size: 14px;">Slide is ready. Please move to next slide.</p>
                         </div>
+
+                        <div ng-if="vm.course.owner.username==vm.user.username">
+                            <audio controls ngf-src="vm.activeSlide.audio"></audio>
+
+                            <form name="form">
+                                <button class="btn btn-primary" ng-click="vm.approve()" ng-hide="vm.activeSlide.audio==null"><i
+                                        class="ion-check"></i> Approve
+                                </button>
+                                <button class="btn btn-danger" ng-click="vm.reject()" ng-hide="vm.activeSlide.audio==null"><i
+                                        class="ion-cross"></i> Reject
+                                </button>
+                            </form>
+                        </div>
                     </div>
                     <div ng-if="vm.activeSlide.status==1">
                         <h4 ng-if="vm.activeSlide.assigned_to.id!=vm.user.id">Recording in progress...</h4>
@@ -139,6 +152,7 @@
                                         class="ion-upload"></i> Submit
                                 </button>
                                 <audio controls ngf-src="file" ng-hide="file==null"></audio>
+
                             </form>
                         </div>
                     </div>

@@ -1,7 +1,3 @@
-/**
- * @author v.lugovsky
- * created on 16.12.2015
- */
 (function () {
     'use strict';
 
@@ -59,6 +55,26 @@
 
         vm.release = function () {
             Slide.release(vm.activeSlide.id, vm.course.id)
+                .then(function (response) {
+                    vm.activeSlide = response.data;
+                    vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
+
+                    vm.course.slides[vm.activeSlideIndex] = response.data;
+                });
+        };
+
+        vm.approve = function () {
+            Slide.approve(vm.activeSlide.id, vm.course.id)
+                .then(function (response) {
+                    vm.activeSlide = response.data;
+                    vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
+
+                    vm.course.slides[vm.activeSlideIndex] = response.data;
+                });
+        };
+
+        vm.reject = function () {
+            Slide.reject(vm.activeSlide.id, vm.course.id)
                 .then(function (response) {
                     vm.activeSlide = response.data;
                     vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");

@@ -6,11 +6,10 @@ from rest_framework.decorators import detail_route
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from users.models import User
 from utils.utils import import_presentation
 from .models import Course, Slide
 from .permissions import IsOwnerOrReadOnly
-from .serializers import CourseSerializer, SlideSerializer
+from .serializers import CourseSerializer, SlideSerializer, CreateCourseSerializer
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -19,11 +18,22 @@ class CourseViewSet(viewsets.ModelViewSet):
     permission_classes = (IsOwnerOrReadOnly,)
 
     def create(self, request, *args, **kwargs):
+        self.serializer_class = CreateCourseSerializer
+
         serializer = self.get_serializer(data=request.data, context={'request': request})
         self.permission_classes = (AllowAny,)
 
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+
+        instance = Course.objects.get(id=serializer.data['id'])
+
+        if instance.id is not None and instance.gid is not None:
+            error = import_presentation(instance.id, instance.gid)
+
+            if error is not None:
+                instance.delete()
+                return Response({'non_field_errors': [error]}, status=status.HTTP_400_BAD_REQUEST)
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -36,7 +46,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
         page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = self.get_serializer(page, many=True, fields=('id', 'name', 'status','owner'))
+            serializer = self.get_serializer(page, many=True, fields=('id', 'name', 'status', 'owner'))
             return self.get_paginated_response(serializer.data)
 
         serializer = self.get_serializer(queryset, many=True, fields=('id', 'name', 'status', 'owner'))
@@ -47,13 +57,13 @@ class CourseViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
 
-        # @detail_route(methods=['post'], url_path='generate')
-        # def generate(self, request, *args, **kwargs):
-        #     instance = self.get_object()
-        #     if instance.id is not None and instance.gid is not None:
-        #         import_presentation(instance.id, instance.gid)
-        #     serializer = self.get_serializer(instance=instance, context={'request': request})
-        #     return Response(serializer.data, status.HTTP_200_OK)
+    @detail_route(methods=['post'], url_path='generate')
+    def generate(self, request, *args, **kwargs):
+        instance = self.get_object()
+        if instance.id is not None and instance.gid is not None:
+            import_presentation(instance.id, instance.gid)
+        serializer = self.get_serializer(instance=instance, context={'request': request})
+        return Response(serializer.data, status.HTTP_200_OK)
 
 
 class SlideViewSet(viewsets.ModelViewSet):
@@ -65,10 +75,12 @@ class SlideViewSet(viewsets.ModelViewSet):
 
         page = self.paginate_queryset(queryset)
         if page is not None:
-            serializer = self.get_serializer(page, many=True, fields=('id', 'position', 'course', 'status', 'status_text'))
+            serializer = self.get_serializer(page, many=True,
+                                             fields=('id', 'position', 'course', 'status', 'status_text'))
             return self.get_paginated_response(serializer.data)
 
-        serializer = self.get_serializer(queryset, many=True, fields=('id', 'position', 'course', 'status', 'status_text'))
+        serializer = self.get_serializer(queryset, many=True,
+                                         fields=('id', 'position', 'course', 'status', 'status_text'))
         return Response(serializer.data)
 
     def retrieve(self, request, *args, **kwargs):
@@ -83,13 +95,13 @@ class SlideViewSet(viewsets.ModelViewSet):
         partial = kwargs.pop('partial', True)
 
         if instance.assigned_to == request.user \
-            and instance.status == Slide.STATUS.in_progress \
+                and instance.status == Slide.STATUS.in_progress \
                 and 'audio' in request.data:
             audio = request.data['audio']
 
             data['audio'] = audio
             data['status'] = Slide.STATUS.pending_approval
-            data['assigned_to'] = User.objects.get(username='admin')
+            data['assigned_to'] = instance.course.owner
 
         data['course'] = instance.course.id
 
@@ -117,6 +129,30 @@ class SlideViewSet(viewsets.ModelViewSet):
         if instance.status == 1 and instance.assigned_to is not None and instance.assigned_to == request.user:
             instance.assigned_to = None
             instance.status = Slide.STATUS.draft
+            instance.save()
+
+        serializer = self.get_serializer(instance=instance, context={'request': request})
+        return Response(serializer.data, status.HTTP_200_OK)
+
+    @detail_route(methods=['put'], url_path='approve')
+    def approve(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        if instance.status == 2 and instance.course.owner == request.user:
+            # instance.assigned_to = User.objects.get(username='admin')
+            instance.status = Slide.STATUS.published
+            instance.save()
+
+        serializer = self.get_serializer(instance=instance, context={'request': request})
+        return Response(serializer.data, status.HTTP_200_OK)
+
+    @detail_route(methods=['put'], url_path='reject')
+    def reject(self, request, *args, **kwargs):
+        instance = self.get_object()
+
+        if instance.status == 2 and instance.course.owner == request.user:
+            # instance.assigned_to = User.objects.get(username='admin')
+            instance.status = Slide.STATUS.in_progress
             instance.save()
 
         serializer = self.get_serializer(instance=instance, context={'request': request})

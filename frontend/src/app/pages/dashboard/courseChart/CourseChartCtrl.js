@@ -12,7 +12,7 @@
     function CourseChartCtrl($scope, baConfig, colorHelper, lodash, Course) {
 
         $scope.transparent = baConfig.theme.blur;
-        var dashboardColors = baConfig.colors.dashboard;
+        var dashboardColors = baConfig.colors.gradation;
 
         Course.list()
             .then(function (response, status) {
@@ -38,22 +38,22 @@
                 $scope.doughnutData = [
                     {
                         value: courses["Draft"].length,
-                        color: dashboardColors.white,
-                        highlight: colorHelper.shade(dashboardColors.white, 15),
+                        color: dashboardColors.dark,
+                        highlight: colorHelper.shade(dashboardColors.lightest, 15),
                         label: 'Draft',
                         percentage: courses["Draft"].length * 100 / $scope.total,
                         order: 1,
                     }, {
                         value: courses["In Progress"].length,
-                        color: dashboardColors.blueStone,
-                        highlight: colorHelper.shade(dashboardColors.blueStone, 15),
+                        color: dashboardColors.darker,
+                        highlight: colorHelper.shade(dashboardColors.lightDark, 15),
                         label: 'In Progress',
                         percentage: courses["In Progress"].length * 100 / $scope.total,
                         order: 2,
                     }, {
                         value: courses["Published"].length,
-                        color: dashboardColors.surfieGreen,
-                        highlight: colorHelper.shade(dashboardColors.surfieGreen, 15),
+                        color: dashboardColors.darkest,
+                        highlight: colorHelper.shade(dashboardColors.dark, 15),
                         label: 'Published',
                         percentage: courses["Published"].length * 100 / $scope.total,
                         order: 3,

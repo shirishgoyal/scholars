@@ -1,7 +1,3 @@
-/**
- * @author v.lugovsky
- * created on 16.12.2015
- */
 (function () {
   'use strict';
 
@@ -12,14 +8,8 @@
 
     'BlurAdmin.pages.auth',
     'BlurAdmin.pages.dashboard',
-    // 'BlurAdmin.pages.ui',
-    // 'BlurAdmin.pages.components',
-    // 'BlurAdmin.pages.form',
-    // 'BlurAdmin.pages.tables',
-    // 'BlurAdmin.pages.charts',
-    // 'BlurAdmin.pages.maps',
     // 'BlurAdmin.pages.profile',
-    'BlurAdmin.pages.courses',
+    'BlurAdmin.pages.courses'
   ])
       .config(routeConfig);
 

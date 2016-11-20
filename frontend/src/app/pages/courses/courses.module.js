@@ -25,7 +25,15 @@
                 sidebarMeta: {
                     icon: 'ion-ios-book',
                     order: 10
-                },
+                }
+            })
+            .state('courses-add', {
+                url: '/courses/add',
+                templateUrl: 'app/pages/courses/add.html',
+                controller: 'CoursesAddCtrl',
+                controllerAs: 'vm',
+                authenticate: true,
+                title: 'Add Course'
             })
             .state('course', {
                 url: '/course/:id/',
@@ -33,7 +41,7 @@
                 controller: 'CoursePageCtrl',
                 controllerAs: 'vm',
                 authenticate: true,
-                title: 'Course'
+                title: 'Courses'
             })
         ;
     }

@@ -1,6 +1,7 @@
 /**
  * Created by shirish.goyal on 8/28/16.
  */
+
 (function () {
     'use strict';
 
@@ -15,6 +16,7 @@
         var Course = {
             list: list,
             get: get,
+            add: add
         };
 
         return Course;
@@ -24,7 +26,11 @@
         }
 
         function get(id) {
-            return $http.get('/api/courses/'+id+'/');
+            return $http.get('/api/courses/' + id + '/');
+        }
+
+        function add(course) {
+            return $http.post('/api/courses/', course);
         }
     }
 })();

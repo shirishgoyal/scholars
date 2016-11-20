@@ -28,3 +28,14 @@ class CourseSerializer(DynamicFieldsModelSerializer):
         model = Course
         fields = ('id', 'gid', 'name', 'owner', 'status', 'slides')
         read_only_fields = ('owner',)
+
+
+class CreateCourseSerializer(serializers.ModelSerializer):
+    # def create(self, validated_data):
+    #     user = User.objects.create_user(**validated_data)
+    #     return user
+
+    class Meta:
+        model = Course
+        fields = ('gid', 'name', 'id', 'owner', 'status', 'slides')
+        read_only_fields = ('id', 'owner', 'status', 'slides')

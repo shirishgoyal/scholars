@@ -41,20 +41,27 @@ def import_presentation(model_id, file_id):
     # for f in files['files']:
     #     print f['name']
 
-    folder = os.path.join(settings.MEDIA_ROOT, '%d' % model_id)
-    if not os.path.exists(folder):
-        os.makedirs(folder)
+    try:
 
-    pdf = os.path.join(folder, 'slides.pdf')
-    pptx = os.path.join(folder, 'slides.pptx')
+        folder = os.path.join(settings.MEDIA_ROOT, '%d' % model_id)
+        if not os.path.exists(folder):
+            os.makedirs(folder)
 
-    export_file(service=service, model_id=model_id, file_id=file_id, mime_type='application/pdf', name="slides.pdf")
-    export_file(service=service, model_id=model_id, file_id=file_id,
-                mime_type='application/vnd.openxmlformats-officedocument.presentationml.presentation',
-                name="slides.pptx")
+        pdf = os.path.join(folder, 'slides.pdf')
+        pptx = os.path.join(folder, 'slides.pptx')
 
-    generate_images(pdf, folder, model_id)
-    generate_notes(pptx, folder, model_id)
+        export_file(service=service, model_id=model_id, file_id=file_id, mime_type='application/pdf', name="slides.pdf")
+        export_file(service=service, model_id=model_id, file_id=file_id,
+                    mime_type='application/vnd.openxmlformats-officedocument.presentationml.presentation',
+                    name="slides.pptx")
+
+        generate_images(pdf, folder, model_id)
+        generate_notes(pptx, folder, model_id)
+
+    except Exception as e:
+        return "Import failed"
+
+    return None
 
 
 def export_video(model_id):
