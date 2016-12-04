@@ -108,6 +108,25 @@ def clear_folder(folder):
             print e
 
 
+def free_space(model_id):
+    folder = os.path.join(settings.MEDIA_ROOT, '%d' % model_id)
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+
+    video_folder = os.path.join(folder, 'videos')
+    if not os.path.exists(video_folder):
+        os.makedirs(video_folder)
+
+    for the_file in os.listdir(video_folder):
+        if the_file.endswith(".mpg"):
+            file_path = os.path.join(folder, the_file)
+            try:
+                if os.path.isfile(file_path):
+                    os.unlink(file_path)
+            except Exception as e:
+                print e
+
+
 def generate_images(pdf, folder, model_id):
     from wand.image import Image
     from wand.color import Color

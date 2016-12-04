@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from utils.utils import export_video, import_presentation
+from utils.utils import export_video, import_presentation,free_space
 from .models import Course, Slide
 
 
@@ -35,3 +35,12 @@ class CourseAdmin(admin.ModelAdmin):
                 export_video(instance.id)
 
     export_video.short_description = "Export"
+
+    def cleanup(self, request, queryset):
+        courses = queryset.all()
+
+        for instance in courses:
+            if instance.id is not None and instance.gid is not None:
+                free_space(instance.id)
+
+    cleanup.short_description = "Cleanup"
