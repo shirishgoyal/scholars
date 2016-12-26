@@ -64,7 +64,8 @@ class Course(TimeStampable):
         video_url = get_video_path(self.id)
 
         if video_url is not None:
-            return u'<video width="320" height="240" controls><source src="%s" type="video/mp4">Your browser does not support the video tag.</video>' % video_url
+            return video_url
+            # u'<video width="320" height="240" controls><source src="%s" type="video/mp4">Your browser does not support the video tag.</video>' % video_url
         return None
     get_video_url.short_description = 'Video'
     get_video_url.allow_tags = True

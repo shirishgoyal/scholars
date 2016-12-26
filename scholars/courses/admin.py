@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from utils.utils import export_video, import_presentation,free_space
+from utils.utils import export_video, import_presentation, free_space
 from .models import Course, Slide
 
 
