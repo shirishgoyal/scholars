@@ -16,7 +16,8 @@ class SlideInline(admin.TabularInline):
 class CourseAdmin(admin.ModelAdmin):
     inlines = [SlideInline]
     actions = ['generate', 'import_from_google', 'export_to_video', 'cleanup']
-    list_display = ('name', 'get_video_url', 'total_slides', 'pending_slides')
+    list_display = ('id', 'name', 'get_video_url', 'total_slides', 'pending_slides')
+    ordering = ('id',)
 
     def import_from_google(self, request, queryset):
         courses = queryset.all()
