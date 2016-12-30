@@ -1,11 +1,15 @@
 import io
 import os
 import subprocess
+import sys
+import traceback
 
 from apiclient import discovery
 from apiclient.http import MediaIoBaseDownload
 from django.conf import settings
+from django.core import mail
 from django.core.files import File
+from django.views.debug import ExceptionReporter
 from httplib2 import Http
 from oauth2client.service_account import ServiceAccountCredentials
 
@@ -59,7 +63,7 @@ def import_presentation(model_id, file_id):
         generate_notes(pptx, folder, model_id)
 
     except Exception as e:
-        return "Import failed"
+        return e
 
     return None
 
@@ -105,7 +109,7 @@ def clear_folder(folder):
             elif os.path.isdir(file_path):
                 shutil.rmtree(file_path)
         except Exception as e:
-            print e
+            return e
 
 
 def free_space(model_id):
@@ -118,13 +122,14 @@ def free_space(model_id):
         os.makedirs(video_folder)
 
     for the_file in os.listdir(video_folder):
+        print the_file
         if the_file.endswith(".mpg"):
             file_path = os.path.join(folder, the_file)
             try:
                 if os.path.isfile(file_path):
                     os.unlink(file_path)
             except Exception as e:
-                print e
+                return e
 
 
 def generate_images(pdf, folder, model_id):
@@ -346,3 +351,17 @@ def image_url_to_gid(url):
 def image_url_to_gdrive_url(url):
     return u'<img src="%s" style="max-width:120px;max-height:100px" />' % (
         "https://drive.google.com/uc?id=%s" % image_url_to_gid(url))
+
+
+def send_manually_exception_email(request, e):
+    exc_info = sys.exc_info()
+    reporter = ExceptionReporter(request, is_email=True, *exc_info)
+    subject = e.message.replace('\n', '\\n').replace('\r', '\\r')[:989]
+    message = "%s\n\n%s" % (
+        '\n'.join(traceback.format_exception(*exc_info)),
+        reporter.filter.get_request_repr(request)
+    )
+    mail.mail_admins(
+        subject, message, fail_silently=True,
+        html_message=reporter.get_traceback_html()
+    )

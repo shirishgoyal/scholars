@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from utils.utils import export_video, import_presentation, free_space
+from utils.utils import export_video, import_presentation, free_space, send_manually_exception_email
 from .models import Course, Slide
 
 
@@ -24,7 +24,10 @@ class CourseAdmin(admin.ModelAdmin):
 
         for instance in courses:
             if instance.id is not None and instance.gid is not None:
-                import_presentation(instance.id, instance.gid)
+                error = import_presentation(instance.id, instance.gid)
+
+                if error is not None:
+                    send_manually_exception_email(request, error)
 
     import_from_google.short_description = "Import"
 
