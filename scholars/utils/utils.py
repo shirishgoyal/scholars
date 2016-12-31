@@ -359,7 +359,7 @@ def send_manually_exception_email(request, e):
     subject = e.message.replace('\n', '\\n').replace('\r', '\\r')[:989]
     message = "%s\n\n%s" % (
         '\n'.join(traceback.format_exception(*exc_info)),
-        reporter.filter.get_request_repr(request)
+        repr(request)
     )
     mail.mail_admins(
         subject, message, fail_silently=True,
