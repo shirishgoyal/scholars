@@ -6,7 +6,7 @@ from rest_framework.decorators import detail_route
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
-from utils.utils import import_presentation
+from utils.utils import import_presentation, send_manually_exception_email
 from .models import Course, Slide
 from .permissions import IsOwnerOrReadOnly
 from .serializers import CourseSerializer, SlideSerializer, CreateCourseSerializer
@@ -32,8 +32,10 @@ class CourseViewSet(viewsets.ModelViewSet):
             error = import_presentation(instance.id, instance.gid)
 
             if error is not None:
+                send_manually_exception_email(request, error)
+
                 instance.delete()
-                return Response({'non_field_errors': [error]}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'non_field_errors': ['Import failed']}, status=status.HTTP_400_BAD_REQUEST)
 
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
@@ -61,7 +63,11 @@ class CourseViewSet(viewsets.ModelViewSet):
     def generate(self, request, *args, **kwargs):
         instance = self.get_object()
         if instance.id is not None and instance.gid is not None:
-            import_presentation(instance.id, instance.gid)
+            error = import_presentation(instance.id, instance.gid)
+
+            if error is not None:
+                send_manually_exception_email(request, error)
+
         serializer = self.get_serializer(instance=instance, context={'request': request})
         return Response(serializer.data, status.HTTP_200_OK)
 
