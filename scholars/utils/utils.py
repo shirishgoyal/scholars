@@ -212,7 +212,7 @@ def process_links(model_id):
         os.unlink(file_path)
 
     for slide in slides:
-        audio_path = '%d/%s/%03d.png' % (model_id, type, slide.position)
+        audio_path = '%d/%s/%03d.mp3' % (model_id, type, slide.position)
 
         if len(str(slide.audio)) > 0:
             if str(slide.audio) == audio_path:
