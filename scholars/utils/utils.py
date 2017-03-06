@@ -123,6 +123,10 @@ def free_space(model_id):
     if not os.path.exists(video_folder):
         os.makedirs(video_folder)
 
+    tmp_folder = os.path.join(folder, 'tmp')
+    if not os.path.exists(tmp_folder):
+        os.makedirs(tmp_folder)
+
     for the_file in os.listdir(video_folder):
         print the_file
         if the_file.endswith(".mpg"):
@@ -132,6 +136,8 @@ def free_space(model_id):
                     os.unlink(file_path)
             except Exception as e:
                 return e
+
+    clear_folder(tmp_folder)
 
 
 def process_links(model_id):
