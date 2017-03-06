@@ -134,7 +134,7 @@ def free_space(model_id):
     for the_file in os.listdir(video_folder):
         # print the_file
         if the_file.endswith(".mpg"):
-            file_path = os.path.join(folder, the_file)
+            file_path = os.path.join(video_folder, the_file)
             try:
                 if os.path.isfile(file_path):
                     os.unlink(file_path)
