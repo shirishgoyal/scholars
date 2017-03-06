@@ -145,7 +145,13 @@ def process_links(model_id):
         os.makedirs(folder)
 
     images_folder = os.path.join(folder, 'images')
+    if not os.path.exists(images_folder):
+        os.makedirs(images_folder)
+
     audio_folder = os.path.join(folder, 'audio')
+    if not os.path.exists(audio_folder):
+        os.makedirs(audio_folder)
+
     video_folder = os.path.join(folder, 'videos')
 
     slides = Course.objects.get(id=model_id).slides.all()
