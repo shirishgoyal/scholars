@@ -76,6 +76,7 @@ def export_video(model_id):
     images_folder = os.path.join(folder, "images")
     total = len([name for name in os.listdir(images_folder) if '.png' in name])
 
+    process_links(model_id)
     generate_video_slides(total, folder)
     merge_video(folder)
 
@@ -131,7 +132,7 @@ def free_space(model_id):
         os.makedirs(tmp_folder)
 
     for the_file in os.listdir(video_folder):
-        print the_file
+        # print the_file
         if the_file.endswith(".mpg"):
             file_path = os.path.join(folder, the_file)
             try:
