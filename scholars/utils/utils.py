@@ -8,7 +8,6 @@ from apiclient import discovery
 from apiclient.http import MediaIoBaseDownload
 from django.conf import settings
 from django.core import mail
-from django.core.files import File
 from django.views.debug import ExceptionReporter
 from httplib2 import Http
 from oauth2client.service_account import ServiceAccountCredentials
@@ -159,7 +158,7 @@ def generate_images(pdf, folder, model_id):
 
         position = count
         slide, created = Slide.objects.get_or_create(position=position, course_id=model_id)
-        slide.image = image_filepath
+        slide.image = 'media/%d/images/%03d.png' % (model_id, count)
         slide.save()
 
         # .save(
