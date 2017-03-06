@@ -211,18 +211,18 @@ def process_links(model_id):
         file_path = os.path.join(settings.MEDIA_ROOT, audio_file)
         os.unlink(file_path)
 
-    # for slide in slides:
-    #     audio_path = '%d/%s/%03d.png' % (model_id, type, slide.position)
-    #
-    #     if str(slide.audio) == audio_path:
-    #         pass
-    #     else:
-    #         original_path = os.path.join(settings.MEDIA_ROOT, str(slide.audio))
-    #         final_path = os.path.join(settings.MEDIA_ROOT, audio_path)
-    #         os.rename(original_path, final_path)
-    #
-    #         slide.audio = audio_path
-    #         slide.save()
+    for slide in slides:
+        audio_path = '%d/%s/%03d.png' % (model_id, type, slide.position)
+
+        if str(slide.audio) == audio_path:
+            pass
+        else:
+            original_path = os.path.join(settings.MEDIA_ROOT, str(slide.audio))
+            final_path = os.path.join(settings.MEDIA_ROOT, audio_path)
+            os.rename(original_path, final_path)
+
+            slide.audio = audio_path
+            slide.save()
 
 
 def generate_images(pdf, folder, model_id):

@@ -10,6 +10,8 @@ from utils.models import TimeStampable
 
 # gd_storage = GoogleDriveStorage()
 
+
+
 def get_image_path(instance, filename):
     import os
     full_name = os.path.join(
@@ -59,6 +61,14 @@ class Course(TimeStampable):
 
     def __str__(self):
         return "%s (%d slides)" % (self.name, self.slides.count())
+
+    def delete(self, using=None, keep_parents=False):
+        from utils.utils import clear_folder
+        import os
+
+        if self.id is not None and len(str(self.id)) > 0:
+            folder = os.path.join(settings.MEDIA_ROOT, '%d' % self.id)
+            clear_folder(folder)
 
     def get_video_url(self):
         video_url = get_video_path(self.id)
