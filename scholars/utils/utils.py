@@ -158,7 +158,7 @@ def generate_images(pdf, folder, model_id):
 
         position = count
         slide, created = Slide.objects.get_or_create(position=position, course_id=model_id)
-        slide.image = 'media/%d/images/%03d.png' % (model_id, count)
+        slide.image = '%d/images/%03d.png' % (model_id, count)
         slide.save()
 
         # .save(
