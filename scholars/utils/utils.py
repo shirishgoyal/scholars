@@ -62,6 +62,7 @@ def import_presentation(model_id, file_id):
         generate_notes(pptx, folder, model_id)
 
     except Exception as e:
+        print e
         return e
 
     return None
@@ -238,6 +239,8 @@ def generate_notes(pptx, folder, model_id):
         filename = os.path.join(notes_folder, "%03d.txt" % position)
         with open(filename, 'w') as f:
             f.write(tempstring.encode('utf-8', 'ignore'))
+
+    clear_folder(tmp_folder)
 
 
 def generate_video_slides(total, folder):
