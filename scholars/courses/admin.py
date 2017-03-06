@@ -19,6 +19,12 @@ class CourseAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'get_video_url', 'total_slides', 'pending_slides')
     ordering = ('id',)
 
+    def get_actions(self, request):
+        actions = super(CourseAdmin, self).get_actions(request)
+        if 'delete_selected' in actions:
+            del actions['delete_selected']
+        return actions
+
     def import_from_google(self, request, queryset):
         courses = queryset.all()
 

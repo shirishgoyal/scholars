@@ -115,6 +115,9 @@ def clear_folder(folder):
 
 
 def free_space(model_id):
+    import os
+    import shutil
+
     folder = os.path.join(settings.MEDIA_ROOT, '%d' % model_id)
     if not os.path.exists(folder):
         os.makedirs(folder)
@@ -138,6 +141,17 @@ def free_space(model_id):
                 return e
 
     clear_folder(tmp_folder)
+
+    # from courses.models import Course
+    # courses = Course.objects.all()
+    # ids = [str(course.id) for course in courses]
+    #
+    # if ids is not None and len(ids)>0:
+    #     for dir in os.listdir('media'):
+    #         dirpath = os.path.join('media', dir)
+    #         if dir not in ids:
+    #             print dir
+    #             shutil.rmtree(dirpath)
 
 
 def process_links(model_id):
@@ -173,10 +187,18 @@ def process_links(model_id):
         file_path = os.path.join(settings.MEDIA_ROOT, image)
         os.unlink(file_path)
 
-    # for filename in os.listdir("."):
-    #     if filename.startswith("cheese_"):
-    #         os.rename(filename, filename[7:])
+    for slide in slides:
+        image_path = '%d/%s/%03d.png' % (model_id, type, slide.position)
 
+        if str(slide.image) == image_path:
+            pass
+        else:
+            original_path = os.path.join(settings.MEDIA_ROOT, str(slide.image))
+            final_path = os.path.join(settings.MEDIA_ROOT, image_path)
+            os.rename(original_path, final_path)
+
+            slide.image = image_path
+            slide.save()
 
     # audio files
     path = audio_folder
@@ -188,6 +210,19 @@ def process_links(model_id):
     for audio_file in audio_to_remove:
         file_path = os.path.join(settings.MEDIA_ROOT, audio_file)
         os.unlink(file_path)
+
+    # for slide in slides:
+    #     audio_path = '%d/%s/%03d.png' % (model_id, type, slide.position)
+    #
+    #     if str(slide.audio) == audio_path:
+    #         pass
+    #     else:
+    #         original_path = os.path.join(settings.MEDIA_ROOT, str(slide.audio))
+    #         final_path = os.path.join(settings.MEDIA_ROOT, audio_path)
+    #         os.rename(original_path, final_path)
+    #
+    #         slide.audio = audio_path
+    #         slide.save()
 
 
 def generate_images(pdf, folder, model_id):
