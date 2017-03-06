@@ -101,6 +101,7 @@ def export_file(service, model_id, file_id, mime_type, name):
 
 def clear_folder(folder):
     import os, shutil
+
     for the_file in os.listdir(folder):
         file_path = os.path.join(folder, the_file)
         try:
@@ -109,6 +110,7 @@ def clear_folder(folder):
             elif os.path.isdir(file_path):
                 shutil.rmtree(file_path)
         except Exception as e:
+            print e
             return e
 
 
@@ -157,11 +159,14 @@ def generate_images(pdf, folder, model_id):
 
         position = count
         slide, created = Slide.objects.get_or_create(position=position, course_id=model_id)
-        slide.image.save(
-            os.path.basename(image_filepath),  # filename
-            File(open(image_filepath)),  # image file
-            save=True  # save slide object
-        )
+        slide.image = image_filepath
+        slide.save()
+
+        # .save(
+        #     os.path.basename(image_filepath),  # filename
+        #     File(open(image_filepath)),  # image file
+        #     save=True  # save slide object
+        # )
 
     return total
 
