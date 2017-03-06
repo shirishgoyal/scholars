@@ -134,6 +134,50 @@ def free_space(model_id):
                 return e
 
 
+def process_links(model_id):
+    import os
+    from os import listdir
+    from os.path import isfile, join
+    from courses.models import Course
+
+    folder = os.path.join(settings.MEDIA_ROOT, '%d' % model_id)
+    if not os.path.exists(folder):
+        os.makedirs(folder)
+
+    images_folder = os.path.join(folder, 'images')
+    audio_folder = os.path.join(folder, 'audio')
+    video_folder = os.path.join(folder, 'videos')
+
+    slides = Course.objects.get(id=model_id).slides.all()
+
+    # image files
+    path = images_folder
+    type = 'images'
+    actual_images = [str(slide.image) for slide in slides]
+    all_images = ['%d/%s/%s' % (model_id, type, f) for f in listdir(path) if isfile(join(path, f))]
+    images_to_remove = [x for x in all_images if x not in actual_images]
+
+    for image in images_to_remove:
+        file_path = os.path.join(settings.MEDIA_ROOT, image)
+        os.unlink(file_path)
+
+    # for filename in os.listdir("."):
+    #     if filename.startswith("cheese_"):
+    #         os.rename(filename, filename[7:])
+
+
+    # audio files
+    path = audio_folder
+    type = 'audio'
+    actual_audio = [str(slide.audio) for slide in slides]
+    all_audio = ['%d/%s/%s' % (model_id, type, f) for f in listdir(path) if isfile(join(path, f))]
+    audio_to_remove = [x for x in all_audio if x not in actual_audio]
+
+    for audio_file in audio_to_remove:
+        file_path = os.path.join(settings.MEDIA_ROOT, audio_file)
+        os.unlink(file_path)
+
+
 def generate_images(pdf, folder, model_id):
     from wand.image import Image
     from wand.color import Color

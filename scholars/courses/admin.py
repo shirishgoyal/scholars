@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from utils.utils import export_video, import_presentation, free_space, send_manually_exception_email
+from utils.utils import export_video, import_presentation, free_space, send_manually_exception_email, process_links
 from .models import Course, Slide
 
 
@@ -15,7 +15,7 @@ class SlideInline(admin.TabularInline):
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
     inlines = [SlideInline]
-    actions = ['generate', 'import_from_google', 'export_to_video', 'cleanup']
+    actions = ['generate', 'import_from_google', 'export_to_video', 'cleanup', 'process_redundancy']
     list_display = ('id', 'name', 'get_video_url', 'total_slides', 'pending_slides')
     ordering = ('id',)
 
@@ -48,3 +48,13 @@ class CourseAdmin(admin.ModelAdmin):
                 free_space(instance.id)
 
     cleanup.short_description = "Cleanup"
+
+    def process_redundancy(self, request, queryset):
+        courses = queryset.all()
+
+        for instance in courses:
+            if instance.id is not None and instance.gid is not None:
+                process_links(instance.id)
+
+    process_redundancy.short_description = "Redundancy (DONT USE)"
+
