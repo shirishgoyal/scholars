@@ -69,6 +69,8 @@ class Course(TimeStampable):
         if self.id is not None and len(str(self.id)) > 0:
             folder = os.path.join(settings.MEDIA_ROOT, '%d' % self.id)
             clear_folder(folder)
+            
+        super(Course, self).delete()
 
     def get_video_url(self):
         video_url = get_video_path(self.id)
