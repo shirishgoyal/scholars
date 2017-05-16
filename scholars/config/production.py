@@ -35,6 +35,7 @@ class Production(Common):
     SESSION_COOKIE_SECURE = values.BooleanValue(True)
     SESSION_COOKIE_HTTPONLY = values.BooleanValue(True)
     SECURE_SSL_REDIRECT = values.BooleanValue(True)
+    CSRF_COOKIE_SECURE = values.BooleanValue(True)
 
     # Site
     # https://docs.djangoproject.com/en/1.6/ref/settings/#allowed-hosts
