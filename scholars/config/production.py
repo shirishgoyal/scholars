@@ -36,6 +36,8 @@ class Production(Common):
     SESSION_COOKIE_HTTPONLY = values.BooleanValue(True)
     SECURE_SSL_REDIRECT = values.BooleanValue(True)
     CSRF_COOKIE_SECURE = values.BooleanValue(True)
+    CSRF_COOKIE_DOMAIN = '*.stanford.edu'
+    CSRF_TRUSTED_ORIGINS = ['scholar.stanford.edu', 'scholar.5harad.com']
 
     # Site
     # https://docs.djangoproject.com/en/1.6/ref/settings/#allowed-hosts
