@@ -46,40 +46,28 @@
         vm.assign = function () {
             Slide.assign(vm.activeSlide.id, vm.course.id)
                 .then(function (response) {
-                    vm.activeSlide = response.data;
-                    vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
-
-                    vm.course.slides[vm.activeSlideIndex] = response.data;
+                    updateSlide(response);
                 });
         };
 
         vm.release = function () {
             Slide.release(vm.activeSlide.id, vm.course.id)
                 .then(function (response) {
-                    vm.activeSlide = response.data;
-                    vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
-
-                    vm.course.slides[vm.activeSlideIndex] = response.data;
+                    updateSlide(response);
                 });
         };
 
         vm.approve = function () {
             Slide.approve(vm.activeSlide.id, vm.course.id)
                 .then(function (response) {
-                    vm.activeSlide = response.data;
-                    vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
-
-                    vm.course.slides[vm.activeSlideIndex] = response.data;
+                    updateSlide(response);
                 });
         };
 
         vm.reject = function () {
             Slide.reject(vm.activeSlide.id, vm.course.id)
                 .then(function (response) {
-                    vm.activeSlide = response.data;
-                    vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
-
-                    vm.course.slides[vm.activeSlideIndex] = response.data;
+                    updateSlide(response);
                 });
         };
 
@@ -101,12 +89,16 @@
         vm.upload = function (file) {
             Slide.update(vm.activeSlide.id, vm.course.id, file)
                 .then(function (response) {
-                    vm.activeSlide = response.data;
-                    vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
-                    vm.course.slides[vm.activeSlideIndex] = response.data;
+                    updateSlide(response);
                 });
 
         };
+
+        function updateSlide(response){
+            vm.activeSlide = response.data;
+            vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
+            vm.course.slides[vm.activeSlideIndex] = response.data;
+        }
     }
 
 })();

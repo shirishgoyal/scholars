@@ -9,13 +9,14 @@
     'BlurAdmin.pages.auth',
     'BlurAdmin.pages.dashboard',
     // 'BlurAdmin.pages.profile',
-    'BlurAdmin.pages.courses'
+    'BlurAdmin.pages.courses',
+    'BlurAdmin.pages.page'
   ])
       .config(routeConfig);
 
   /** @ngInject */
   function routeConfig($urlRouterProvider, baSidebarServiceProvider) {
-    $urlRouterProvider.otherwise('/auth/login');
+    $urlRouterProvider.otherwise('/page/home');
 
     // baSidebarServiceProvider.addStaticItem({
     //   title: 'Pages',
