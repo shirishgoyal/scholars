@@ -20,8 +20,11 @@
                 var vm = this;
 
                 vm.is_logged_in = Auth.isAuthenticated();
+                Auth.getAccount().then(function (response) {
+                    vm.account = response.data;
+                });
 
-                vm.logout = function(){
+                vm.logout = function () {
                     Auth.logout();
                     $state.go('auth.login');
                 }

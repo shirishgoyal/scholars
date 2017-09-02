@@ -1,27 +1,27 @@
 (function () {
-  'use strict';
+    'use strict';
 
-  angular.module('BlurAdmin.theme')
-      .directive('autoFocus', autoFocus);
+    angular.module('BlurAdmin.theme')
+        .directive('errSrc', errSrc);
 
-  /** @ngInject */
-  function autoFocus($timeout, $parse) {
-    return {
-      link: function (scope, element, attrs) {
-        var model = $parse(attrs.autoFocus);
-        scope.$watch(model, function (value) {
-          if (value === true) {
-            $timeout(function () {
-              element[0].focus();
-              element[0].select();
-            });
-          }
-        });
-        element.bind('blur', function () {
-          scope.$apply(model.assign(scope, false));
-        });
-      }
-    };
-  }
+    /** @ngInject */
+    // adapted from https://stackoverflow.com/questions/16310298/if-a-ngsrc-path-resolves-to-a-404-is-there-a-way-to-fallback-to-a-default
+    function errSrc($timeout, $parse) {
+        return {
+            link: function (scope, element, attrs) {
+                attrs.$observe('ngSrc', function (value) {
+                    if (!value && attrs.errSrc) {
+                        attrs.$set('src', attrs.errSrc);
+                    }
+                });
+
+                element.bind('error', function () {
+                    if (attrs.errSrc && attrs.src !== attrs.errSrc) {
+                        attrs.$set('src', attrs.errSrc);
+                    }
+                });
+            }
+        }
+    }
 
 })();

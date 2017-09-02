@@ -12,8 +12,8 @@
   <div class="user-profile clearfix" ng-show="vm.is_logged_in">
     <div class="al-user-profile" uib-dropdown>
       <a uib-dropdown-toggle class="profile-toggle-link">
-        <img ng-src="static/img/theme/icon/kameleon/Student-3.svg" alt="Profile">
-        <!--<img ng-src="{{::( 'no-photo' | profilePicture )}}">-->
+        <img ng-src="{{vm.account.avatar}}" alt="Profile" err-src="static/img/theme/icon/kameleon/Student-3.svg">
+        <!--<span style="color: white">{{vm.account.first_name}}</span>-->
       </a>
       <ul  class="top-dropdown-menu profile-dropdown" uib-dropdown-menu>
         <li><i class="dropdown-arr"></i></li>
