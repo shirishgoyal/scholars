@@ -143,7 +143,7 @@
                 authenticate: true,
                 title: 'Talks in progress',
                 sidebarMeta: {
-                    icon: 'ion-ios-book',
+                    icon: 'ion-ios-paper',
                     order: 10
                 }
             })
@@ -155,7 +155,7 @@
                 authenticate: true,
                 title: 'Proposed Talks',
                 sidebarMeta: {
-                    icon: 'ion-ios-book',
+                    icon: 'ion-calendar',
                     order: 10
                 }
             })

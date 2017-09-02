@@ -8,9 +8,9 @@
   content: '\25AA';
 }
 /* line 11, themes/lagunita/less/base.less */
-.container {
-  padding: 0;
-}
+//.container {
+//  padding: 0;
+//}
 /* line 18, themes/lagunita/less/base.less */
 a,
 a:hover,
@@ -761,7 +761,7 @@ ul.vbar li:last-of-type {
 /* line 59, themes/lagunita/less/_header.less */
 #logo {
   float: none;
-  padding: 0 15px 0 0;
+  padding: 10px 15px 0 0;
 }
 /* line 63, themes/lagunita/less/_header.less */
 #logo img {
@@ -784,7 +784,7 @@ ul.vbar li:last-of-type {
   font-size: 3em;
   font-weight: 300;
   line-height: 1em;
-  margin-bottom: -3px;
+  margin-bottom: -15px;
 }
 /* line 83, themes/lagunita/less/_header.less */
 #signature #site-name a {
@@ -793,11 +793,13 @@ ul.vbar li:last-of-type {
 }
 /* line 88, themes/lagunita/less/_header.less */
 #signature #site-name #site-name-2 {
-  display: none;
+  //display: none;
 }
 /* line 93, themes/lagunita/less/_header.less */
 #signature #site-slogan {
-  display: none;
+  //display: none;
+  font-style:italic;
+  color:#eee;
 }
 /* line 97, themes/lagunita/less/_header.less */
 body.two-line-signature #signature #site-name span {
@@ -1228,9 +1230,9 @@ body:before {
 }
 @media (max-width: 991px) {
   /* line 100, themes/lagunita/less/_base-responsive.less */
-  .container {
-    padding: 0 15px;
-  }
+  //.container {
+  //  padding: 0 15px;
+  //}
   /* line 104, themes/lagunita/less/_base-responsive.less */
   #search-field {
     -webkit-appearance: none;

@@ -17,20 +17,23 @@
       <div id="header" class="clearfix" role="banner">
         <div class="container">
           <div class="row">
-            <div class="col-md-7">
+            <div class="col-md-7 col-xs-9">
               <!-- Logo -->
-              <div id="logo" class="clearfix"><a href="#"><img class="img-responsive"
-                                                               src="static/img/stanford.png"
-                                                               alt="site logo"/></a></div>
+              <div id="logo" class="clearfix">
+                <a href="#"><img class="img-responsive"
+                                 src="static/img/stanford.png"
+                                 alt="site logo"/></a>
+              </div>
               <!-- /logo -->
               <div id="signature">
-                <div id="site-name"><a ui-sref="page.home"> <span
-                  id="site-name-1"><strong>Stanford</strong> Scholar</span> </a></div>
-                <div id="site-slogan"><a ui-sref="page.home"><span id="site-name-2">An initiative to make research more accessible and collaborative!</span></a>
+                <div id="site-name">
+                  <a ui-sref="page.home"><span
+                    id="site-name-1"><strong>Stanford</strong> Scholar</span> </a>
                 </div>
+                <div id="site-slogan"><span id="site-name-2">Collectively created research talks</span></div>
               </div>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-5 col-xs-3">
               <div id="mainmenu" class="clearfix" role="navigation">
                 <div class="container-fluid">
                   <div class="navbar navbar-default">
@@ -38,8 +41,7 @@
                     <!-- main navigation -->
                     <button type="button" class="navbar-toggle btn-navbar" data-toggle="collapse"
                             data-target=".navbar-collapse"><span class="icon-bar"></span> <span
-                      class="icon-bar"></span> <span class="icon-bar"></span> <span
-                      class="menu-text">Menu</span></button>
+                      class="icon-bar"></span> <span class="icon-bar"></span></button>
                     <!-- /nav-collapse -->
 
                     <div class="navbar-collapse collapse">
@@ -50,20 +52,20 @@
 
                           <!--search box-->
                           <!--<div id="nav-search" role="search">-->
-                            <!--<form action="/search" method="get" id="search-form"-->
-                                  <!--accept-charset="UTF-8" style="margin-top: 0">-->
-                              <!--<label class="hidden" for="search-field">Search term</label>-->
-                              <!--<input title="Search string" class="input-medium"-->
-                                     <!--placeholder="Search&hellip;" type="text" id="search-field"-->
-                                     <!--name="q" value="" size="15" maxlength="128"/>-->
-                              <!--<button id="search-btn" type="submit" name="submit" aria-label="Search"-->
-                                      <!--formmethod="get"><i class="fa fa-search"></i></button>-->
-                            <!--</form>-->
+                          <!--<form action="/search" method="get" id="search-form"-->
+                          <!--accept-charset="UTF-8" style="margin-top: 0">-->
+                          <!--<label class="hidden" for="search-field">Search term</label>-->
+                          <!--<input title="Search string" class="input-medium"-->
+                          <!--placeholder="Search&hellip;" type="text" id="search-field"-->
+                          <!--name="q" value="" size="15" maxlength="128"/>-->
+                          <!--<button id="search-btn" type="submit" name="submit" aria-label="Search"-->
+                          <!--formmethod="get"><i class="fa fa-search"></i></button>-->
+                          <!--</form>-->
                           <!--</div>-->
                           <ul class="nav navbar-nav pull-right" aria-label="primary navigation">
                             <li>
                               <button class="btn btn-primary" style="margin-top: 30px;margin-right:10px"
-                                      ui-sref="page.join">Join Us
+                                      ui-sref="page.join">Join the community
                               </button>
                             </li>
                             <li>
@@ -101,15 +103,20 @@
     <div id="global-footer">
       <div class="container">
         <div class="row row-conformity">
-          <div class="col-sm-4">
-            <div id="logo" class="clearfix"><a href="#"><img class="img-responsive"
-                                                             src="static/img/stanford.png"
-                                                             alt="site logo"/></a></div>
-            <!-- /logo -->
-            <div id="signature">
-              <div id="site-name" style="font-size:3em;"><a ui-sref="page.home"> <span
-                id="site-name-1"><strong>Stanford</strong> Scholar</span> </a></div>
-            </div>
+          <div class="col-md-4 col-sm-4 col-xs-12">
+            <div id="logo" class="clearfix" style="vertical-align: top;padding-top: 0px;">
+                <a href="#"><img class="img-responsive"
+                                 src="static/img/stanford.png"
+                                 alt="site logo"/></a>
+              </div>
+              <!-- /logo -->
+              <div id="signature" style="vertical-align: top">
+                <div id="site-name" style="font-size: 2em; margin-bottom: 5px">
+                  <a ui-sref="page.home"><span
+                    id="site-name-1"><strong>Stanford</strong> Scholar</span> </a>
+                </div>
+                <div id="site-slogan"><span id="site-name-2">Collectively created research talks</span></div>
+              </div>
           </div>
           <!--<div id="bottom-logo" class="col-xs-6 col-sm-4"><a href="http://www.stanford.edu"> <img-->
           <!--src="/static/img/brandbar-stanford-logo@2x.png" alt="Stanford University"-->
@@ -119,7 +126,7 @@
           <!-- .bottom-text end -->
           <!--<div class="clear"></div>-->
 
-          <div class="col-sm-2">
+          <div class="col-md-2 col-sm-2 col-xs-12">
             <ul class="list-unstyled">
               <li><a ui-sref="page.home">Home</a></li>
               <li><a ui-sref="page.faq">FAQ</a></li>
@@ -134,22 +141,22 @@
 
           </div>
 
-          <div class="col-sm-2">
-            <ul class="list-unstyled">
+          <div class="col-md-2 col-sm-2 col-xs-12">
+            <!--<ul class="list-unstyled">-->
               <!--<li><a ui-sref="page.home">Home</a></li>-->
               <!--<li><a ui-sref="page.faq">FAQs</a></li>-->
-              <li><a ui-sref="page.rules">Rules</a></li>
-              <li><a ui-sref="page.technical">Technical</a></li>
-              <li><a ui-sref="proposed">Audio Studio</a></li>
+              <!--<li><a ui-sref="page.rules">Rules</a></li>-->
+              <!--<li><a ui-sref="page.technical">Technical</a></li>-->
+              <!--<li><a ui-sref="proposed">Audio Studio</a></li>-->
               <!--<li><a-->
               <!--href="https://docs.google.com/forms/d/e/1FAIpQLSd97PTIFo0lTaUB3E7PpalFQ6wsStAwEBcYnOJyPAoysI_yXg/viewform"-->
               <!--target="_blank">Join Us</a></li>-->
               <!--<li><a href="mailto:rvaish@cs.stanford.edu" target="_blank">Contact</a></li>-->
-            </ul>
+            <!--</ul>-->
 
           </div>
 
-          <div class="col-sm-4">
+          <div class="col-md-4 col-sm-4 col-xs-12">
             <div style="position: absolute;top:75px;right:0px">
               <p class="copyright vcard">&copy; <span class="fn org">Stanford
             Scholar</span>, 2017.</p>

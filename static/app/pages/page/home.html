@@ -8,37 +8,11 @@
                  class="slider multiple-items">
 
             <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" ng-repeat="paper in vm.featured_papers">
-              <!--<div class="postcard-image">-->
-              <!--<img ng-src="{{paper.image}}" alt="{{paper.name}}" height="200" width="200">-->
-              <!--</div>-->
               <div class="postcard-text">
-                <!--<h3><a ng-href="{{paper.pdf}}" target="_blank">{{paper.name}}</a></h3>-->
-                <!--<p class="descriptor">Published on {{paper.published_on}} <span ng-repeat="pdf_link in paper.pdf_links"> - <a ng-href="{{pdf_link.url}}" target="_blank">{{pdf_link.name}}</a></span></p>-->
-                <!--<p class="descriptor">{{paper.description}}</p>-->
-
-                <!--<p ng-if="paper.video_links.length>0">Check out this talk in <span-->
-                <!--ng-repeat="video_link in paper.video_links"><a-->
-                <!--target="_blank" ng-href="{{video_link.url}}">{{video_link.name}}</a>{{$last ? '' : ($index==paper.video_links.length-2) ? ' and ' : ', '}}</span></p>-->
-
-                <!--<div class="embed-responsive embed-responsive-16by9">-->
-                <!--<youtube-video class="embed-responsive-item" video-url="paper.video"></youtube-video>-->
-                <!--</div>-->
-
                 <a ui-sref="page.talk({id:paper.id})" style="cursor: pointer;">
                   <img ng-src="{{paper.image}}" style="width: 100%;height:auto;margin-bottom: 8px">
                 </a>
                 <h3 style="color: white;font-size: 14px" ng-text-truncate="paper.name" ng-tt-chars-threshold="70"></h3>
-                <!--<p><strong>Directly Responsible Individuals (DRI) Team:</strong> <span ng-repeat="user in paper.dri">-->
-                <!--{{user}} {{$last ? '' : ($index==paper.dri.length-2) ? ' and ' : ', '}}</span></p>-->
-
-                <!--<p ng-if="paper.super_dri.length>0"><strong>Super DRI Team:</strong> <span-->
-                <!--ng-repeat="user in paper.super_dri">-->
-                <!--{{user}} {{$last ? '' : ($index==paper.super_dri.length-2) ? ' and ' : ', '}}</span></p>-->
-
-                <!--<p ng-if="paper.scripting.length>0"><strong>Presentation Team:</strong> <span ng-repeat="user in paper.scripting">-->
-                <!--{{user}} {{$last ? '' : ($index==paper.scripting.length-2) ? ' and ' : ', '}}</span></p>-->
-                <!--<p ng-if="paper.audio.length>0"><strong>Audio Team:</strong> <span ng-repeat="user in paper.audio">-->
-                <!--{{user}} {{$last ? '' : ($index==paper.audio.length-2) ? ' and ' : ', '}}</span></p>-->
               </div>
             </div>
 
@@ -51,7 +25,7 @@
   </div>
 </div>
 
-<div class="container" role="main" tabindex="0" style="padding: 20px 0;">
+<div class="container" role="main" tabindex="0" style="padding-top: 20px; padding-bottom: 20px">
   <div ng-repeat="(category,papers) in vm.paper_categories">
     <div class="row" style="margin-bottom: 10px">
       <div class="col-xs-12">
@@ -74,6 +48,7 @@
             <h3 style="font-weight: 400;min-height: 44px;" ui-sref="page.talk({id:paper.id})"><a><span
               ng-text-truncate="paper.name"
               ng-tt-chars-threshold="60"></span></a></h3>
+
             <p class="descriptor"><a ng-href="{{paper.url}}" target="_blank" style="color:#222">{{paper.publisher}}</a>
               <span> - <a ng-href="{{paper.pdf}}" target="_blank">PDF</a></span></p>
 
@@ -81,6 +56,7 @@
               ng-repeat="video_link in paper.video_links"><a
               target="_blank" ng-href="{{video_link.url}}">{{video_link.name}}</a>{{$last ? '' : ($index==paper.video_links.length-2) ? ' and ' : ', '}}</span>
             </p>
+
           </div>
         </div>
 

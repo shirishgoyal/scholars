@@ -2182,6 +2182,11 @@
                 var papers = lodash
                     .map(response.data.results, function (paper) {
                         paper.image = 'https://i.ytimg.com/vi/' + paper.yid + '/maxresdefault.jpg';
+
+                        if (['Programming Languages', 'Databases', 'Computer Vision', 'Cryptography'].indexOf(paper.category_display)>=0){
+                            paper.category_display = 'Others'
+                        }
+
                         return paper;
                     });
 
