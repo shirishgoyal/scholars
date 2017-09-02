@@ -742,9 +742,9 @@ ul.vbar li:last-of-type {
 /* line 44, themes/lagunita/less/_header.less */
 #header {
   z-index: 999;
-  padding: 30px 0;
+  padding: 10px 0;
   //background-color: #f8f7f2;
-  background-color: #222;
+  background-color: #151515;
 }
 /* line 50, themes/lagunita/less/_header.less */
 #header a,
@@ -766,7 +766,7 @@ ul.vbar li:last-of-type {
 /* line 63, themes/lagunita/less/_header.less */
 #logo img {
   max-width: 160px;
-  max-height: 90px;
+  max-height: 55px;
 }
 /* line 68, themes/lagunita/less/_header.less */
 #signature {
@@ -781,7 +781,7 @@ ul.vbar li:last-of-type {
 /* line 76, themes/lagunita/less/_header.less */
 #signature #site-name {
   color: #fff;
-  font-size: 4em;
+  font-size: 3em;
   font-weight: 300;
   line-height: 1em;
   margin-bottom: -3px;
@@ -844,6 +844,7 @@ body.site-slogan #signature #site-slogan a {
   border-radius: 8px;
   position: absolute;
   right: 0;
+  outline:none;
 }
 /* line 141, themes/lagunita/less/_header.less */
 #search-type {

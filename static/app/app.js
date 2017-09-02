@@ -23,7 +23,11 @@ angular.module('BlurAdmin', [
     'youtube-embed',
     'satellizer',
     'slick',
+    'ngDisqus',
+    'ngOpbeat',
+    'angular-flexslider',
 
     'BlurAdmin.theme',
-    'BlurAdmin.pages'
+    'BlurAdmin.pages',
+    'BlurAdmin.services'
 ]);

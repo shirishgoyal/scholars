@@ -15,8 +15,8 @@
         .config(routeConfig)
         .constant('gTemplates', {
             WORKFLOW_TEMPLATE: '1DBM-v8bieVlUlnDZihCM4MlTZCLGCuw8ezVlF5Re0wc',
-            BEST_PRACTICES_TEMPLATE: '1sQS_OZ9A9HLoQcJGlVjRXKiPJvt62oafW7CyKFELwaM'
-
+            BEST_PRACTICES_TEMPLATE: '1sQS_OZ9A9HLoQcJGlVjRXKiPJvt62oafW7CyKFELwaM',
+            SLACK_TEAM_ID: 'T268ARDCG'
         });
 
     /** @ngInject */

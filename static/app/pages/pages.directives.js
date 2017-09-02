@@ -9,6 +9,7 @@
         .directive('autoFocus', autoFocus)
         .filter('screenshot', screenshot)
         .directive('phaseHeader', phaseHeader)
+        .directive('phaseActions', phaseActions)
         .directive("ngTextTruncate", ["$compile", "ValidationServices", "CharBasedTruncation", "WordBasedTruncation",
             function ($compile, ValidationServices, CharBasedTruncation, WordBasedTruncation) {
                 return {
@@ -235,6 +236,29 @@
                 $scope.goto = function (item) {
                     $state.go(item.state, {id: $stateParams.id});
                 }
+            }
+        };
+    }
+
+    function phaseActions() {
+        return {
+            restrict: 'E',
+            scope: {
+                'items': '=',
+                'currentPhase': '=',
+                'course': '=',
+                'canPrevious': '=',
+                'canNext': '=',
+                'isDri': '=',
+                'movePrevious': '&',
+                'moveNext': '&'
+            },
+            templateUrl: 'static/app/pages/courses/phases/actions.html',
+
+            controller: function ($scope, $state, $stateParams,$sce) {
+                $scope.trustSrc = function (src) {
+                    return $sce.trustAsResourceUrl(src);
+                };
             }
         };
     }

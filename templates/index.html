@@ -11,8 +11,7 @@
   <meta name="author" content="Stanford Social Systems Lab"/>
 
   <link
-    href='https://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic,900italic,900&subset=latin,greek,greek-ext,vietnamese,cyrillic-ext,latin-ext,cyrillic'
-    rel='stylesheet' type='text/css'>
+    href='https://fonts.googleapis.com/css?family=Merriweather|Open+Sans' rel='stylesheet' type='text/css'>
 
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}">
@@ -27,6 +26,7 @@
   <link rel='stylesheet' type='text/css' href="{% static 'libs/bootcards/dist/css/bootcards-desktop.min.css' %}">
   <link rel='stylesheet' type='text/css' href="{% static 'libs/bootstrap/dist/css/bootstrap.min.css' %}">
   <link rel='stylesheet' type='text/css' href="{% static 'libs/bootstrap-select/dist/css/bootstrap-select.min.css' %}">
+  <link rel='stylesheet' type='text/css' href="{% static 'libs/angular-toastr/dist/angular-toastr.css' %}">
   <link rel='stylesheet' type='text/css' href="{% static 'libs/slick-carousel/slick/slick.css' %}">
   <link rel='stylesheet' type='text/css' href="{% static 'libs/slick-carousel/slick/slick-theme.css' %}">
   <link rel='stylesheet' type='text/css' href="{% static 'libs/font-awesome/css/font-awesome.css' %}">
@@ -82,9 +82,9 @@
 <script type="text/javascript" src="{% static 'libs/jquery/dist/jquery.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/jquery-ui/jquery-ui.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/jquery.easing/js/jquery.easing.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'libs/lodash/dist/lodash.js' %}"></script>
+<script type="text/javascript" src="{% static 'libs/lodash/dist/lodash.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/slimscroll/jquery.slimscroll.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'libs/moment/moment.js' %}"></script>
+<script type="text/javascript" src="{% static 'libs/moment/min/moment.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/tether/dist/js/tether.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/bootstrap/dist/js/bootstrap.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/bootcards/dist/js/bootcards.min.js' %}"></script>
@@ -106,24 +106,30 @@
 <script type="text/javascript" src="{% static 'libs/angular-ui-router/release/angular-ui-router.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-touch/angular-touch.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-slick/dist/slick.js' %}"></script>
-<script type="text/javascript" src="{% static 'libs/angular-toastr/dist/angular-toastr.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-smart-table/dist/smart-table.min.js' %}"></script>
-<!--<script type="text/javascript" src="{% static 'libs/angular-material/angular-material.min.js' %}"></script>-->
-
 <script type="text/javascript" src="{% static 'libs/angular-moment/angular-moment.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/ng-lodash/build/ng-lodash.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-youtube-mb/dist/angular-youtube-embed.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/ng-file-upload/ng-file-upload.min.js' %}"></script>
-<script type="text/javascript"
-        src="{% static 'libs/angularAudioRecorder/dist/angular-audio-recorder.min.js' %}"></script>
-<script type="text/javascript"
-        src="{% static 'libs/angular-progress-button-styles/dist/angular-progress-button-styles.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'libs/angularAudioRecorder/dist/angular-audio-recorder.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'libs/angular-progress-button-styles/dist/angular-progress-button-styles.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-slimscroll/angular-slimscroll.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-ui-sortable/sortable.min.js' %}"></script>
-<!--<script type="text/javascript" src="{% static 'libs/angular-bootstrap/ui-bootstrap.min.js' %}"></script>-->
 <script type="text/javascript" src="{% static 'libs/angular-bootstrap/ui-bootstrap-tpls.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/Chart.js/Chart.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/satellizer/dist/satellizer.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'libs/angular-toastr/dist/angular-toastr.tpls.js' %}"></script>
+<script type="text/javascript" src="{% static 'libs/angular-disqus/angular-disqus.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'libs/angular-flexslider/angular-flexslider.js' %}"></script>
+<script type="text/javascript" src="{% static 'libs/opbeat-angular/opbeat-angular.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'libs/raven-js/dist/raven.js' %}"></script>
+<script type="text/javascript" src="{% static 'libs/raven-js/dist/plugins/angular.js' %}"></script>
+<script>
+  Raven
+    .config('https://6b552a9d3c714aac9f510410d79a9202@sentry.io/207311')
+    .addPlugin(Raven.Plugins.Angular)
+    .install();
+</script>
 {% endcompress %}
 
 {% compress js %}
@@ -156,6 +162,7 @@
 <script type="text/javascript" src="{% static 'app/theme/directives/scrollPosition.js' %}"></script>
 <script type="text/javascript" src="{% static 'app/theme/directives/trackWidth.js' %}"></script>
 <script type="text/javascript" src="{% static 'app/theme/directives/zoomIn.js' %}"></script>
+<script type="text/javascript" src="{% static 'app/theme/directives/errSrc.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'app/theme/components/components.module.js' %}"></script>
 <script type="text/javascript" src="{% static 'app/theme/components/toastrLibConfig.js' %}"></script>
@@ -187,17 +194,20 @@
 
 <script type="text/javascript" src="{% static 'app/theme/components/widgets/widgets.directive.js' %}"></script>
 
+<script type="text/javascript" src="{% static 'app/services/services.module.js' %}"></script>
+<script type="text/javascript" src="{% static 'app/services/auth.service.js' %}"></script>
+<script type="text/javascript" src="{% static 'app/services/courses.service.js' %}"></script>
+<script type="text/javascript" src="{% static 'app/services/slides.service.js' %}"></script>
+
 <script type="text/javascript" src="{% static 'app/pages/pages.module.js' %}"></script>
 <script type="text/javascript" src="{% static 'app/pages/pages.directives.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'app/pages/auth/auth.module.js' %}"></script>
-<script type="text/javascript" src="{% static 'app/pages/auth/auth.service.js' %}"></script>
 <script type="text/javascript" src="{% static 'app/pages/auth/LoginPageCtrl.js' %}"></script>
 <script type="text/javascript" src="{% static 'app/pages/auth/RegisterPageCtrl.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'app/pages/courses/courses.module.js' %}"></script>
-<script type="text/javascript" src="{% static 'app/pages/courses/courses.service.js' %}"></script>
-<script type="text/javascript" src="{% static 'app/pages/courses/slides.service.js' %}"></script>
+
 <script type="text/javascript" src="{% static 'app/pages/courses/CoursePageCtrl.js' %}"></script>
 <script type="text/javascript" src="{% static 'app/pages/courses/add/CoursesAddCtrl.js' %}"></script>
 <script type="text/javascript" src="{% static 'app/pages/courses/join/CourseJoinCtrl.js' %}"></script>
@@ -205,7 +215,6 @@
 <script type="text/javascript" src="{% static 'app/pages/courses/stages/CoursesPublishedPageCtrl.js' %}"></script>
 <script type="text/javascript" src="{% static 'app/pages/courses/stages/CoursesInProgressPageCtrl.js' %}"></script>
 <script type="text/javascript" src="{% static 'app/pages/courses/phases/ReadingPhaseCtrl.js' %}"></script>
-
 
 <script type="text/javascript" src="{% static 'app/pages/dashboard/dashboard.module.js' %}"></script>
 <script type="text/javascript" src="{% static 'app/pages/dashboard/courseChart/courseChart.directive.js' %}"></script>
@@ -215,6 +224,7 @@
 
 <script type="text/javascript" src="{% static 'app/pages/page/page.module.js' %}"></script>
 <script type="text/javascript" src="{% static 'app/pages/page/PageCtrl.js' %}"></script>
+<script type="text/javascript" src="{% static 'app/pages/page/CourseDetailCtrl.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'app/pages/profile/profile.module.js' %}"></script>
 <script type="text/javascript" src="{% static 'app/pages/profile/ProfileModalCtrl.js' %}"></script>
