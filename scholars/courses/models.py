@@ -1,18 +1,21 @@
 import os
 
 import pytz
+from datetime import tzinfo, timedelta, datetime
 from django.conf import settings
 from django.core.validators import MinValueValidator
 from django.db import models
-# from gdstorage.storage import GoogleDriveStorage
+from django.db.models import F, Count, ExpressionWrapper, DateField, DateTimeField
+from django.db.models.signals import pre_delete, post_save, pre_save
 from django.utils.translation import gettext_noop
-from model_utils import Choices
+from model_utils import Choices, FieldTracker
 
+from scholars.courses.signals import update_course_counters, update_course_status_phase
 from scholars.users.models import User
 from scholars.utils.models import TimeStampable
 from scholars.utils.utils import clear_folder
-
-# gd_storage = GoogleDriveStorage()
+from scholars.utils.utils import import_presentation, send_manually_exception_email, copy_file, writable_permissions
+from scholars.utils.slack import Slack
 
 
 def get_image_path(instance, filename):
@@ -60,6 +63,36 @@ class Category(TimeStampable):
         return "%s" % self.name
 
 
+class CourseQuerySet(models.QuerySet):
+    def in_progress(self):
+        return self.filter(
+            status=Course.STATUS.in_progress
+        )
+
+    def include_members_needed(self):
+        return self.select_related().annotate(
+            presentation_needed=F('num_presentation') - F('num_presentation_actual'),
+            graphics_needed=F('num_graphics') - F('num_graphics_actual'),
+            scripting_needed=F('num_scripting') - F('num_scripting_actual'),
+            audio_needed=F('num_audio') - F('num_audio_actual'),
+            dri_needed=F('num_dri') - F('num_dri_actual'),
+            members_count=Count('members'),
+            min_date=ExpressionWrapper(F('created_at') + timedelta(days=7), output_field=DateTimeField())
+        )
+
+    def meets_requirements_for_in_progress(self):
+        return self.include_members_needed().filter(
+            status=Course.STATUS.proposed,
+            min_date__lt=datetime.now(pytz.timezone('UTC')),
+            presentation_needed__lte=0,
+            graphics_needed__lte=0,
+            scripting_needed__lte=0,
+            audio_needed__lte=0,
+            dri_needed__lte=0,
+            members_count__gte=10
+        ).order_by('-members_count')
+
+
 class Course(TimeStampable):
     STATUS = Choices(
         (0, 'proposed', 'Proposed'),
@@ -102,6 +135,7 @@ class Course(TimeStampable):
         ('eu', 'eu', gettext_noop('Basque')),
         ('fa', 'fa', gettext_noop('Persian')),
         ('fi', 'fi', gettext_noop('Finnish')),
+        ('fil', 'fil', gettext_noop('Filipino')),
         ('fr', 'fr', gettext_noop('French')),
         ('fy', 'fy', gettext_noop('Frisian')),
         ('ga', 'ga', gettext_noop('Irish')),
@@ -134,6 +168,7 @@ class Course(TimeStampable):
         ('ne', 'ne', gettext_noop('Nepali')),
         ('nl', 'nl', gettext_noop('Dutch')),
         ('nn', 'nn', gettext_noop('Norwegian Nynorsk')),
+        ('or', 'or', gettext_noop('Odia')),
         ('os', 'os', gettext_noop('Ossetic')),
         ('pa', 'pa', gettext_noop('Punjabi')),
         ('pl', 'pl', gettext_noop('Polish')),
@@ -155,7 +190,8 @@ class Course(TimeStampable):
         ('uk', 'uk', gettext_noop('Ukrainian')),
         ('ur', 'ur', gettext_noop('Urdu')),
         ('vi', 'vi', gettext_noop('Vietnamese')),
-        ('zh', 'zh', gettext_noop('Chinese')),
+        ('zh', 'zh', gettext_noop('Mandarin')),
+        ('zho', 'zho', gettext_noop('Chinese')),
     )
 
     doi = models.CharField(max_length=256, null=True, blank=True)
@@ -164,7 +200,7 @@ class Course(TimeStampable):
     version = models.PositiveIntegerField(default=1)
     lang = models.CharField(max_length=8, choices=LANGUAGE, default='en')
 
-    name = models.CharField(max_length=2048, unique=True)
+    name = models.CharField(max_length=2048)
     owner = models.ForeignKey(User, related_name='courses')
     status = models.PositiveIntegerField(choices=STATUS, default=STATUS.proposed)
     phase = models.PositiveIntegerField(choices=PHASE, default=PHASE.onboarding)
@@ -200,6 +236,34 @@ class Course(TimeStampable):
     # questionnaire
     qid = models.CharField(max_length=256, null=True, blank=True)
 
+    # slack
+    cid = models.CharField(max_length=256, null=True, blank=True)
+    channel = models.CharField(max_length=256, null=True, blank=True)
+
+    # youtube
+    yid = models.CharField(max_length=256, null=True, blank=True)
+
+    # timelines
+    in_progress_at = models.DateTimeField(null=True, blank=True)
+
+    # phase timelines
+    reading_at = models.DateTimeField(null=True, blank=True)
+    discussion_at = models.DateTimeField(null=True, blank=True)
+    slides_at = models.DateTimeField(null=True, blank=True)
+    peer_review_at = models.DateTimeField(null=True, blank=True)
+    audio_at = models.DateTimeField(null=True, blank=True)
+    refine_at = models.DateTimeField(null=True, blank=True)
+    pending_approval_at = models.DateTimeField(null=True, blank=True)
+    approved_at = models.DateTimeField(null=True, blank=True)
+
+    tracker = FieldTracker(fields=['status', 'phase'])
+
+    objects = models.Manager()
+    requirements = CourseQuerySet.as_manager()
+
+    class Meta:
+        unique_together = ('name', 'lang', 'version')
+
     def __unicode__(self):
         return "%s [%d slides][%s]" % (self.name, self.slides.count(), self.lang)
 
@@ -207,42 +271,69 @@ class Course(TimeStampable):
         return "%s [%d slides][%s]" % (self.name, self.slides.count(), self.lang)
 
     @property
+    def phase_display(self):
+        return Course.PHASE[self.phase]
+
+    @property
+    def status_display(self):
+        return Course.STATUS[self.status]
+
+    @property
+    def youtube_display(self):
+        if self.yid == '' or self.yid is None:
+            return ''
+        return 'https://youtu.be/%s' % self.yid
+
+    @property
+    def category_display(self):
+        if self.category is not None:
+            return self.category.name
+        return 'General'
+
+    @property
+    def lang_display(self):
+        if self.lang is not None:
+            return Course.LANGUAGE[self.lang]
+        return 'Unknown'
+
+    @property
     def num_presentation_required(self):
         required = self.num_presentation - self.num_presentation_actual
-        return required if required >= 0 else 0
+        if required >= 0:
+            return required
+        return 0
 
     @property
     def num_graphics_required(self):
         required = self.num_graphics - self.num_graphics_actual
-        return required if required >= 0 else 0
+        if required >= 0:
+            return required
+        return 0
 
     @property
     def num_scripting_required(self):
         required = self.num_scripting - self.num_scripting_actual
-        return required if required >= 0 else 0
+        if required >= 0:
+            return required
+        return 0
 
     @property
     def num_audio_required(self):
         required = self.num_audio - self.num_audio_actual
-        return required if required >= 0 else 0
+        if required >= 0:
+            return required
+        return 0
 
     @property
     def num_dri_required(self):
         required = self.num_dri - self.num_dri_actual
-        return required if required >= 0 else 0
+        if required >= 0:
+            return required
+        return 0
 
-
-
-    def delete(self, using=None, keep_parents=False):
-        if self.id is not None and len(str(self.id)) > 0:
-            folder = os.path.join(settings.MEDIA_ROOT, '%d' % self.id)
-
-            try:
-                clear_folder(folder)
-            except:
-                pass
-
-        super(Course, self).delete()
+    @property
+    def total_members(self):
+        return self.members.count()
 
     def get_video_url(self):
         video_url = get_video_path(self.id)
@@ -255,27 +346,82 @@ class Course(TimeStampable):
     get_video_url.short_description = 'Video'
     get_video_url.allow_tags = True
 
+    @property
+    def video_url(self):
+        video_url = None
+        if self.id is not None:
+            video_url = get_video_path(self.id)
+        return video_url
+
     def total_slides(self):
-        return self.slides.count()
+        if self.slides is not None:
+            return self.slides.count()
+        return 0
 
     total_slides.short_description = 'Total Slides'
 
     def pending_slides(self):
-        return self.slides.filter(status=Slide.STATUS.pending_approval).count()
+        if self.slides is not None:
+            return self.slides.filter(status=Slide.STATUS.pending_approval).count()
+        return 0
 
     pending_slides.short_description = 'Pending Approval'
 
+    def delete(self, using=None, keep_parents=False):
+        if self.pk is not None and len(str(self.pk)) > 0:
+            folder = os.path.join(settings.MEDIA_ROOT, '%d' % self.pk)
+
+            try:
+                clear_folder(folder)
+            except:
+                pass
+
+        super(Course, self).delete()
+
+    def make_in_progress(self):
+        try:
+            if self.id is not None:
+
+                # create questionnaire
+                if self.qid is None:
+                    response = copy_file(self.id, settings.QUESTIONNAIRE_TEMPLATE, self.name)
+                    writable_permissions(response['id'])
+                    self.qid = response['id']
+                    # self.save()
+
+                # copy_file(self.id, settings.WORKFLOW_TEMPLATE, self.name)
+
+                # create presentation
+                if self.gid is None:
+                    response = copy_file(self.id, settings.PRESENTATION_TEMPLATE, self.name)
+                    writable_permissions(response['id'])
+                    self.gid = response['id']
+                    # self.save()
+
+                try:
+                    # create slack channel
+                    if self.cid is None:
+                        slack = Slack()
+                        result = slack.create_channel('%s%d' % (self.category.shortcode.lower(), self.id))
+                        print result
+
+                        if 'ok' in result and result['ok']:
+                            self.channel = result['channel']['name']
+                            self.cid = result['channel']['id']
+                except Exception as es:
+                    print "slack"
+                    print es
+
+        except Exception as e:
+            # todo call sentry
+            print "error while changing status to progress"
+            print e
+
+
+pre_save.connect(update_course_status_phase, sender=Course)
+
 
 class CourseMember(TimeStampable):
-    # ROLE = Choices(
-    #     (0, 'unknown', 'Unknown'),
-    #     (1, 'presentation', 'Presentation'),
-    #     (2, 'graphics', 'Graphics'),
-    #     (3, 'scripting', 'Scripting'),
-    #     (4, 'audio', 'Audio'),
-    #     (5, 'dri', 'DRI')
-    # )
-
     EXPERTISE = Choices(
         (1, 'novice', 'Novice'),
         (2, 'primary', 'Primary'),
@@ -288,7 +434,6 @@ class CourseMember(TimeStampable):
 
     course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='members')
     member = models.ForeignKey(User, related_name='course_contributions')
-    # role = models.PositiveIntegerField(choices=ROLE, default=ROLE.unknown)
     expertise = models.PositiveIntegerField(choices=EXPERTISE, default=EXPERTISE.novice)
     timezone = models.CharField(max_length=128, choices=TIMEZONES, blank=True, null=True)
     time_commitment = models.PositiveIntegerField(default=0)  # hours per week
@@ -297,15 +442,20 @@ class CourseMember(TimeStampable):
     graphics = models.BooleanField(default=False)
     scripting = models.BooleanField(default=False)
     audio = models.BooleanField(default=False)
-
-    # field for selection
     dri = models.BooleanField(default=False)
+    been_dri = models.BooleanField(default=False)
 
-    # field for actual
+    # field for actual selection
     is_dri = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('course', 'member')
+
+    def __str__(self):
+        return '%s - %s'% (self.course.name, self.member.username)
+
+
+pre_delete.connect(update_course_counters, sender=CourseMember)
 
 
 class Slide(TimeStampable):
@@ -333,12 +483,21 @@ class Slide(TimeStampable):
     class Meta:
         ordering = ['position']
 
+    def __str__(self):
+        return '%s %d' % (self.course.name, self.position)
+
+    @property
+    def status_text(self):
+        return self.STATUS[self.status]
+
+    # @property
     def image_url(self):
         return u'<img src="%s" style="max-width:250px;max-height:250px" />' % self.image.url
 
     image_url.short_description = 'Image'
     image_url.allow_tags = True
 
+    # @property
     def audio_url(self):
         return u'<audio controls src="%s" style="max-width:200px;" />' % self.audio.url
 
@@ -346,11 +505,22 @@ class Slide(TimeStampable):
     audio_url.allow_tags = True
 
 
+class SlideReview(TimeStampable):
+    STATUS = Choices(
+        (1, 'proposed', 'Proposed'),
+        (2, 'resolved', 'Resolved')
+    )
 
-# from django.db.models.signals import post_save
-# from django.dispatch import receiver
-# from utils.utils import export
-# @receiver(post_save, sender=Course)
-# def update_slides(sender, instance=None, created=False, **kwargs):
-#     if instance.id is not None and instance.gid is not None:
-#         export(instance.id, instance.gid)
+    STAGE = Choices(
+        (1, 'peer_review', 'Peer Review'),
+        (2, 'refine', 'Refine')
+    )
+
+    slide = models.ForeignKey(Slide, on_delete=models.CASCADE, related_name='reviews')
+    feedback = models.TextField(max_length=5000, null=True, blank=True)
+    status = models.PositiveIntegerField(choices=STATUS, default=STATUS.proposed)
+    stage = models.PositiveIntegerField(choices=STAGE, default=STAGE.peer_review)
+    user = models.ForeignKey(User, related_name='reviews', null=True, blank=True)
+
+    def __str__(self):
+        return '%s %s' % (self.slide.course.name, self.STAGE[self.stage])

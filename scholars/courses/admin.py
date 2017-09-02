@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from scholars.utils.utils import export_video, import_presentation, free_space, send_manually_exception_email, \
     process_links
-from .models import Course, Slide, Category
+from .models import Course, Slide, Category, CourseMember, SlideReview
 
 
 @admin.register(Category)
@@ -23,7 +23,12 @@ class SlideInline(admin.TabularInline):
 class CourseAdmin(admin.ModelAdmin):
     inlines = [SlideInline]
     actions = ['generate', 'import_from_google', 'export_to_video', 'cleanup', 'process_redundancy']
-    list_display = ('id', 'name', 'status', 'phase', 'get_video_url', 'total_slides', 'pending_slides', 'is_featured')
+    list_display = (
+    'id', 'name', 'status', 'phase', 'lang', 'doi', 'category', 'publisher', 'yid', 'get_video_url', 'total_slides',
+    'pending_slides',
+    'is_featured')
+    list_editable=('is_featured',)
+    # filter_vertical = ('lang', 'status', 'phase', 'category')
     ordering = ('id',)
 
     def get_actions(self, request):
@@ -70,3 +75,16 @@ class CourseAdmin(admin.ModelAdmin):
                 process_links(instance.id)
 
     process_redundancy.short_description = "Redundancy (DONT USE)"
+
+
+@admin.register(CourseMember)
+class CourseMemberAdmin(admin.ModelAdmin):
+    list_display = ('id', 'course', 'member', 'is_dri', 'time_commitment', 'expertise', 'timezone', 'presentation', 'graphics',
+                    'scripting', 'audio', 'dri')
+    ordering = ('id',)
+
+
+@admin.register(SlideReview)
+class SlideReviewAdmin(admin.ModelAdmin):
+    list_display = ('id', 'slide', 'user', 'status', 'stage', 'feedback')
+    ordering = ('id',)
