@@ -32,7 +32,7 @@
             </div>
             <div class="col-md-5">
               <div id="mainmenu" class="clearfix" role="navigation">
-                <div class="container">
+                <div class="container-fluid">
                   <div class="navbar navbar-default">
 
                     <!-- main navigation -->
@@ -49,39 +49,28 @@
                         <div id="primary-nav">
 
                           <!--search box-->
-                          <div id="nav-search" role="search">
-                            <form action="/search" method="get" id="search-form"
-                                  accept-charset="UTF-8">
-                              <!--<h2 class="hidden">Search form</h2>-->
-                              <label class="hidden" for="search-field">Search term</label>
-                              <!--<input name="cx" type="hidden" value="003265255082301896483:sq5n7qoyfh8">-->
-                              <!--<input name="cof" type="hidden" value="FORID:9">-->
-                              <!--<input name="ie" type="hidden" value="UTF-8">-->
-                              <!--replace value in next line with your site URL -->
-                              <!--<input name="as_sitesearch" type="hidden" value="www.stanford.edu">-->
-                              <input title="Search string" class="input-medium"
-                                     placeholder="Search&hellip;" type="text" id="search-field"
-                                     name="q" value="" size="15" maxlength="128"/>
-                              <button id="search-btn" type="submit" name="submit" aria-label="Search"
-                                      formmethod="get"><i class="fa fa-search"></i></button>
-                            </form>
-                          </div>
-                          <ul class="nav navbar-nav" aria-label="primary navigation">
-                            <!--<li id="nav-home"><a ui-sref="page.home">Home</a></li>-->
-                            <!--<li id="nav-1"><a ui-sref="page.faq">FAQs</a></li>-->
-                            <!--<li id="nav-2"><a ui-sref="page.rules">Rules</a></li>-->
-                            <!--<li id="nav-5"><a ui-sref="page.technical">Technical</a></li>-->
-                            <!--<li id="nav-0"><a ui-sref="dashboard">Audio-->
-                              <!--Studio</a></li>-->
-                            <!--<li><button class="btn btn-primary" style="margin-top: 30px" ng-show="!vm.isAuthenticated"-->
-                              <!--href="https://docs.google.com/forms/d/e/1FAIpQLSd97PTIFo0lTaUB3E7PpalFQ6wsStAwEBcYnOJyPAoysI_yXg/viewform"-->
-                              <!--target="_blank">Join Us</button></li>-->
-                            <li><button class="btn btn-primary" style="margin-top: 30px"
-                              ui-sref="auth.login"
-                              target="_blank">Join Us</button></li>
-                            <!--<li id="nav-3"><a href="mailto:rvaish@cs.stanford.edu" target="_blank">Contact</a></li>-->
-
-
+                          <!--<div id="nav-search" role="search">-->
+                            <!--<form action="/search" method="get" id="search-form"-->
+                                  <!--accept-charset="UTF-8" style="margin-top: 0">-->
+                              <!--<label class="hidden" for="search-field">Search term</label>-->
+                              <!--<input title="Search string" class="input-medium"-->
+                                     <!--placeholder="Search&hellip;" type="text" id="search-field"-->
+                                     <!--name="q" value="" size="15" maxlength="128"/>-->
+                              <!--<button id="search-btn" type="submit" name="submit" aria-label="Search"-->
+                                      <!--formmethod="get"><i class="fa fa-search"></i></button>-->
+                            <!--</form>-->
+                          <!--</div>-->
+                          <ul class="nav navbar-nav pull-right" aria-label="primary navigation">
+                            <li>
+                              <button class="btn btn-primary" style="margin-top: 30px;margin-right:10px"
+                                      ui-sref="page.join">Join Us
+                              </button>
+                            </li>
+                            <li>
+                              <button class="btn btn-primary" style="margin-top: 30px"
+                                      ui-sref="proposed">Sign-in
+                              </button>
+                            </li>
                           </ul>
                         </div>
                       </div>
@@ -111,7 +100,7 @@
     <!-- Global footer snippet start -->
     <div id="global-footer">
       <div class="container">
-        <div class="row">
+        <div class="row row-conformity">
           <div class="col-sm-4">
             <div id="logo" class="clearfix"><a href="#"><img class="img-responsive"
                                                              src="static/img/stanford.png"
@@ -139,8 +128,7 @@
               <!--<li><a ui-sref="dashboard">Audio-->
               <!--Studio</a></li>-->
               <li><a
-                href="https://docs.google.com/forms/d/e/1FAIpQLSd97PTIFo0lTaUB3E7PpalFQ6wsStAwEBcYnOJyPAoysI_yXg/viewform"
-                target="_blank">Join Us</a></li>
+                ui-sref="page.join">Join Us</a></li>
               <li><a href="mailto:rvaish@cs.stanford.edu" target="_blank">Contact</a></li>
             </ul>
 
@@ -152,8 +140,7 @@
               <!--<li><a ui-sref="page.faq">FAQs</a></li>-->
               <li><a ui-sref="page.rules">Rules</a></li>
               <li><a ui-sref="page.technical">Technical</a></li>
-              <li><a ui-sref="dashboard">Audio
-                Studio</a></li>
+              <li><a ui-sref="proposed">Audio Studio</a></li>
               <!--<li><a-->
               <!--href="https://docs.google.com/forms/d/e/1FAIpQLSd97PTIFo0lTaUB3E7PpalFQ6wsStAwEBcYnOJyPAoysI_yXg/viewform"-->
               <!--target="_blank">Join Us</a></li>-->
@@ -162,9 +149,12 @@
 
           </div>
 
-          <!--<p class="copyright vcard col-sm-10">&copy; <span class="fn org">Stanford Scholar</span>.&nbsp;-->
-          <!--<span class="adr"> <span class="locality">Stanford</span>, <span-->
-          <!--class="region">California</span> <span class="postal-code">94305</span></span>.</p>-->
+          <div class="col-sm-4">
+            <div style="position: absolute;top:75px;right:0px">
+              <p class="copyright vcard">&copy; <span class="fn org">Stanford
+            Scholar</span>, 2017.</p>
+            </div>
+          </div>
         </div>
         <!-- .row end -->
       </div>

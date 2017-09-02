@@ -6,11 +6,10 @@
     'use strict';
 
     angular.module('BlurAdmin.pages.auth', [
-        'BlurAdmin.pages.auth.services'
+        'BlurAdmin.services'
     ])
         .config(routeConfig);
 
-    angular.module('BlurAdmin.pages.auth.services', ['satellizer']);
 
     /** @ngInject */
     function routeConfig($stateProvider) {
@@ -25,12 +24,12 @@
                 },
                 authenticate: false
             })
-            .state('auth.register', {
-                url: '/register',
-                templateUrl: 'static/app/pages/auth/register.html',
-                controller: 'RegisterPageCtrl',
-                controllerAs: 'vm'
-            })
+            // .state('auth.register', {
+            //     url: '/register',
+            //     templateUrl: 'static/app/pages/auth/register.html',
+            //     controller: 'RegisterPageCtrl',
+            //     controllerAs: 'vm'
+            // })
             .state('auth.login', {
                 url: '/login',
                 templateUrl: 'static/app/pages/auth/login.html',

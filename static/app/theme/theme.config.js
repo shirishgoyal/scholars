@@ -9,15 +9,27 @@
         .config(config);
 
     /** @ngInject */
-    function config($httpProvider, $compileProvider, baConfigProvider, colorHelper, $authProvider) {
+    function config($httpProvider, $compileProvider, $locationProvider, baConfigProvider, colorHelper, $authProvider, toastrConfig, $disqusProvider, $opbeatProvider) {
+        $locationProvider.hashPrefix('!');
+
         $httpProvider.interceptors.push('AuthHttpResponseInterceptor');
 
         $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
         $httpProvider.defaults.xsrfCookieName = 'csrftoken';
 
-        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension):/);
+        $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|slack):/);
 
         $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|local|data|chrome-extension):/);
+
+        $authProvider.baseUrl = '/';
+        $authProvider.loginUrl = '/auth/login';
+        $authProvider.signupUrl = '/auth/login';
+        // $authProvider.unlinkUrl = '/auth/unlink/';
+        $authProvider.tokenName = 'token';
+        $authProvider.tokenPrefix = 'scholars';
+        $authProvider.tokenHeader = 'Authorization';
+        $authProvider.tokenType = 'Bearer';
+        $authProvider.storageType = 'localStorage';
 
         $authProvider.google({
             clientId: '986490356220-qlef4cg2t9ru83cj3bq83qmflrfshvde.apps.googleusercontent.com',
@@ -33,6 +45,20 @@
             oauthType: '2.0',
             popupOptions: {width: 400, height: 400}
         });
+
+        angular.extend(toastrConfig, {
+            templates: {
+                toast: 'directives/toast/toast.html',
+                progressbar: 'directives/progressbar/progressbar.html'
+            }
+        });
+
+        $disqusProvider.setShortname('stanfordscholar');
+
+        $opbeatProvider.config({
+            orgId: 'dd3b73bcb11544bf85764ffcd34f8ad8',
+            appId: '592bbc667c'
+        })
 
         //baConfigProvider.changeTheme({blur: true});
 

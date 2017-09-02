@@ -52,9 +52,9 @@
                     $state.go('auth.login');
                 } else {
                     //check if login page and already logged in
-                    if ((toState.name == 'auth.login' || toState.name == 'auth.register' ) && Auth.isAuthenticated()) {
+                    if ((toState.name === 'auth.login' || toState.name === 'auth.register' ) && Auth.isAuthenticated()) {
                         event.preventDefault();
-                        $state.go('dashboard');
+                        $state.go('proposed');
                     }
                 }
             }

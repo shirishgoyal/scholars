@@ -9,7 +9,7 @@
         .controller('LoginPageCtrl', LoginPageCtrl);
 
     /** @ngInject */
-    function LoginPageCtrl($scope, $location, $state, $log, Auth) {
+    function LoginPageCtrl($scope, $location, $state, $log, Auth, toastr) {
         var vm = this;
 
         vm.account = {};
@@ -28,10 +28,13 @@
             vm.submitted = true;
 
             // if (isValid) {
-                Auth.login(vm.account).then(function () {
-                    $state.go('dashboard');
+                Auth.login().then(function (response) {
+                    $state.go('proposed');
                 }, function (error) {
-                    console.log(error);
+
+                    toastr.error('Authentication failed!', 'Error');
+
+                    // console.log(error);
                     // if (response.data.hasOwnProperty('non_field_errors')) {
                     //     $scope.form.$setValidity('form', false);
                     //     vm.errors['form'] = response.data.non_field_errors.join(', ');
