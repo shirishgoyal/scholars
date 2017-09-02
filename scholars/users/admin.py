@@ -4,6 +4,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin, UserAdmin
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from social_django.models import UserSocialAuth
 
 from .models import User
 
@@ -29,6 +30,13 @@ class CustomUserCreationForm(UserCreationForm):
         model = User
 
 
+class SocialAuthInline(admin.TabularInline):
+    model = UserSocialAuth
+    extra = 0
+    fields = ('provider', 'uid', 'user')
+    readonly_fields = ('id', 'provider', 'uid', 'user', 'extra_data')
+
+
 @admin.register(User)
 class UserAdmin(AuthUserAdmin):
     form = CustomUserChangeForm
@@ -36,3 +44,4 @@ class UserAdmin(AuthUserAdmin):
     fieldsets = UserAdmin.fieldsets + (
         ('More info', {'fields': ('gender', 'avatar', 'slack_id', 'slack_name')}),
     )
+    inlines = [SocialAuthInline]
