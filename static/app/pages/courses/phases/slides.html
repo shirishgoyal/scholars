@@ -1,0 +1,46 @@
+<div class="row" ng-cloak>
+  <div class="col-lg-12 col-md-12 col-sm-12">
+
+    <div class="panel with-scroll animated zoom-in">
+      <phase-header items="vm.phases"></phase-header>
+
+      <div class="panel-body">
+        <h2>{{vm.course.name}}</h2>
+
+        <div class="row">
+          <div class="col-lg-8 col-md-12 col-sm-12">
+            <div class="slider-box" style="margin-bottom: 10px">
+              <div uib-carousel active="vm.activeSlideIndex" interval="0" no-wrap="noWrapSlides">
+                <div uib-slide ng-repeat="slide in vm.course.slides track by slide.id"
+                     index="slide.position">
+                  <img ng-src="{{slide.image}}" style="margin:auto;">
+                </div>
+              </div>
+
+              <iframe
+                src="https://docs.google.com/presentation/d/1Wf7BX7EVIH6GTYfOnrSLdLZF3AXNxO5OxVMf7qLEBWQ/embed?start=false&loop=false"
+                frameborder="0" width="100%" height="450" allowfullscreen="true" mozallowfullscreen="true"
+                webkitallowfullscreen="true"></iframe>
+
+            </div>
+          </div>
+          <div class="col-lg-4 col-md-12 col-sm-12">
+<h4 style="font-weight: 300; line-height: 26px; margin-bottom: 16px">You have {{vm.course.days_left}} days
+              left to read,
+              discuss
+              and ask
+              questions
+              on this
+              paper in
+                Slack.</h4>
+
+            <a class="btn btn-outline-danger btn-lg btn-block" ng-href="{{vm.course.getting_started_url}}" target="_blank"><i class="fa fa-play"></i> Getting Started</a>
+            <a class="btn btn-outline-danger btn-lg btn-block" ng-href="{{vm.course.best_practices_url}}" target="_blank"><i class="fa fa-star"></i> Best Practices</a>
+            <a class="btn btn-outline-warning btn-lg btn-block" ng-href="{{vm.course.slack_url}}" target="_blank"><i class="fa fa-slack"></i> Discuss on Slack</a>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

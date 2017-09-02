@@ -1,8 +1,10 @@
 from django.conf.urls import include, url
+from rest_framework_jwt.views import refresh_jwt_token
 
-from authentication import views
+from scholars.authentication.views import SocialView
+# from scholars.authentication import views
 
 urlpatterns = [
-    url(r'^auth/login/', views.obtain_auth_token),
-    # url(r'^auth/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^auth/google/', SocialView.as_view()),
+    # url(r'^auth/token/refresh/', refresh_jwt_token),
 ]

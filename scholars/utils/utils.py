@@ -1,5 +1,6 @@
 import io
 import os
+import pprint
 import subprocess
 import sys
 import traceback
@@ -33,6 +34,13 @@ def get_credentials(scopes=SCOPES):
     credential_path = os.path.join(settings.ROOT_DIR, settings.GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE)
     credentials = ServiceAccountCredentials.from_json_keyfile_name(credential_path, scopes=scopes)
     return credentials
+
+
+def get_service():
+    credentials = get_credentials()
+    http = credentials.authorize(Http())
+    service = discovery.build('drive', 'v3', http=http)
+    return service
 
 
 def import_presentation(model_id, file_id):
@@ -81,6 +89,47 @@ def export_video(model_id):
     merge_video(folder)
 
 
+def copy_file(model_id, file_id, name):
+    service = get_service()
+
+    request = service.files().copy(fileId=file_id,
+                                   keepRevisionForever=True,
+                                   supportsTeamDrives=True,
+                                   # mimeType=mime_type,
+                                   body={
+                                       "name": name,
+                                       "viewersCanCopyContent": True,
+                                       "writersCanShare": True,
+                                   })
+    response = request.execute()
+
+    # {u'id': u'1jsBMKlKwvt7ZOgX0c2BaovGaaPZ2yJnAAj3y1wfjjzY',
+    #  u'kind': u'drive#file',
+    #  u'mimeType': u'application/vnd.google-apps.document',
+    #  u'name': u'Copy of Sample: Notes and Questions'}
+
+    pprint.pprint(response)
+    # pprint.pprint(response.capabilities)
+
+    return response
+
+
+def writable_permissions(file_id):
+    service = get_service()
+
+    request = service.permissions().create(fileId=file_id,
+                                           sendNotificationEmail=False,
+                                           supportsTeamDrives=True,
+                                           body={
+                                               "role": "writer",
+                                               "type": "anyone",
+                                               "allowFileDiscovery": True
+                                           })
+    response = request.execute()
+
+    return response
+
+
 def export_file(service, model_id, file_id, mime_type, name):
     request = service.files().export_media(fileId=file_id,
                                            mimeType=mime_type)
@@ -117,7 +166,6 @@ def clear_folder(folder):
 
 def free_space(model_id):
     import os
-    import shutil
 
     folder = os.path.join(settings.MEDIA_ROOT, '%d' % model_id)
     if not os.path.exists(folder):
@@ -456,7 +504,7 @@ def image_url_to_gdrive_url(url):
 def send_manually_exception_email(request, e):
     exc_info = sys.exc_info()
     reporter = ExceptionReporter(request, is_email=True, *exc_info)
-    subject = e.message.replace('\n', '\\n').replace('\r', '\\r')[:989]
+    subject = str(e)  #.message.replace('\n', '\\n').replace('\r', '\\r')[:989]
     message = "%s\n\n%s" % (
         '\n'.join(traceback.format_exception(*exc_info)),
         repr(request)

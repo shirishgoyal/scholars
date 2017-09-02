@@ -26,6 +26,7 @@ pip-log.txt
 env
 site
 media/*
+assets/*
 .idea/*
 docs/*
 frontend/.tmp/*
@@ -35,3 +36,5 @@ LICENSE.txt
 preview.html
 README.md
 *.pem
+static/libs/
+node_modules

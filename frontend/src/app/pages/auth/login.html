@@ -4,6 +4,10 @@
         <h3>Sign-in to your account</h3>
         <a ui-sref="auth.register" class="auth-link">Don't have an account? Sign up!</a>
 
+       <div class="g-signin2" data-onsuccess="onSignIn">
+
+       </div>
+
         <form class="form-horizontal" name="form" ng-submit="vm.signin(true)" novalidate>
 
             <div class="form-group has-feedback"

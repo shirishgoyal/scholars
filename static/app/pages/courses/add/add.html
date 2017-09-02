@@ -1,0 +1,184 @@
+<div class="col-lg-6">
+
+  <form name="form" ng-submit="!vm.pending && vm.submit(true)" novalidate>
+    <!-- Text input-->
+    <div class="form-group  has-feedback"
+         ng-class="{ 'has-error': vm.hasError('doi') }">
+      <label for="doi" class="control-label">DOI</label>
+
+      <input name="doi" type="text"
+             placeholder="Enter DOI information" class="form-control input-md"
+             ng-required="true" ng-model="vm.course.doi" backend-validity>
+      <span class="help-block sub-little-text">Example: 10.1038/nature16961</span>
+
+      <div class="help-block" ng-if="vm.hasError('doi')" ng-messages="form.doi.$error">
+        <span ng-message="required">DOI is required</span>
+        <span ng-message="backend">{{ vm.errors.doi }}</span>
+      </div>
+
+    </div>
+
+    <div class="jumbotron" ng-if="vm.search.submitted && vm.search.found" style="padding: 1.5rem;">
+      <h5><a href="{{vm.course.url}}" target="_blank">{{vm.course.name}}</a></h5>
+      <h6 class="muted"><span style="text-transform:capitalize;">{{vm.course.type }}</span> published on
+        {{vm.course.published_at| date}} by
+        {{vm.course.publisher}} on
+        pages
+        {{vm.course.pages}}</h6>
+      <p style="font-weight: 400;font-size: 12px;margin-bottom: 0"><strong>Authors:</strong>
+        {{vm.course.authors}}</p>
+    </div>
+
+
+    <div class="form-group  has-feedback"
+         ng-class="{ 'has-error': vm.hasError('pdf') }">
+      <label for="pdf" class="control-label">PDF URL</label>
+
+      <input name="pdf" type="text" placeholder="Enter url for pdf"
+             class="form-control input-md" ng-required="true" ng-model="vm.course.pdf" backend-validity>
+
+      <div class="help-block" ng-if="vm.hasError('pdf')" ng-messages="form.pdf.$error">
+        <span ng-message="required">PDF URL is required</span>
+        <span ng-message="backend">{{ vm.errors.pdf }}</span>
+      </div>
+
+    </div>
+
+
+    <div class="form-group  has-feedback"
+         ng-class="{ 'has-error': vm.hasError('name') }">
+      <label for="name" class="control-label">Name</label>
+
+      <input name="name" type="text" placeholder="Enter a unique course name"
+             class="form-control input-md" ng-required="true" ng-model="vm.course.name" backend-validity>
+
+      <div class="help-block" ng-if="vm.hasError('name')" ng-messages="form.name.$error">
+        <span ng-message="required">Name is required</span>
+        <span ng-message="backend">{{ vm.errors.name }}</span>
+      </div>
+
+    </div>
+
+    <div class="form-group  has-feedback"
+         ng-class="{ 'has-error': vm.hasError('publisher') }">
+      <label for="publisher" class="control-label">Publisher name</label>
+
+      <input name="publisher" type="text" placeholder="Enter a publisher name"
+             class="form-control input-md" ng-required="true" ng-model="vm.course.publisher" backend-validity>
+
+      <div class="help-block" ng-if="vm.hasError('publisher')" ng-messages="form.publisher.$error">
+        <span ng-message="required">Publisher name is required</span>
+        <span ng-message="backend">{{ vm.errors.publisher }}</span>
+      </div>
+    </div>
+
+    <div class="form-group  has-feedback"
+         ng-class="{ 'has-error': vm.hasError('url') }">
+      <label for="url" class="control-label">Publication URL</label>
+
+      <input name="url" type="text" placeholder="Enter url"
+             class="form-control input-md" ng-required="true" ng-model="vm.course.url" backend-validity>
+
+      <div class="help-block" ng-if="vm.hasError('url')" ng-messages="form.url.$error">
+        <span ng-message="required">URL is required</span>
+        <span ng-message="backend">{{ vm.errors.url }}</span>
+      </div>
+
+    </div>
+
+
+
+    <div class="form-group  has-feedback"
+         ng-class="{ 'has-error': vm.hasError('authors') }">
+      <label for="authors" class="control-label">Authors</label>
+
+      <input name="authors" type="text" placeholder="Enter authors"
+             class="form-control input-md" ng-required="true" ng-model="vm.course.authors" backend-validity>
+
+      <div class="help-block" ng-if="vm.hasError('authors')" ng-messages="form.authors.$error">
+        <span ng-message="required">Author names are required</span>
+        <span ng-message="backend">{{ vm.errors.authors }}</span>
+      </div>
+
+    </div>
+
+    <div class="form-group  has-feedback"
+         ng-class="{ 'has-error': vm.hasError('published_on') }">
+      <label for="published_on" class="control-label">Published on</label>
+
+      <!--<div class="input-group">-->
+        <input name="published_on" type="text" placeholder="Enter date of publication"
+               class="form-control input-md" ng-required="true" ng-model="vm.course.published_on" backend-validity
+               ng-click="open()"
+               uib-datepicker-popup="{{ datepicker.format }}"
+               datepicker-options="datepicker.options"
+               datepicker-append-to-body="true"
+               is-open="datepicker.opened"
+               show-button-bar="false"
+               close-text="Close"
+        >
+        <!--<span class="input-group-btn">-->
+                <!--<button type="button" class="btn btn-default" ng-click="open()"><i-->
+                  <!--class="glyphicon glyphicon-calendar"></i></button>-->
+              <!--</span>-->
+      <!--</div>-->
+
+      <div class="help-block" ng-if="vm.hasError('published_on')" ng-messages="form.published_on.$error">
+        <span ng-message="required">Date of publication is required</span>
+        <span ng-message="date">Invalid date format</span>
+        <span ng-message="backend">{{ vm.errors.published_on }}</span>
+      </div>
+
+    </div>
+
+    <div class="form-group  has-feedback"
+         ng-class="{ 'has-error': vm.hasError('category') }">
+      <label for="category" class="control-label">Category</label>
+
+      <select name="category" class="form-control" ng-required="true" ng-model="vm.course.category"
+              ng-options="category.id as category.name for category in vm.categories track by category.id">
+        <option>Choose Category</option>
+      </select>
+
+
+      <div class="help-block" ng-if="vm.hasError('category')" ng-messages="form.category.$error">
+        <span ng-message="required">Category is required</span>
+        <span ng-message="backend">{{ vm.errors.category }}</span>
+      </div>
+    </div>
+
+    <div class="form-group has-feedback" ng-class="{ 'has-error': vm.submitted && form.$error.form }">
+      <div class="help-block" ng-if="vm.submitted && form.$invalid" ng-messages="form.$error">
+        <span ng-message="form">{{ vm.errors.form }}</span>
+      </div>
+    </div>
+
+     <div class="form-group  has-feedback"
+         ng-class="{ 'has-error': vm.hasError('lang') }">
+      <label for="lang" class="control-label">Language</label>
+
+      <select name="lang" class="form-control" ng-required="true" ng-model="vm.course.lang"
+              ng-options="lang.code as lang.name for lang in vm.languages track by lang.code">
+        <option>Choose Language</option>
+      </select>
+
+
+      <div class="help-block" ng-if="vm.hasError('lang')" ng-messages="form.lang.$error">
+        <span ng-message="required">Language is required</span>
+        <span ng-message="backend">{{ vm.errors.lang }}</span>
+      </div>
+    </div>
+
+    <div class="form-group has-feedback" ng-class="{ 'has-error': vm.submitted && form.$error.form }">
+      <div class="help-block" ng-if="vm.submitted && form.$invalid" ng-messages="form.$error">
+        <span ng-message="form">{{ vm.errors.form }}</span>
+      </div>
+    </div>
+
+
+    <!-- Button -->
+    <div class="form-group">
+      <button type="submit" class="btn btn-primary" ng-disabled="vm.pending">Submit</button>
+    </div>
+  </form>
+</div>

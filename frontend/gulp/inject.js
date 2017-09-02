@@ -44,14 +44,23 @@ gulp.task('inject', ['scripts', 'styles', 'injectAuth', 'inject404', 'copyVendor
 
 gulp.task('injectAuth', ['stylesAuth'], function () {
   return injectAlone({
-    css: [path.join('!' + conf.paths.tmp, '/serve/app/vendor.css'), path.join(conf.paths.tmp, '/serve/app/auth.css')],
-    paths: [path.join(conf.paths.src, '/auth.html'), path.join(conf.paths.src, '/reg.html')]
+    css: [
+        path.join('!' + conf.paths.tmp, '/serve/app/vendor.css'),
+        path.join(conf.paths.tmp, '/serve/app/auth.css')
+    ],
+    paths: [
+        path.join(conf.paths.src, '/auth.html'),
+        path.join(conf.paths.src, '/reg.html')
+    ]
   })
 });
 
 gulp.task('inject404', ['styles404'], function () {
   return injectAlone({
-    css: [path.join('!' + conf.paths.tmp, '/serve/app/vendor.css'), path.join(conf.paths.tmp, '/serve/app/404.css')],
+    css: [
+        path.join('!' + conf.paths.tmp, '/serve/app/vendor.css'),
+        path.join(conf.paths.tmp, '/serve/app/404.css')
+    ],
     paths: path.join(conf.paths.src, '/404.html')
   })
 });
@@ -62,7 +71,10 @@ var injectAlone = function (options) {
     , {read: false});
 
   var injectOptions = {
-    ignorePath: [conf.paths.src, path.join(conf.paths.tmp, '/serve')],
+    ignorePath: [
+        conf.paths.src,
+        path.join(conf.paths.tmp, '/serve')
+    ],
     addRootSlash: false
   };
 

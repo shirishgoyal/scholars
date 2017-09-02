@@ -1,0 +1,179 @@
+<div class="home site-slogan">
+  <!-- class="home" underlines the Home link in the top nav -->
+
+  <div id="su-wrap"> <!-- used to force footer to bottom of short pages -->
+    <div id="su-content"> <!-- used to force footer to bottom of short pages -->
+
+      <!-- Brandbar snippet start -->
+      <div id="brandbar">
+        <div class="container"><a ui-sref="page.home"> <img
+          src="static/lagunita/images/brandbar-stanford-logo@2x.png" alt="Stanford University"
+          width="152" height="23"> </a></div>
+        <!-- .container end -->
+      </div>
+      <!-- #brandbar end -->
+      <!-- Brandbar snippet end -->
+      <!--=== Header ===-->
+      <div id="header" class="clearfix" role="banner">
+        <div class="container">
+          <div class="row">
+            <div class="col-md-7">
+              <!-- Logo -->
+              <div id="logo" class="clearfix"><a href="#"><img class="img-responsive"
+                                                               src="static/img/stanford.png"
+                                                               alt="site logo"/></a></div>
+              <!-- /logo -->
+              <div id="signature">
+                <div id="site-name"><a ui-sref="page.home"> <span
+                  id="site-name-1"><strong>Stanford</strong> Scholar</span> </a></div>
+                <div id="site-slogan"><a ui-sref="page.home"><span id="site-name-2">An initiative to make research more accessible and collaborative!</span></a>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div id="mainmenu" class="clearfix" role="navigation">
+                <div class="container">
+                  <div class="navbar navbar-default">
+
+                    <!-- main navigation -->
+                    <button type="button" class="navbar-toggle btn-navbar" data-toggle="collapse"
+                            data-target=".navbar-collapse"><span class="icon-bar"></span> <span
+                      class="icon-bar"></span> <span class="icon-bar"></span> <span
+                      class="menu-text">Menu</span></button>
+                    <!-- /nav-collapse -->
+
+                    <div class="navbar-collapse collapse">
+
+
+                      <div role="navigation">
+                        <div id="primary-nav">
+
+                          <!--search box-->
+                          <div id="nav-search" role="search">
+                            <form action="/search" method="get" id="search-form"
+                                  accept-charset="UTF-8">
+                              <!--<h2 class="hidden">Search form</h2>-->
+                              <label class="hidden" for="search-field">Search term</label>
+                              <!--<input name="cx" type="hidden" value="003265255082301896483:sq5n7qoyfh8">-->
+                              <!--<input name="cof" type="hidden" value="FORID:9">-->
+                              <!--<input name="ie" type="hidden" value="UTF-8">-->
+                              <!--replace value in next line with your site URL -->
+                              <!--<input name="as_sitesearch" type="hidden" value="www.stanford.edu">-->
+                              <input title="Search string" class="input-medium"
+                                     placeholder="Search&hellip;" type="text" id="search-field"
+                                     name="q" value="" size="15" maxlength="128"/>
+                              <button id="search-btn" type="submit" name="submit" aria-label="Search"
+                                      formmethod="get"><i class="fa fa-search"></i></button>
+                            </form>
+                          </div>
+                          <ul class="nav navbar-nav" aria-label="primary navigation">
+                            <!--<li id="nav-home"><a ui-sref="page.home">Home</a></li>-->
+                            <!--<li id="nav-1"><a ui-sref="page.faq">FAQs</a></li>-->
+                            <!--<li id="nav-2"><a ui-sref="page.rules">Rules</a></li>-->
+                            <!--<li id="nav-5"><a ui-sref="page.technical">Technical</a></li>-->
+                            <!--<li id="nav-0"><a ui-sref="dashboard">Audio-->
+                              <!--Studio</a></li>-->
+                            <!--<li><button class="btn btn-primary" style="margin-top: 30px" ng-show="!vm.isAuthenticated"-->
+                              <!--href="https://docs.google.com/forms/d/e/1FAIpQLSd97PTIFo0lTaUB3E7PpalFQ6wsStAwEBcYnOJyPAoysI_yXg/viewform"-->
+                              <!--target="_blank">Join Us</button></li>-->
+                            <li><button class="btn btn-primary" style="margin-top: 30px"
+                              ui-sref="auth.login"
+                              target="_blank">Join Us</button></li>
+                            <!--<li id="nav-3"><a href="mailto:rvaish@cs.stanford.edu" target="_blank">Contact</a></li>-->
+
+
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /nav-collapse -->
+                  </div>
+                  <!-- /navbar -->
+
+                </div>
+                <!-- /container -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div ui-view></div>
+
+    </div>
+    <!-- #su-content -->
+  </div>
+  <!-- #su-wrap -->
+
+
+  <!-- BEGIN footer -->
+  <div id="footer" class="clearfix footer" role="contentinfo">
+    <!-- Global footer snippet start -->
+    <div id="global-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-sm-4">
+            <div id="logo" class="clearfix"><a href="#"><img class="img-responsive"
+                                                             src="static/img/stanford.png"
+                                                             alt="site logo"/></a></div>
+            <!-- /logo -->
+            <div id="signature">
+              <div id="site-name" style="font-size:3em;"><a ui-sref="page.home"> <span
+                id="site-name-1"><strong>Stanford</strong> Scholar</span> </a></div>
+            </div>
+          </div>
+          <!--<div id="bottom-logo" class="col-xs-6 col-sm-4"><a href="http://www.stanford.edu"> <img-->
+          <!--src="/static/img/brandbar-stanford-logo@2x.png" alt="Stanford University"-->
+          <!--width="105" height="49"/></a></div>-->
+          <!-- #bottom-logo end -->
+
+          <!-- .bottom-text end -->
+          <!--<div class="clear"></div>-->
+
+          <div class="col-sm-2">
+            <ul class="list-unstyled">
+              <li><a ui-sref="page.home">Home</a></li>
+              <li><a ui-sref="page.faq">FAQ</a></li>
+              <!--<li><a ui-sref="page.rules">Rules</a></li>-->
+              <!--<li><a ui-sref="page.technical">Technical</a></li>-->
+              <!--<li><a ui-sref="dashboard">Audio-->
+              <!--Studio</a></li>-->
+              <li><a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSd97PTIFo0lTaUB3E7PpalFQ6wsStAwEBcYnOJyPAoysI_yXg/viewform"
+                target="_blank">Join Us</a></li>
+              <li><a href="mailto:rvaish@cs.stanford.edu" target="_blank">Contact</a></li>
+            </ul>
+
+          </div>
+
+          <div class="col-sm-2">
+            <ul class="list-unstyled">
+              <!--<li><a ui-sref="page.home">Home</a></li>-->
+              <!--<li><a ui-sref="page.faq">FAQs</a></li>-->
+              <li><a ui-sref="page.rules">Rules</a></li>
+              <li><a ui-sref="page.technical">Technical</a></li>
+              <li><a ui-sref="dashboard">Audio
+                Studio</a></li>
+              <!--<li><a-->
+              <!--href="https://docs.google.com/forms/d/e/1FAIpQLSd97PTIFo0lTaUB3E7PpalFQ6wsStAwEBcYnOJyPAoysI_yXg/viewform"-->
+              <!--target="_blank">Join Us</a></li>-->
+              <!--<li><a href="mailto:rvaish@cs.stanford.edu" target="_blank">Contact</a></li>-->
+            </ul>
+
+          </div>
+
+          <!--<p class="copyright vcard col-sm-10">&copy; <span class="fn org">Stanford Scholar</span>.&nbsp;-->
+          <!--<span class="adr"> <span class="locality">Stanford</span>, <span-->
+          <!--class="region">California</span> <span class="postal-code">94305</span></span>.</p>-->
+        </div>
+        <!-- .row end -->
+      </div>
+      <!-- .container end -->
+    </div>
+    <!-- Global footer snippet end -->
+
+  </div>
+  <!-- END footer -->
+
+
+</div>

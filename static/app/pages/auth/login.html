@@ -1,0 +1,55 @@
+<main class="auth-main">
+    <div class="auth-block">
+        <h1><b>Stanford</b> Scholar</h1>
+        <h3>Sign-in to your account</h3>
+        <!--<a ui-sref="auth.register" class="auth-link">Don't have an account? Sign up!</a>-->
+        <!--<a href="/api/social/login/google-oauth2/" class="google-signin"></a>-->
+        <a ng-click="vm.signin(true)" class="google-signin"></a>
+
+
+        <!--<form class="form-horizontal" name="form" ng-submit="vm.signin(true)" novalidate>-->
+
+            <!--<div class="form-group has-feedback"-->
+                 <!--ng-class="{ 'has-error': vm.has_error('username') }">-->
+                <!--<label for="username" class="col-sm-3 control-label">Username</label>-->
+
+                <!--<div class="col-sm-9">-->
+                    <!--<input type="text" class="form-control" name="username" placeholder="Username"-->
+                           <!--ng-model="vm.account.username" ng-required="true" backend-validity>-->
+                    <!--<div class="help-block" ng-if="vm.has_error('username')" ng-messages="form.username.$error">-->
+                        <!--<span ng-message="required">Username is required</span>-->
+                        <!--<span ng-message="backend">{{ vm.errors.username }}</span>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+            <!--<div class="form-group has-feedback"-->
+                 <!--ng-class="{ 'has-error': vm.has_error('password') }">-->
+                <!--<label for="password" class="col-sm-3 control-label">Password</label>-->
+
+                <!--<div class="col-sm-9">-->
+                    <!--<input type="password" class="form-control" name="password" placeholder="Password"-->
+                           <!--ng-model="vm.account.password" ng-required="true">-->
+                    <!--<div class="help-block" ng-if="vm.has_error('password')" ng-messages="form.password.$error">-->
+                        <!--<span ng-message="required">Password is required</span>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="form-group has-feedback" ng-class="{ 'has-error': vm.submitted && form.$error.form }">-->
+                <!--<div class="col-sm-3"></div>-->
+                <!--<div class="col-sm-9">-->
+                    <!--<div class="help-block" ng-if="vm.submitted && form.$invalid" ng-messages="form.$error">-->
+                        <!--<span ng-message="form">{{ vm.errors.form }}</span>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+
+
+            <!--<div class="form-group">-->
+                <!--<div class="col-sm-offset-3 col-sm-9">-->
+                    <!--<button type="submit" class="btn btn-default btn-auth">Sign in</button>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</form>-->
+    </div>
+</main>

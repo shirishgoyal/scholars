@@ -1,0 +1,36 @@
+<div class="row">
+
+  <div class="col-sm-12 col-md-6 col-lg-4" ng-repeat="item in vm.courses">
+    <!--<div class="panel-deck">-->
+    <div class="panel " ui-sref="talk({id:item.id})" style="margin-bottom: 10px">
+      <div class="panel-heading" style="background-color: #8c1515; color:#fff;min-height: 70px;
+        overflow: hidden;padding: 15px 15px;">
+        {{item.name}}
+      </div>
+      <!--<img class="panel-img-top" src="..." alt="Card image cap">-->
+      <div class="panel-body">
+
+        <p class="muted"><a href="{{item.url}}" target="_blank">Published by
+
+          {{item.publisher}} on {{item.published_on| date}}</a></p>
+
+        <p style="font-weight: 400;font-size: 12px;margin-bottom: 10px"><strong>Authors:</strong>
+          {{item.authors}}</p>
+
+        <p class="panel-text">Needs 5 more members</p>
+        <a href="#" class="btn btn-warning" ui-sref="proposed-join({id:item.id})">Join</a>
+      </div>
+      <div class="panel-footer">
+        <small class="text-muted pull-left">Proposed by {{item.owner.username}}</small>
+        <small class="text-muted pull-right">{{item.phase}}</small>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-xs-12" ng-if="vm.courses.length == 0">
+    <h3>Want to propose a new talk and work with a globally connected team?</h3>
+
+    <button class="btn btn-warning" ui-sref="talks-add">Go!</button>
+
+  </div>
+</div>

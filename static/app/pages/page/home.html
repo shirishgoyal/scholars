@@ -1,0 +1,91 @@
+<div style="background-color: black">
+  <div id="content" class="container-fluid" role="main" tabindex="0">
+    <div class="row">
+
+      <div id="main-content" class="col-xs-12" role="main">
+        <div class="row">
+          <slick lazy-load="ondemand" slides-to-show="3" slides-to-scroll="1" autoplay="false" arrows="true"
+                 centerMode="true" infinite="true"
+                 class="slider multiple-items">
+
+            <div class="col-lg-4 col-xs-12" ng-repeat="paper in vm.featured_papers">
+              <!--<div class="postcard-image">-->
+              <!--<img ng-src="{{paper.image}}" alt="{{paper.name}}" height="200" width="200">-->
+              <!--</div>-->
+              <div class="postcard-text">
+                <!--<h3><a ng-href="{{paper.pdf}}" target="_blank">{{paper.name}}</a></h3>-->
+                <!--<p class="descriptor">Published on {{paper.published_on}} <span ng-repeat="pdf_link in paper.pdf_links"> - <a ng-href="{{pdf_link.url}}" target="_blank">{{pdf_link.name}}</a></span></p>-->
+                <!--<p class="descriptor">{{paper.description}}</p>-->
+
+                <!--<p ng-if="paper.video_links.length>0">Check out this talk in <span-->
+                <!--ng-repeat="video_link in paper.video_links"><a-->
+                <!--target="_blank" ng-href="{{video_link.url}}">{{video_link.name}}</a>{{$last ? '' : ($index==paper.video_links.length-2) ? ' and ' : ', '}}</span></p>-->
+
+                <!--<div class="embed-responsive embed-responsive-16by9">-->
+                  <!--<youtube-video class="embed-responsive-item" video-url="paper.video"></youtube-video>-->
+                <!--</div>-->
+
+                <img ng-src="{{paper.image}}" style="width: 100%;height:auto;margin-bottom: 8px">
+
+                <!--<p><strong>Directly Responsible Individuals (DRI) Team:</strong> <span ng-repeat="user in paper.dri">-->
+                <!--{{user}} {{$last ? '' : ($index==paper.dri.length-2) ? ' and ' : ', '}}</span></p>-->
+
+                <!--<p ng-if="paper.super_dri.length>0"><strong>Super DRI Team:</strong> <span-->
+                <!--ng-repeat="user in paper.super_dri">-->
+                <!--{{user}} {{$last ? '' : ($index==paper.super_dri.length-2) ? ' and ' : ', '}}</span></p>-->
+
+                <!--<p ng-if="paper.scripting.length>0"><strong>Presentation Team:</strong> <span ng-repeat="user in paper.scripting">-->
+                <!--{{user}} {{$last ? '' : ($index==paper.scripting.length-2) ? ' and ' : ', '}}</span></p>-->
+                <!--<p ng-if="paper.audio.length>0"><strong>Audio Team:</strong> <span ng-repeat="user in paper.audio">-->
+                <!--{{user}} {{$last ? '' : ($index==paper.audio.length-2) ? ' and ' : ', '}}</span></p>-->
+              </div>
+            </div>
+
+          </slick>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container" role="main" tabindex="0" style="padding: 20px 0;">
+    <div class="row" style="margin-bottom: 10px">
+      <div class="col-xs-12">
+        <h2
+          style="border-bottom: 1px solid #e9e6df;padding-bottom: 10px;text-transform: uppercase;font-weight: 600;color:#444">Human Computer
+          Interaction</h2>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4 col-xs-12" ng-repeat="paper in vm.papers" style="min-height: 335px;">
+              <div class="postcard-text" >
+
+                <!--<div class="embed-responsive embed-responsive-16by9">-->
+                  <img ng-src="{{paper.image}}" style="width: 100%;height:auto;margin-bottom: 8px">
+                <!--</div>-->
+                <h3 style="font-weight: 400;min-height: 44px;"><a><span ng-text-truncate="paper.name"
+                                                      ng-tt-chars-threshold="60"></span></a></h3>
+                <p class="descriptor">Published on {{paper.published_on}} <span ng-repeat="pdf_link in paper.pdf_links"> - <a ng-href="{{pdf_link.url}}" target="_blank">{{pdf_link.name}}</a></span></p>
+                <!--<p class="descriptor"><span ng-text-truncate="paper.description" ng-tt-chars-threshold="100"></span></p>-->
+
+                <p ng-if="paper.video_links.length>0">Also available in <span
+                ng-repeat="video_link in paper.video_links"><a
+                target="_blank" ng-href="{{video_link.url}}">{{video_link.name}}</a>{{$last ? '' : ($index==paper.video_links.length-2) ? ' and ' : ', '}}</span></p>
+
+                <!--<p><strong>Directly Responsible Individuals (DRI) Team:</strong> <span ng-repeat="user in paper.dri">-->
+                <!--{{user}} {{$last ? '' : ($index==paper.dri.length-2) ? ' and ' : ', '}}</span></p>-->
+
+                <!--<p ng-if="paper.super_dri.length>0"><strong>Super DRI Team:</strong> <span-->
+                <!--ng-repeat="user in paper.super_dri">-->
+                <!--{{user}} {{$last ? '' : ($index==paper.super_dri.length-2) ? ' and ' : ', '}}</span></p>-->
+
+                <!--<p ng-if="paper.scripting.length>0"><strong>Presentation Team:</strong> <span ng-repeat="user in paper.scripting">-->
+                <!--{{user}} {{$last ? '' : ($index==paper.scripting.length-2) ? ' and ' : ', '}}</span></p>-->
+                <!--<p ng-if="paper.audio.length>0"><strong>Audio Team:</strong> <span ng-repeat="user in paper.audio">-->
+                <!--{{user}} {{$last ? '' : ($index==paper.audio.length-2) ? ' and ' : ', '}}</span></p>-->
+              </div>
+            </div>
+    </div>
+</div>

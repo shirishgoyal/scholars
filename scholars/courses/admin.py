@@ -1,7 +1,14 @@
 from django.contrib import admin
 
-from utils.utils import export_video, import_presentation, free_space, send_manually_exception_email, process_links
-from .models import Course, Slide
+from scholars.utils.utils import export_video, import_presentation, free_space, send_manually_exception_email, \
+    process_links
+from .models import Course, Slide, Category
+
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'shortcode')
+    ordering = ('id',)
 
 
 class SlideInline(admin.TabularInline):
@@ -16,13 +23,13 @@ class SlideInline(admin.TabularInline):
 class CourseAdmin(admin.ModelAdmin):
     inlines = [SlideInline]
     actions = ['generate', 'import_from_google', 'export_to_video', 'cleanup', 'process_redundancy']
-    list_display = ('id', 'name', 'get_video_url', 'total_slides', 'pending_slides')
+    list_display = ('id', 'name', 'status', 'phase', 'get_video_url', 'total_slides', 'pending_slides', 'is_featured')
     ordering = ('id',)
 
     def get_actions(self, request):
         actions = super(CourseAdmin, self).get_actions(request)
-        if 'delete_selected' in actions:
-            del actions['delete_selected']
+        # if 'delete_selected' in actions:
+        #     del actions['delete_selected']
         return actions
 
     def import_from_google(self, request, queryset):
@@ -63,4 +70,3 @@ class CourseAdmin(admin.ModelAdmin):
                 process_links(instance.id)
 
     process_redundancy.short_description = "Redundancy (DONT USE)"
-

@@ -1,0 +1,7 @@
+<div class="panel-heading" style="padding: 0px 13px;height: 36px;min-height: 36px;background-color: transparent">
+  <div class="wizard small row ng-cloak" ng-cloak>
+    <a ng-repeat="item in items" ng-class="{ 'current': item.isCurrent, 'complete': item.isComplete }">
+      <span ng-click="goto(item)">{{ item.name }}</span>
+    </a>
+  </div>
+</div>

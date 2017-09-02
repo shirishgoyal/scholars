@@ -18,6 +18,7 @@ angular.module('BlurAdmin', [
     'angular-progress-button-styles',
     'angularAudioRecorder',
     'ngFileUpload',
+    'youtube-embed',
 
     'BlurAdmin.theme',
     'BlurAdmin.pages'

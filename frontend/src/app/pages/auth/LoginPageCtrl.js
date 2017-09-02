@@ -12,6 +12,8 @@
     function LoginPageCtrl($scope, $state, $log, Auth) {
         var vm = this;
 
+
+
         vm.account = {};
         vm.submitted = false;
         vm.errors = {};

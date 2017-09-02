@@ -1,0 +1,42 @@
+<div>
+
+  <div class="row">
+    <div class="col-sm-12 col-md-6 col-lg-4" ng-repeat="item in vm.courses">
+      <!--<div class="card-deck">-->
+      <div class="panel " ui-sref="talk({id:item.id})" style="margin-bottom: 10px">
+        <div class="panel-heading">
+          {{item.name}}
+        </div>
+        <!--<img class="card-img-top" src="..." alt="Card image cap">-->
+        <div class="panel-body">
+
+          <p class="muted" style="min-height: 32px;"><a href="{{item.url}}" target="_blank"><span ng-text-truncate="item.published_by_line" ng-tt-chars-threshold="120"></span></a></p>
+
+          <p style="font-weight: 400;font-size: 12px;margin-bottom: 10px;min-height: 32px;"><strong>Authors:</strong>
+            <span ng-text-truncate="item.authors" ng-tt-chars-threshold="100"></span></p>
+
+          <p class="card-text">Needs 5 more members</p>
+          <a href="#" class="btn btn-warning" ui-sref="proposed-join({id:item.id})">Join</a>
+        </div>
+        <div class="panel-footer">
+          <small class="text-muted pull-left">Proposed by {{item.owner.username}}</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-xs-12" ng-if="vm.courses.length == 0">
+      <h3>Want to propose a new talk and work with a globally connected team?</h3>
+
+      <button class="btn btn-warning" ui-sref="courses-add">Go!</button>
+
+    </div>
+  </div>
+
+  <!--<div class="form-group select-page-size-wrap ">-->
+  <!--<label>Rows on page-->
+  <!--<select class="form-control selectpicker show-tick" title="Rows on page" selectpicker-->
+  <!--ng-model="vm.pageSize" ng-options="i for i in [5,10,15,20,25]">-->
+  <!--</select>-->
+  <!--</label>-->
+  <!--</div>-->
+</div>
