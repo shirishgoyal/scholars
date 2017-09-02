@@ -1,49 +1,17 @@
-from calendar import timegm
-from urlparse import parse_qsl
-
-import datetime
 import requests
 from django.conf import settings
 from django.urls import reverse
-from rest_framework import parsers, renderers, permissions, status
-from rest_framework.authtoken.models import Token
-from rest_framework.authtoken.serializers import AuthTokenSerializer
+from rest_framework import status
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_jwt.serializers import jwt_payload_handler, jwt_encode_handler
 from social_core.exceptions import MissingBackend
-from social_core.utils import get_strategy, setting_name
-from social_django.utils import psa, load_strategy, load_backend
+from social_django.utils import load_strategy, load_backend
 from social_django.views import NAMESPACE
 
 from scholars.users.serializers import UserSerializer
-
-
-# class ObtainAuthToken(APIView):
-#     throttle_classes = ()
-#     permission_classes = ()
-#     parser_classes = (parsers.FormParser, parsers.MultiPartParser, parsers.JSONParser,)
-#     renderer_classes = (renderers.JSONRenderer,)
-#     serializer_class = AuthTokenSerializer
-#
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.serializer_class(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#
-#         user = serializer.validated_data['user']
-#         token, created = Token.objects.get_or_create(user=user)
-#
-#         from django.contrib.auth import login
-#         if user is not None:
-#             login(request, user)
-#
-#         user_serializer = UserSerializer(instance=user)
-#         return Response({'token': token.key, 'user': user_serializer.data})
-
-
-# obtain_auth_token = ObtainAuthToken.as_view()
 
 
 def auth_by_token(request, backend, token):
@@ -100,19 +68,27 @@ class SocialView(APIView):
     permission_classes = (AllowAny,)
 
     def post(self, request, format=None):
+        # gives back the code from google
+
         backend = request.data.get(u'backend', 'google-oauth2')
 
+        # now get auth token from google using code it gave confirming user
         auth_token = get_access_token_from_provider(request, backend)
 
         if auth_token is not None and backend:
             try:
-                # Try to authenticate the user using python-social-auth
+                # try to authenticate the user using python-social-auth
                 user = auth_by_token(request, backend, auth_token)
+
+                print "user ====================================="
+                print user.__dict__
+                print '=' * 15
 
                 if user:
                     if not user.is_active:
                         return Response({'status': 'Unauthorized',
-                                         'message': 'The user account is disabled.'}, status=status.HTTP_401_UNAUTHORIZED)
+                                         'message': 'The user account is disabled.'},
+                                        status=status.HTTP_401_UNAUTHORIZED)
 
                     # Get the JWT payload for the user.
                     payload = jwt_payload_handler(user)

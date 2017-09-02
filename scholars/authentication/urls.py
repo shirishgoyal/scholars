@@ -2,7 +2,6 @@ from django.conf.urls import include, url
 from rest_framework_jwt.views import refresh_jwt_token
 
 from scholars.authentication.views import SocialView
-# from scholars.authentication import views
 
 urlpatterns = [
     url(r'^auth/google/', SocialView.as_view()),

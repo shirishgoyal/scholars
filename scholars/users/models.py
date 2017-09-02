@@ -22,5 +22,8 @@ class User(AbstractUser):
     gender = models.CharField(max_length=8, choices=GENDER_CHOICES, default=GENDER_CHOICES.unknown)
     avatar = models.URLField(null=True, blank=True)
 
+    slack_id = models.CharField(max_length=256, null=True, blank=True)
+    slack_name = models.CharField(max_length=256, null=True, blank=True)
+
     def __str__(self):
         return "%s %s" % (self.first_name, self.last_name)

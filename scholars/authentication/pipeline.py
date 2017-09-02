@@ -20,6 +20,9 @@ def social_user(backend, uid, user=None, *args, **kwargs):
 
     if social:
         # can happen when user has multiple accounts with same email (apply email uniqueness strictly)
+        print user
+        print social
+
         if user and social.user != user:
             msg = 'This {0} account is already in use.'.format(provider)
             raise AuthAlreadyAssociated(backend, msg)
