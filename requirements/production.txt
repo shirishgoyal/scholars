@@ -1,7 +1,25 @@
 -r base.txt
 
 # Django-secure
-django-secure==1.0.1
+# django-secure==1.0.1
+
+gevent==1.2.2
+gunicorn==19.6.0
 
 # App Monitoring
 newrelic==2.68.0.50
+
+# Static and Media Storage
+# ------------------------------------------------
+# boto==2.48.0
+django-storages==1.6.5
+
+django-anymail==0.11.1
+
+# Raven is the Sentry client
+# --------------------------
+raven==6.1.0
+
+# Opbeat agent for performance monitoring
+# -----------------------------------------
+opbeat==3.5.2

@@ -4,14 +4,14 @@ from os.path import join
 
 import environ
 
-ROOT_DIR = environ.Path(__file__) - 1  # (old_sch/config/settings/base.py - 3 = old_sch/)
-APPS_DIR = ROOT_DIR.path('old_sch')
+ROOT_DIR = environ.Path(__file__) - 2  # (old_sch/config/settings/base.py - 3 = old_sch/)
+APPS_DIR = ROOT_DIR.path('scholars')
 
 # Load operating system environment variables and then prepare to use them
 env = environ.Env()
 
-# .env file, should load only in development environment
-READ_DOT_ENV_FILE = env.bool('DJANGO_READ_DOT_ENV_FILE', default=False)
+# .env file, should always load
+READ_DOT_ENV_FILE = env.bool('DJANGO_READ_DOT_ENV_FILE', default=True)
 
 if READ_DOT_ENV_FILE:
     # Operating System Environment variables have precedence over variables defined in the .env file,
@@ -19,8 +19,8 @@ if READ_DOT_ENV_FILE:
     # as environment variables.
     env_file = str(ROOT_DIR.path('.env'))
     print('Loading : {}'.format(env_file))
+
     env.read_env(env_file)
-    print('The .env file has been loaded. See base.py for more information')
 
 # APP CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -48,10 +48,8 @@ THIRD_PARTY_APPS = [
     'oauth2_provider',
     'social_django',
 
-    # 3rd party apps
     'rest_framework',  # utilities for rest apis
     'rest_framework_social_oauth2',
-    # 'rest_framework.authtoken',       # token authentication
     'dry_rest_permissions',
 
     'versatileimagefield',  # image manipulation
@@ -75,7 +73,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # ------------------------------------------------------------------------------
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
+    # 'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -87,7 +85,7 @@ MIDDLEWARE = [
 # MIGRATIONS CONFIGURATION
 # ------------------------------------------------------------------------------
 MIGRATION_MODULES = {
-    'sites': 'old_sch.contrib.sites.migrations'
+    'sites': 'scholars.contrib.sites.migrations'
 }
 
 # DEBUG
@@ -99,7 +97,7 @@ DEBUG = env.bool('DJANGO_DEBUG', False)
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-FIXTURE_DIRS
 FIXTURE_DIRS = (
-    str(APPS_DIR.path('fixtures')),
+    str(ROOT_DIR.path('fixtures')),
 )
 
 # EMAIL CONFIGURATION
@@ -161,6 +159,7 @@ TEMPLATES = [
         'OPTIONS': {
             # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
             'debug': DEBUG,
+            # 'APP_DIRS': False,
             # See: https://docs.djangoproject.com/en/dev/ref/settings/#template-loaders
             # https://docs.djangoproject.com/en/dev/ref/templates/api/#loader-types
             'loaders': [
@@ -177,6 +176,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
+
                 # custom template context processors go here
                 'social_django.context_processors.backends',
                 'social_django.context_processors.login_redirect',
@@ -217,26 +217,62 @@ MEDIA_URL = '/media/'
 # ------------------------------------------------------------------------------
 ROOT_URLCONF = 'config.urls'
 
+# General
+APPEND_SLASH = env.bool('DJANGO_APPEND_SLASH', True)
+
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
 WSGI_APPLICATION = 'config.wsgi.application'
 
 # PASSWORD STORAGE SETTINGS
 # ------------------------------------------------------------------------------
 # See https://docs.djangoproject.com/en/dev/topics/auth/passwords/#using-argon2-with-django
-PASSWORD_HASHERS = [
-    'django.contrib.auth.hashers.Argon2PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2PasswordHasher',
-    'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
-    'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
-    'django.contrib.auth.hashers.BCryptPasswordHasher',
-]
+# PASSWORD_HASHERS = [
+#     'django.contrib.auth.hashers.Argon2PasswordHasher',
+#     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
+#     'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
+#     'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
+#     'django.contrib.auth.hashers.BCryptPasswordHasher',
+# ]
 
 # AUTHENTICATION CONFIGURATION
 # ------------------------------------------------------------------------------
-AUTHENTICATION_BACKENDS = [
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.google.GoogleOAuth2',
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
     'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
-]
+)
+
+# OAUTH2_PROVIDER = {
+#     # The number of seconds an access token remains valid.
+#     # RFC6749 Section 4.1.2 recommends a 10 minutes (600 seconds) duration.
+#     'ACCESS_TOKEN_EXPIRE_SECONDS': 600
+# }
+
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=env.int('DJANGO_JWT_EXPIRATION_DELTA', default=1)),
+    'JWT_ALLOW_REFRESH': False,
+    'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=env.int('DJANGO_JWT_REFRESH_EXPIRATION_DELTA', default=1)),
+}
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+
+SOCIAL_AUTH_PIPELINE = (
+    'scholars.authentication.pipeline.auto_logout',  # custom action
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'scholars.authentication.pipeline.check_email_present',  # custom action
+    'scholars.authentication.pipeline.social_user',  # custom action
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.social_auth.associate_by_email',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+    'scholars.authentication.pipeline.save_avatar',  # custom action
+)
+
+SOCIAL_AUTH_USERNAME_IS_FULL_EMAIL = True
 
 # Some really nice defaults
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
@@ -256,13 +292,22 @@ LOGIN_REDIRECT_URL = '/'
 # SLUGLIFIER
 AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
 
+REDIS_URL = env('REDIS_URL', default='redis://localhost:6379/0')
+
 # CELERY
-INSTALLED_APPS += ['old_sch.taskapp.celery.CeleryConfig']
+# INSTALLED_APPS += ['scholars.taskapp.celery.CeleryConfig']
 CELERY_BROKER_URL = env('CELERY_BROKER_URL', default='django://')
 if CELERY_BROKER_URL == 'django://':
-    CELERY_RESULT_BACKEND = 'redis://'
+    CELERY_BROKER_URL = REDIS_URL
+    CELERY_RESULT_BACKEND = REDIS_URL
 else:
     CELERY_RESULT_BACKEND = CELERY_BROKER_URL
+
+CELERY_BROKER_POOL_LIMIT = None
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
 # END CELERY
 
 
@@ -278,372 +323,133 @@ COMPRESS_OFFLINE = env.bool('DJANGO_COMPRESS_OFFLINE', False)
 # Location of root django.contrib.admin URL, use {% url 'admin:index' %}
 ADMIN_URL = r'^admin/'
 
-# Your common stuff: Below this line define 3rd party library settings
+# Below this line define 3rd party library settings
 # ------------------------------------------------------------------------------
 
+SUIT_CONFIG = {
+    # header
+    'ADMIN_NAME': 'Stanford Scholar',
+    'HEADER_DATE_FORMAT': 'l, j. F Y',
+    'HEADER_TIME_FORMAT': 'H:i',
 
+    # forms
+    'SHOW_REQUIRED_ASTERISK': True,  # Default True
+    'CONFIRM_UNSAVED_CHANGES': True,  # Default True
 
-from configurations import Configuration, values
+    # menu
+    # 'SEARCH_URL': '/admin/auth/user/',
+    # 'MENU_ICONS': {
+    #    'sites': 'icon-leaf',
+    #    'auth': 'icon-lock',
+    # },
+    'MENU_OPEN_FIRST_CHILD': True,  # Default True
+    'MENU_EXCLUDE': ('auth.group',),
+    # 'MENU': (
+    #     'sites',
+    #     {'app': 'auth', 'icon':'icon-lock', 'models': ('user', 'group')},
+    #     {'label': 'Settings', 'icon':'icon-cog', 'models': ('auth.user', 'auth.group')},
+    #     {'label': 'Support', 'icon':'icon-question-sign', 'url': '/support/'},
+    # ),
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # misc
+    'LIST_PER_PAGE': 25
+}
 
-
-class Common(Configuration):
-    INSTALLED_APPS = (
-        'suit',
-        'django.contrib.admin',
-        'django.contrib.auth',
-        'django.contrib.contenttypes',
-        'django.contrib.sessions',
-        'django.contrib.messages',
-        'django.contrib.postgres',
-        'django.contrib.staticfiles',
-
-        'corsheaders',
-        'compressor',
-        'crispy_forms',
-
-        'oauth2_provider',
-        'social_django',
-
-        # 3rd party apps
-        'rest_framework',  # utilities for rest apis
-        'rest_framework_social_oauth2',
-        # 'rest_framework.authtoken',       # token authentication
-        'dry_rest_permissions',
-
-        'versatileimagefield',  # image manipulation
-
-        # 'gdstorage',                      # google drive storage
-        # 'ws4redis',
-        # 'django_filters',
-
-        # apps
-        'scholars.authentication',
-        'scholars.users',
-        'scholars.courses',
-        'scholars.utils',
-    )
-
-    # https://docs.djangoproject.com/en/1.8/topics/http/middleware/
-    MIDDLEWARE_CLASSES = (
-        'django.contrib.sessions.middleware.SessionMiddleware',
-        'corsheaders.middleware.CorsMiddleware',
-        'django.middleware.common.CommonMiddleware',
-        'django.middleware.csrf.CsrfViewMiddleware',
-        'django.contrib.auth.middleware.AuthenticationMiddleware',
-        'django.contrib.messages.middleware.MessageMiddleware',
-        'django.middleware.clickjacking.XFrameOptionsMiddleware',
-        'django.middleware.security.SecurityMiddleware'
-    )
-
-    ROOT_URLCONF = 'config.urls'
-
-    SECRET_KEY = 'Not a secret'
-    WSGI_APPLICATION = 'config.wsgi.application'
-
-    # Email
-    EMAIL_BACKEND = values.Value('django.core.mail.backends.smtp.EmailBackend')
-
-    MANAGERS = (
-        ('Author', 'shirish.goyal@gmail.com'),
-    )
-
-    ADMINS = [
-        ('Shirish', 'shirish.goyal@gmail.com')
-    ]
-
-    # Postgres
-    DATABASES = values.DatabaseURLValue('postgres://localhost/scholars')
-
-    # General
-    APPEND_SLASH = values.BooleanValue(False)
-
-    TIME_ZONE = 'UTC'
-    USE_TZ = True
-
-    LANGUAGE_CODE = 'en-us'
-    # If you set this to False, Django will make some optimizations so as not
-    # to load the internationalization machinery.
-    USE_I18N = True
-    USE_L10N = True
-
-    LOGIN_REDIRECT_URL = '/'
-
-    ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-    # Static Files
-    STATIC_ROOT = join(BASE_DIR, 'assets')
-    STATICFILES_DIRS = [join(BASE_DIR, 'static'), ]
-    STATIC_URL = '/static/'
-    STATICFILES_FINDERS = (
-        'django.contrib.staticfiles.finders.FileSystemFinder',
-        'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-        'compressor.finders.CompressorFinder',
-    )
-
-    COMPRESS_ENABLED = values.BooleanValue(False)
-    COMPRESS_OFFLINE = values.BooleanValue(False)
-
-    # Media files
-    MEDIA_ROOT = join(BASE_DIR, 'media')
-    MEDIA_URL = '/media/'
-
-    TEMPLATES_DIR = join(BASE_DIR, 'templates')
-    TEMPLATES = [
-        {
-            'BACKEND': 'django.template.backends.django.DjangoTemplates',
-            'APP_DIRS': False,
-            'DIRS': [TEMPLATES_DIR],
-            'OPTIONS': {
-                'context_processors': [
-                    'django.template.context_processors.debug',
-                    'django.template.context_processors.request',
-                    'django.contrib.auth.context_processors.auth',
-                    'django.template.context_processors.i18n',
-                    'django.template.context_processors.media',
-                    'django.template.context_processors.static',
-                    'django.template.context_processors.tz',
-                    'django.contrib.messages.context_processors.messages',
-                    'social_django.context_processors.backends',
-                    'social_django.context_processors.login_redirect',
-                ],
-                'loaders': [
-                    ('django.template.loaders.cached.Loader', [
-                        'django.template.loaders.filesystem.Loader',
-                        'django.template.loaders.app_directories.Loader',
-                    ]),
-                ],
-            },
+# Logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
         },
-    ]
-
-    # Set DEBUG to False as a default for safety
-    # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-    DEBUG = values.BooleanValue(False)
-
-    for config in TEMPLATES:
-        config['OPTIONS']['debug'] = DEBUG
-
-    # Logging
-    LOGGING = {
-        'version': 1,
-        'disable_existing_loggers': False,
-        'formatters': {
-            'verbose': {
-                'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
-            },
-            'simple': {
-                'format': '%(levelname)s %(message)s'
-            },
-            # 'rq_console': {
-            #     'format': '%(asctime)s %(message)s',
-            #     'datefmt': '%H:%M:%S',
-            # },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
         },
-        'filters': {
-            'require_debug_true': {
-                '()': 'django.utils.log.RequireDebugTrue',
-            },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
         },
-        'handlers': {
-            'console': {
-                'level': 'INFO',
-                'filters': ['require_debug_true'],
-                'class': 'logging.StreamHandler',
-                'formatter': 'simple'
-            },
-            # 'rq_console': {
-            #     'level': 'DEBUG',
-            #     'class': 'rq.utils.ColorizingStreamHandler',
-            #     'formatter': 'rq_console',
-            #     'exclude': ['%(asctime)s'],
-            # },
-            'mail_admins': {
-                'level': 'ERROR',
-                'class': 'django.utils.log.AdminEmailHandler'
-            }
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
         },
-        'loggers': {
-            'django': {
-                'handlers': ['console'],
-                'propagate': True,
-            },
-            'django.request': {
-                'handlers': ['mail_admins'],
-                'level': 'ERROR',
-                'propagate': False,
-            },
-            # 'rq.worker': {
-            #     'handlers': ['rq_console'],
-            #     'level': 'DEBUG'
-            # }
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
         }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'propagate': True,
+        },
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
     }
+}
 
-    # Custom user app
-    AUTH_USER_MODEL = 'users.User'
+# Django Rest Framework
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': env.int('DJANGO_PAGINATION_LIMIT', default=20),
+    'DATETIME_FORMAT': '%Y-%m-%dT%H:%M:%S%z',
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+    ),
+    # 'DEFAULT_FILTER_BACKENDS': (
+    #     'rest_framework.filters.DjangoFilterBackend',
+    # ),
+}
 
-    AUTHENTICATION_BACKENDS = (
-        'social_core.backends.google.GoogleOAuth2',
-        'rest_framework_social_oauth2.backends.DjangoOAuth2',
-        'django.contrib.auth.backends.ModelBackend',
-    )
+# Versatile Image Field
+VERSATILEIMAGEFIELD_SETTINGS = {
+    # The amount of time, in seconds, that references to created images
+    # should be stored in the cache. Defaults to `2592000` (30 days)
+    'cache_length': 2592000,
+    'cache_name': 'versatileimagefield_cache',
+    'jpeg_resize_quality': 70,
+    'sized_directory_name': '__sized__',
+    'filtered_directory_name': '__filtered__',
+    'placeholder_directory_name': '__placeholder__',
+    'create_images_on_demand': DEBUG
+}
 
-    # Django Rest Framework
-    REST_FRAMEWORK = {
-        'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-        'PAGE_SIZE': int(os.getenv('DJANGO_PAGINATION_LIMIT', 15)),
-        'DATETIME_FORMAT': '%Y-%m-%dT%H:%M:%S%z',
-        'DEFAULT_RENDERER_CLASSES': (
-            'rest_framework.renderers.JSONRenderer',
-        ),
-        'DEFAULT_PERMISSION_CLASSES': [
-            'rest_framework.permissions.IsAuthenticated',
-        ],
-        'DEFAULT_AUTHENTICATION_CLASSES': (
-            'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
-            'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
-            'rest_framework_social_oauth2.authentication.SocialAuthentication',
-        ),
-        # 'DEFAULT_FILTER_BACKENDS': (
-        #     'rest_framework.filters.DjangoFilterBackend',
-        # ),
-    }
+# http://django-googledrive-storage.readthedocs.io/en/latest/
+GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = env('DJANGO_GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE', default='')
+GOOGLE_DRIVE_STORAGE_SERVICE_EMAIL = env('DJANGO_GOOGLE_DRIVE_STORAGE_SERVICE_EMAIL', default='')
 
-    # REST_FRAMEWORK_JWT_ALLOW_REFRESH = False  # avoid timer based solutions to refresh token
-    # JWT_EXPIRATION_DELTA = 24*60*60  # seconds
+# READ ONLY
+WORKFLOW_TEMPLATE = env('DJANGO_WORKFLOW_TEMPLATE',  default='')
+BEST_PRACTICES_TEMPLATE = env('DJANGO_BEST_PRACTICES_TEMPLATE', default='')
 
-    JWT_AUTH = {
-        'JWT_EXPIRATION_DELTA': datetime.timedelta(days=1),
-        'JWT_ALLOW_REFRESH': False,
-        'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=1),
-    }
+# UNIQUE PER TALK - CREATE COPIES OF THESE AND CHANGE TITLE
+QUESTIONNAIRE_TEMPLATE = env('DJANGO_QUESTIONNAIRE_TEMPLATE',  default='')
+PRESENTATION_TEMPLATE = env('DJANGO_PRESENTATION_TEMPLATE',  default='')
 
-    SOCIAL_AUTH_URL_NAMESPACE = 'social'
-    # DRFSO2_URL_NAMESPACE = 'social'
-    # SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'first_name', 'last_name', 'email', 'image', 'birthday',
-    #                                         'gender']
-    #
-    # SOCIAL_AUTH_PIPELINE = (
-    #     'scholars.authentication.pipeline.auto_logout',
-    #
-    #     # Get the information we can about the user and return it in a simple
-    #     # format to create the user instance later. On some cases the details are
-    #     # already part of the auth response from the provider, but sometimes this
-    #     # could hit a provider API.
-    #     'social_core.pipeline.social_auth.social_details',
-    #
-    #     # Get the social uid from whichever service we're authing thru. The uid is
-    #     # the unique identifier of the given user in the provider.
-    #     'social_core.pipeline.social_auth.social_uid',
-    #
-    #     # Verifies that the current auth process is valid within the current
-    #     # project, this is where emails and domains whitelists are applied (if
-    #     # defined).
-    #     'social_core.pipeline.social_auth.auth_allowed',
-    #
-    #     'scholars.authentication.pipeline.check_email_present',
-    #
-    #     # Checks if the current social-account is already associated in the site.
-    #     'scholars.authentication.pipeline.social_user',
-    #
-    #     # Make up a username for this person, appends a random string at the end if
-    #     # there's any collision.
-    #     'social_core.pipeline.user.get_username',
-    #
-    #     # Send a validation email to the user to verify its email address.
-    #     # Disabled by default.
-    #     # 'social_core.pipeline.mail.mail_validation',
-    #
-    #     # Associates the current social details with another user account with
-    #     # a similar email address. Disabled by default.
-    #     'social_core.pipeline.social_auth.associate_by_email',
-    #
-    #     # Create a user account if we haven't found one yet.
-    #     'social_core.pipeline.user.create_user',
-    #
-    #     # Create the record that associates the social account with the user.
-    #     'social_core.pipeline.social_auth.associate_user',
-    #
-    #     # Populate the extra_data field in the social record with the values
-    #     # specified by settings (and the default ones like access_token, etc).
-    #     'social_core.pipeline.social_auth.load_extra_data',
-    #
-    #     # Update the user record with any changed info from the auth service.
-    #     'social_core.pipeline.user.user_details',
-    #
-    #     'scholars.authentication.pipeline.save_avatar',
-    # )
+SLACK_CLIENT_ID = env('DJANGO_SLACK_CLIENT_ID',  default='')
+SLACK_CLIENT_SECRET = env('DJANGO_SLACK_CLIENT_SECRET',  default='')
+SLACK_VERIFICATION_TOKEN = env('DJANGO_SLACK_VERIFICATION_TOKEN',  default='')
+SLACK_OAUTH_ACCESS_TOKEN = env('DJANGO_SLACK_OAUTH_ACCESS_TOKEN',  default='')
+SLACK_TEAM_ID = env('DJANGO_SLACK_TEAM_ID',  default='')
 
-    # Versatile Image Field
-    VERSATILEIMAGEFIELD_SETTINGS = {
-        # The amount of time, in seconds, that references to created images
-        # should be stored in the cache. Defaults to `2592000` (30 days)
-        'cache_length': 2592000,
-        'cache_name': 'versatileimagefield_cache',
-        'jpeg_resize_quality': 70,
-        'sized_directory_name': '__sized__',
-        'filtered_directory_name': '__filtered__',
-        'placeholder_directory_name': '__placeholder__',
-        'create_images_on_demand': False
-    }
-
-    # django-rq
-    # Adds dashboard link for queues in /admin, This will override the default
-    # admin template so it may interfere with other apps that modify the
-    # default admin template. If you're using such an app, simply remove this.
-    # RQ_SHOW_ADMIN_LINK = True
-
-    # http://django-googledrive-storage.readthedocs.io/en/latest/
-    GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE = 'gdrive-9f7d7b145768.json'
-    GOOGLE_DRIVE_STORAGE_SERVICE_EMAIL = 'slides@fifth-chalice-142403.iam.gserviceaccount.com'
-
-    SUIT_CONFIG = {
-        # header
-        'ADMIN_NAME': 'Stanford Scholar',
-        'HEADER_DATE_FORMAT': 'l, j. F Y',
-        'HEADER_TIME_FORMAT': 'H:i',
-
-        # forms
-        'SHOW_REQUIRED_ASTERISK': True,  # Default True
-        'CONFIRM_UNSAVED_CHANGES': True,  # Default True
-
-        # menu
-        # 'SEARCH_URL': '/admin/auth/user/',
-        # 'MENU_ICONS': {
-        #    'sites': 'icon-leaf',
-        #    'auth': 'icon-lock',
-        # },
-        'MENU_OPEN_FIRST_CHILD': True,  # Default True
-        'MENU_EXCLUDE': ('auth.group',),
-        # 'MENU': (
-        #     'sites',
-        #     {'app': 'auth', 'icon':'icon-lock', 'models': ('user', 'group')},
-        #     {'label': 'Settings', 'icon':'icon-cog', 'models': ('auth.user', 'auth.group')},
-        #     {'label': 'Support', 'icon':'icon-question-sign', 'url': '/support/'},
-        # ),
-
-        # misc
-        'LIST_PER_PAGE': 25
-    }
-
-    # READ ONLY
-    WORKFLOW_TEMPLATE = '1DBM-v8bieVlUlnDZihCM4MlTZCLGCuw8ezVlF5Re0wc'
-    BEST_PRACTICES_TEMPLATE = '1sQS_OZ9A9HLoQcJGlVjRXKiPJvt62oafW7CyKFELwaM'
-
-    # UNIQUE PER TALK - CREATE COPIES OF THESE AND CHANGE TITLE
-    QUESTIONNAIRE_TEMPLATE = '18A4oFaknlfbj4V1dbj_mS3QT2mnWnU826fhoJZO2oRo'
-    PRESENTATION_TEMPLATE = '1Fxul07yiAVKU02KnoQaZ_iOpSF-fJr0WmsDucOxpbKc'
-
-    # Celery
-    REDIS_URL = os.environ.get('REDIS_URL', 'redis://localhost:6379')
-
-    CELERY_BROKER_URL = "django://"
-    BROKER_URL = REDIS_URL
-    BROKER_POOL_LIMIT = None
-    CELERY_RESULT_BACKEND = REDIS_URL
-    CELERY_ACCEPT_CONTENT = ['application/json']
-    CELERY_TASK_SERIALIZER = 'json'
-    CELERY_RESULT_SERIALIZER = 'json'
-    CELERY_TIMEZONE = 'UTC'
+SOCIAL_AUTH_GOOGLE_OAUTH2_ACCESS_TOKEN_URL = env('DJANGO_SOCIAL_AUTH_GOOGLE_OAUTH2_ACCESS_TOKEN_URL',  default='')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = ['email', 'profile']
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env('DJANGO_SOCIAL_AUTH_GOOGLE_OAUTH2_KEY',  default='')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env('DJANGO_SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET',  default='')

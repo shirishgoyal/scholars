@@ -2,12 +2,12 @@
 *.db
 *~
 
-html/
-htmlcov/
-coverage/
-.coverage
-.tox
-nosetests.xml
+# Logs
+logs
+*.log
+pip-log.txt
+npm-debug.log*
+
 build/
 dist/
 *.egg-info/
@@ -23,11 +23,26 @@ pip-log.txt
 
 .DS_Store
 
+# Unit test / coverage reports
+# Unit test / coverage reports
+.coverage
+.tox
+nosetests.xml
+htmlcov
+html/
+htmlcov/
+coverage/
+
 env
 site
 media/*
 assets/*
 .idea/*
+!.idea/runConfigurations/
+!.idea/old_sch.iml
+!.idea/vcs.xml
+!.idea/webResources.xml
+
 docs/*
 frontend/.tmp/*
 frontend/docs/*
@@ -37,4 +52,17 @@ preview.html
 README.md
 *.pem
 static/libs/
-node_modules
+node_modules/
+.sass-cache
+
+.env
+
+mailhog
+
+staticfiles/
+
+.cache/
+
+# Translations
+*.mo
+*.pot

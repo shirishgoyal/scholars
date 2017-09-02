@@ -1,46 +1,68 @@
-import os
-from .common import Common
-from configurations import values
+"""
+Local settings
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+- Run in Debug mode
 
+- Use mailhog for emails
 
-class Local(Common):
+- Add Django Debug Toolbar
+- Add django-extensions as app
+"""
 
-    DEBUG = values.BooleanValue(True)
-    for config in Common.TEMPLATES:
-        config['OPTIONS']['debug'] = DEBUG
+from .base import *  # noqa
 
-    # Testing
-    INSTALLED_APPS = Common.INSTALLED_APPS
-    INSTALLED_APPS += ('django_nose',)
-    TEST_RUNNER = 'django_nose.NoseTestSuiteRunner'
-    NOSE_ARGS = [
-        BASE_DIR,
-        '--nologcapture',
-        '--with-coverage',
-        '--with-progressive',
-        '--cover-package={}'.format(BASE_DIR)
-    ]
+# DEBUG
+# ------------------------------------------------------------------------------
+DEBUG = env.bool('DJANGO_DEBUG', default=True)
+TEMPLATES[0]['OPTIONS']['debug'] = DEBUG
 
-    # Mail
-    EMAIL_HOST = 'localhost'
-    EMAIL_PORT = 1025
-    EMAIL_BACKEND = values.Value('django.core.mail.backends.console.EmailBackend')
+# SECRET CONFIGURATION
+# ------------------------------------------------------------------------------
+# See: https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
+# Note: This key only used for development and testing.
+SECRET_KEY = env('DJANGO_SECRET_KEY', default='?WAj*jiEVGy[jNQIh(-u!f]e&|/<S!u(;qXVE#&6:1FqQxk{C+')
 
-    # Vesitle Image Field settings
-    VERSATILEIMAGEFIELD_SETTINGS = Common.VERSATILEIMAGEFIELD_SETTINGS
-    VERSATILEIMAGEFIELD_SETTINGS['create_images_on_demand'] = True
+# Mail settings
+# ------------------------------------------------------------------------------
+EMAIL_PORT = 1025
+EMAIL_HOST = 'localhost'
 
-    # Django RQ local settings
-    # RQ_QUEUES = {
-    #     'default': {
-    #         'URL': os.getenv('REDISTOGO_URL', 'redis://localhost:6379'),
-    #         'DB': 0,
-    #         'DEFAULT_TIMEOUT': 500,
-    #     },
-    # }
+# CACHING
+# ------------------------------------------------------------------------------
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': ''
+    }
+}
 
-    QUESTIONNAIRE_TEMPLATE = '1wQuBapjAjFmGcQysDeD2YMh3AzxN6BlExZl-Ehj57hI'
-    WORKFLOW_TEMPLATE = '1iIkw_TkSXiMVOJw5dMtTUiGwhUDVwso7h9XKLDIjPAU'
-    PRESENTATION_TEMPLATE = '1Wf7BX7EVIH6GTYfOnrSLdLZF3AXNxO5OxVMf7qLEBWQ'
+# django-debug-toolbar
+# ------------------------------------------------------------------------------
+MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware', ]
+INSTALLED_APPS += ['debug_toolbar', ]
+
+INTERNAL_IPS = ['127.0.0.1', ]
+
+DEBUG_TOOLBAR_CONFIG = {
+    'DISABLE_PANELS': [
+        'debug_toolbar.panels.redirects.RedirectsPanel',
+    ],
+    'SHOW_TEMPLATE_CONTEXT': True,
+}
+
+# django-extensions
+# ------------------------------------------------------------------------------
+INSTALLED_APPS += ['django_extensions', ]
+
+# TESTING
+# ------------------------------------------------------------------------------
+TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+
+########## CELERY
+# In development, all tasks will be executed locally by blocking until the task returns
+CELERY_ALWAYS_EAGER = True
+########## END CELERY
+
+# Below this line define 3rd party library settings
+# ------------------------------------------------------------------------------
+ALLOWED_HOSTS = ['*']
