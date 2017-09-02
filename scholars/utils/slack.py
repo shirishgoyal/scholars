@@ -11,7 +11,7 @@ class Slack:
 
     def create_channel(self, name):
         return self.sc.api_call(
-            "chat.create",
-            name=name,
+            "channels.create",
+            name=name.lower(),
             validate=True
         )

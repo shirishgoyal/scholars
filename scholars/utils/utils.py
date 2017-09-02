@@ -31,7 +31,7 @@ def get_credentials(scopes=SCOPES):
     # if not os.path.exists(credential_dir):
     #     os.makedirs(credential_dir)
 
-    credential_path = os.path.join(settings.ROOT_DIR, settings.GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE)
+    credential_path = str(settings.ROOT_DIR.path(settings.GOOGLE_DRIVE_STORAGE_JSON_KEY_FILE))
     credentials = ServiceAccountCredentials.from_json_keyfile_name(credential_path, scopes=scopes)
     return credentials
 
@@ -44,6 +44,7 @@ def get_service():
 
 
 def import_presentation(model_id, file_id):
+    print "importing..."
     credentials = get_credentials()
     http = credentials.authorize(Http())
     service = discovery.build('drive', 'v3', http=http)
@@ -53,7 +54,7 @@ def import_presentation(model_id, file_id):
     #     print f['name']
 
     try:
-
+        print "exporting files..."
         folder = os.path.join(settings.MEDIA_ROOT, '%d' % model_id)
         if not os.path.exists(folder):
             os.makedirs(folder)
@@ -66,7 +67,10 @@ def import_presentation(model_id, file_id):
                     mime_type='application/vnd.openxmlformats-officedocument.presentationml.presentation',
                     name="slides.pptx")
 
+        print "generating images..."
         generate_images(pdf, folder, model_id)
+
+        print "generating notes..."
         generate_notes(pptx, folder, model_id)
 
     except Exception as e:
@@ -108,7 +112,7 @@ def copy_file(model_id, file_id, name):
     #  u'mimeType': u'application/vnd.google-apps.document',
     #  u'name': u'Copy of Sample: Notes and Questions'}
 
-    pprint.pprint(response)
+    # pprint.pprint(response)
     # pprint.pprint(response.capabilities)
 
     return response
@@ -207,7 +211,7 @@ def process_links(model_id):
     import os
     from os import listdir
     from os.path import isfile, join
-    from courses.models import Course
+    from scholars.courses.models import Course
 
     folder = os.path.join(settings.MEDIA_ROOT, '%d' % model_id)
     if not os.path.exists(folder):
@@ -278,11 +282,13 @@ def process_links(model_id):
 def generate_images(pdf, folder, model_id):
     from wand.image import Image
     from wand.color import Color
-    from courses.models import Slide
+    from scholars.courses.models import Slide
 
     image_folder = os.path.join(folder, 'images')
     if not os.path.exists(image_folder):
         os.makedirs(image_folder)
+
+    # print image_folder
 
     clear_folder(image_folder)
 
@@ -294,6 +300,8 @@ def generate_images(pdf, folder, model_id):
         img.save(filename=os.path.join(image_folder, '%03d.png'))
         total = len(img.sequence)
 
+        print total
+
     # get slide for this image in the course
     for count in range(total):
         image_filepath = os.path.join(image_folder, '%03d.png' % count)
@@ -302,6 +310,8 @@ def generate_images(pdf, folder, model_id):
         slide, created = Slide.objects.get_or_create(position=position, course_id=model_id)
         slide.image = '%d/images/%03d.png' % (model_id, count)
         slide.save()
+
+        # print count
 
         # .save(
         #     os.path.basename(image_filepath),  # filename
@@ -325,7 +335,7 @@ def generate_notes(pptx, folder, model_id):
     import os, glob
     from zipfile import ZipFile
     from xml.dom.minidom import parse
-    from courses.models import Slide
+    from scholars.courses.models import Slide
 
     tmp_folder = os.path.join(folder, 'tmp')
     if not os.path.exists(tmp_folder):
