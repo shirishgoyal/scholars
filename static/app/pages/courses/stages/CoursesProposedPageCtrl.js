@@ -1,7 +1,3 @@
-/**
- * @author v.lugovsky
- * created on 16.12.2015
- */
 (function () {
     'use strict';
 
@@ -19,7 +15,7 @@
                 // $log.log(response.data);
                 vm.courses = response.data.results.map(function(course){
                     var line = [];
-                    line.push('Published by '+course.publisher);
+                    line.push(course.publisher);
 
                     if(course.published_on){
                         line.push( $filter('date')(course.published_on, 'yyyy'))

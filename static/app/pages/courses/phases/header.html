@@ -1,7 +1,8 @@
-<div class="panel-heading" style="padding: 0px 13px;height: 36px;min-height: 36px;background-color: transparent">
+<div class="panel-heading" style="padding: 0px 13px;height: 48px;min-height: 48px;background-color: transparent">
   <div class="wizard small row ng-cloak" ng-cloak>
     <a ng-repeat="item in items" ng-class="{ 'current': item.isCurrent, 'complete': item.isComplete }">
-      <span ng-click="goto(item)">{{ item.name }}</span>
+      <h5>{{ item.name }}</h5>
+      <span class="small" ng-class="item.class">{{item.status || '&nbsp;'}}</span>
     </a>
   </div>
 </div>

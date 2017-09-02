@@ -6,14 +6,49 @@
     'use strict';
 
     angular.module('BlurAdmin.pages.courses', [
-        'BlurAdmin.pages.courses.services'
+        'BlurAdmin.services'
     ])
         .config(routeConfig);
 
-    angular.module('BlurAdmin.pages.courses.services', []);
-
     /** @ngInject */
     function routeConfig($stateProvider) {
+        var getCourseState = function (status, phase) {
+            // STATUS = Choices(
+            //     (0, 'proposed', 'Proposed'),
+            //     (1, 'in_progress', 'In Progress'),
+            //     (2, 'published', 'Published')
+            // )
+            //
+            // PHASE = Choices(
+            //     (0, 'onboarding', 'Onboarding'),
+            //     (1, 'reading', 'Reading'),
+            //     (2, 'discussion', 'Discussion'),
+            //     (3, 'slides', 'Slides'),
+            //     (4, 'peer_review', 'Peer Review'),
+            //     (5, 'audio', 'Audio'),
+            //     (6, 'refine', 'Refinement'),
+            //     (7, 'pending_approval', 'Pending Approval'),
+            // )
+
+            return function ($q, $state, $stateParams, Course) {
+                var deferred = $q.defer();
+                Course.get($stateParams.id)
+                    .then(function (response) {
+                        var course = response.data;
+                        if (course.status === status && course.phase === phase) {
+                            deferred.resolve(course);
+                        } else {
+                            $state.go('proposed');
+                            deferred.reject('talk is not ready yet!');
+                        }
+                    }, function (response, status) {
+                        deferred.reject('failed to fetch talk');
+                    });
+
+                return deferred.promise;
+            }
+        };
+
         $stateProvider
 
             .state('talk', {
@@ -21,7 +56,7 @@
                 abstract: true,
                 authenticate: true,
                 title: 'Research Talk',
-                templateUrl:'static/app/pages/courses/phases/base.html'
+                templateUrl: 'static/app/pages/courses/phases/base.html'
             })
             .state('talk.reading', {
                 url: '/:id/reading',
@@ -29,7 +64,10 @@
                 controller: 'ReadingPhaseCtrl',
                 controllerAs: 'vm',
                 authenticate: true,
-                title: 'Research Talk: Reading Phase'
+                title: 'Research Talk',
+                resolve: {
+                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1,1)]
+                }
             })
             .state('talk.questionnaire', {
                 url: '/:id/questionnaire',
@@ -37,7 +75,10 @@
                 controller: 'ReadingPhaseCtrl',
                 controllerAs: 'vm',
                 authenticate: true,
-                title: 'Research Talk: Questionnaire'
+                title: 'Research Talk',
+                resolve: {
+                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1,2)]
+                }
             })
             .state('talk.slides', {
                 url: '/:id/slides',
@@ -45,7 +86,10 @@
                 controller: 'ReadingPhaseCtrl',
                 controllerAs: 'vm',
                 authenticate: true,
-                title: 'Research Talk: Presentation'
+                title: 'Research Talk',
+                resolve: {
+                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1,3)]
+                }
             })
             .state('talk.peer_review', {
                 url: '/:id/peer_review',
@@ -53,7 +97,10 @@
                 controller: 'ReadingPhaseCtrl',
                 controllerAs: 'vm',
                 authenticate: true,
-                title: 'Research Talk: Peer Review'
+                title: 'Research Talk',
+                resolve: {
+                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1,4)]
+                }
             })
             .state('talk.audio', {
                 url: '/:id/audio',
@@ -61,7 +108,10 @@
                 controller: 'ReadingPhaseCtrl',
                 controllerAs: 'vm',
                 authenticate: true,
-                title: 'Research Talk: Audio'
+                title: 'Research Talk',
+                resolve: {
+                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1,5)]
+                }
             })
             .state('talk.refine', {
                 url: '/:id/refine',
@@ -69,7 +119,10 @@
                 controller: 'ReadingPhaseCtrl',
                 controllerAs: 'vm',
                 authenticate: true,
-                title: 'Research Talk: Refinement'
+                title: 'Research Talk',
+                resolve: {
+                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1,6)]
+                }
             })
             .state('talk.pending_approval', {
                 url: '/:id/pending_approval',
@@ -77,7 +130,10 @@
                 controller: 'ReadingPhaseCtrl',
                 controllerAs: 'vm',
                 authenticate: true,
-                title: 'Research Talk: Awaiting Publish'
+                title: 'Research Talk',
+                resolve: {
+                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1,7)]
+                }
             })
             .state('in_progress', {
                 url: '/talks/in-progress',
@@ -109,20 +165,20 @@
                 controller: 'CourseJoinCtrl',
                 controllerAs: 'vm',
                 authenticate: true,
-                title: 'Join a proposed talk'
+                title: 'Join talk'
             })
-            .state('published', {
-                url: '/talks/published',
-                templateUrl: 'static/app/pages/courses/stages/published.html',
-                controller: 'CoursesPublishedPageCtrl',
-                controllerAs: 'vm',
-                authenticate: true,
-                title: 'Published Talks',
-                sidebarMeta: {
-                    icon: 'ion-ios-book',
-                    order: 10
-                }
-            })
+            // .state('published', {
+            //     url: '/talks/published',
+            //     templateUrl: 'static/app/pages/courses/stages/published.html',
+            //     controller: 'CoursesPublishedPageCtrl',
+            //     controllerAs: 'vm',
+            //     authenticate: true,
+            //     title: 'Published Talks',
+            //     sidebarMeta: {
+            //         icon: 'ion-ios-book',
+            //         order: 10
+            //     }
+            // })
             .state('talks-add', {
                 url: '/talks/add',
                 templateUrl: 'static/app/pages/courses/add/add.html',

@@ -85,7 +85,7 @@
                 var info = response.data.message;
                 vm.search.found = true;
 
-                vm.course.name = info.title.join(' ') + info.subtitle.join(' ');
+                vm.course.name = info.title.join(' ');//info.subtitle.join(' ');
                 vm.course.url = info['URL'];
                 vm.course.publisher = info['container-title'].join(' ');
                 vm.course.type = info['type'];
@@ -96,7 +96,7 @@
                 vm.course.pages = info['page'];
 
             }, function (response, status) {
-                console.log(response);
+                // console.log(response);
                 vm.search.found = false;
 
             }).finally(function () {

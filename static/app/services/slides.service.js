@@ -5,7 +5,7 @@
     'use strict';
 
     angular
-        .module('BlurAdmin.pages.courses.services')
+        .module('BlurAdmin.services')
         .factory('Slide', Slide);
 
     Slide.$inject = ['$cookies', '$http', '$q', '$window', 'Auth', 'Upload'];
@@ -18,6 +18,8 @@
             release: release,
             approve: approve,
             reject: reject,
+            submitFeedback: submitFeedback,
+            updateFeedbackStatus: updateFeedbackStatus,
 
             list: list,
             // get: get,
@@ -33,7 +35,7 @@
 
             return $http.put('/api/slides/' + id + '/assign/', data);
         }
-        
+
         function release(id, courseId) {
             var data = {
                 'course': courseId
@@ -85,6 +87,20 @@
             return $http.get('/api/slides/' + id + '/');
         }
 
-        
+        function submitFeedback(id, review) {
+            return $http.post('/api/slides/' + id + '/review/', review);
+        }
+
+        function updateFeedbackStatus(review_id, status) {
+            var data = {
+                // status: parseInt(status)
+            };
+
+            var action = parseInt(status) === 1 ? 'proposed' : 'resolved';
+
+            return $http.put('/api/reviews/' + review_id + '/' + action + '/', data);
+        }
+
+
     }
 })();

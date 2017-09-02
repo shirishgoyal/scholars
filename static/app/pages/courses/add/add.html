@@ -7,7 +7,7 @@
       <label for="doi" class="control-label">DOI</label>
 
       <input name="doi" type="text"
-             placeholder="Enter DOI information" class="form-control input-md"
+             placeholder="Enter DOI information" class="form-control"
              ng-required="true" ng-model="vm.course.doi" backend-validity>
       <span class="help-block sub-little-text">Example: 10.1038/nature16961</span>
 
@@ -32,7 +32,7 @@
 
     <div class="form-group  has-feedback"
          ng-class="{ 'has-error': vm.hasError('pdf') }">
-      <label for="pdf" class="control-label">PDF URL</label>
+      <label for="pdf" class="control-label">URL for downloadable PDF (public link only)</label>
 
       <input name="pdf" type="text" placeholder="Enter url for pdf"
              class="form-control input-md" ng-required="true" ng-model="vm.course.pdf" backend-validity>

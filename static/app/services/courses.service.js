@@ -6,7 +6,7 @@
     'use strict';
 
     angular
-        .module('BlurAdmin.pages.courses.services')
+        .module('BlurAdmin.services')
         .factory('Course', Course);
 
     Course.$inject = ['$cookies', '$http', '$q', '$window'];
@@ -15,16 +15,20 @@
 
         var Course = {
             list: list,
+            listFeatured: listFeatured,
             listPublished: listPublished,
             listProposed: listProposed,
             listInProgress: listInProgress,
             get: get,
+            listRelated:listRelated,
             add: add,
             info: info,
             join: join,
-            listCategories:listCategories,
-            listLanguages:listLanguages,
-            listTimezones:listTimezones,
+            listCategories: listCategories,
+            listLanguages: listLanguages,
+            listTimezones: listTimezones,
+            approvePhase:approvePhase,
+            rejectPhase:rejectPhase,
         };
 
         return Course;
@@ -33,8 +37,12 @@
             return $http.get('/api/courses/');
         }
 
-        function listPublished() {
-            return $http.get('/api/courses/published/');
+        function listFeatured() {
+            return $http.get('/api/courses/featured/');
+        }
+
+        function listPublished(page_size) {
+            return $http.get('/api/courses/published/?page_size=' + page_size);
         }
 
         function listInProgress() {
@@ -61,6 +69,10 @@
             return $http.get('/api/courses/' + id + '/');
         }
 
+        function listRelated(id) {
+            return $http.get('/api/courses/' + id + '/related/');
+        }
+
         function add(course) {
             return $http.post('/api/courses/', course);
         }
@@ -76,5 +88,22 @@
                 }
             });
         }
+
+        function rejectPhase(id, phase) {
+            var data = {
+                'phase': phase
+            };
+
+            return $http.put('/api/courses/' + id + '/reject/', data);
+        }
+
+        function approvePhase(id, phase) {
+            var data = {
+                'phase': phase
+            };
+
+            return $http.put('/api/courses/' + id + '/approve/', data);
+        }
+
     }
 })();

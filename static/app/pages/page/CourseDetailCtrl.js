@@ -2,10 +2,10 @@
     'use strict';
 
     angular.module('BlurAdmin.pages.page')
-        .controller('PageCtrl', PageCtrl);
+        .controller('CourseDetailCtrl', CourseDetailCtrl);
 
     /** @ngInject */
-    function PageCtrl($scope, $state, $log, Auth, lodash) {
+    function CourseDetailCtrl($scope, $state, $stateParams, $log, lodash, Auth, Course) {
         var vm = this;
 
         vm.account = {};
@@ -18,7 +18,7 @@
         vm.papers = [
             {
                 "name": "Mastering the Game of Go with Deep Neural Networks and Tree Search",
-                "doi": "doi:10.1038/nature16961",
+                "doi": "10.1038/nature16961",
                 "video_links": [
                     {
                         "url": "https://youtu.be/MXVyITzDzu0",
@@ -51,7 +51,7 @@
                     "Venkata Karthik Gullapalli"
                 ],
                 "video": "https://youtu.be/F2uBxrnfgVA",
-                "id": 20,
+                "id": 18,
                 "pdf": "http://airesearch.com/wp-content/uploads/2016/01/deepmind-mastering-go.pdf",
                 "audio": [
                     "Niresh Jain",
@@ -290,7 +290,7 @@
             },
             {
                 "name": "Social Networks Under Stress",
-                "doi": "10.1016/j.ssresearch.2014.01.001",
+                "doi": "10.1145/2872427.2883063",
                 "video_links": [
                     {
                         "url": "https://youtu.be/LUJb26_LSW0",
@@ -454,6 +454,7 @@
             },
             {
                 "name": "Hierarchical Finite State Controllers for Generalized Planning",
+                "doi": "",
                 "video_links": [
                     {
                         "url": "https://youtu.be/26MK9Vq4mKM",
@@ -491,7 +492,7 @@
                     "Binit Kumar"
                 ],
                 "video": "https://youtu.be/2lDzMuBWuqA",
-                "id": 110,
+                "id": 81,
                 "pdf": "http://www.ijcai.org/Proceedings/16/Papers/458.pdf",
                 "audio": [
                     "Zafarali Ahmed",
@@ -591,7 +592,7 @@
                     "Raviteja Chunduru"
                 ],
                 "video": "https://youtu.be/B8dJgC4MkPY",
-                "id": 106,
+                "id": 85,
                 "pdf": "http://www.kdd.org/kdd2016/papers/files/rfp0110-hooiA.pdf",
                 "audio": [
                     "Naveena Benjamin",
@@ -661,7 +662,7 @@
                     {
                         "url": "https://youtu.be/unCNVFu2Yro",
                         "name": "Chinese",
-                        "id": 132
+                        "id": 127
                     },
                     {
                         "url": "https://youtu.be/F4Lz1Q73k58",
@@ -751,7 +752,7 @@
                     "Sarthak Munshi"
                 ],
                 "video": "https://youtu.be/8gZSfT4y44w",
-                "id": 112,
+                "id": 86,
                 "pdf": "https://eprint.iacr.org/2016/094.pdf",
                 "audio": [
                     "Sarthak Munshi",
@@ -831,7 +832,7 @@
                     "Gargi Sharma"
                 ],
                 "video": "https://youtu.be/YIdF9CT7Mzo",
-                "id": 190,
+                "id": 210,
                 "pdf": "http://webdocs.cs.ualberta.ca/~holte/Publications/MM-AAAI2016.pdf",
                 "audio": [
                     "Tanveet Singh"
@@ -920,7 +921,7 @@
                 "description": "Published on March 12, 2017 - Public link - VLDB 2016 (best paper)"
             },
             {
-                "name": "Rovables: Miniature On-Body Robots as Wearables",
+                "name": "Rovables: Miniature On-Body Robots as Mobile Wearables",
                 "doi": "10.1145/2984511.2984531",
                 "video_links": [
                     {
@@ -1022,7 +1023,7 @@
                 "description": "Published on March 12, 2017 - Public link - CSCW 2017 (best paper)"
             },
             {
-                "name": "Designing movement-based play with young people using powered wheelchairs",
+                "name": "Designing Movement-based Play With Young People Using Powered Wheelchairs",
                 "doi": "10.1145/2858036.2858070",
                 "video_links": [
                     {
@@ -1725,6 +1726,7 @@
             },
             {
                 "name": "Deep Face Deblurring",
+                "doi": "",
                 "description": "Grigorios G. Chrysos, Stefanos Zafeiriou, Deep Face Deblurring",
                 "published_on": "25 May 2017",
                 "pdf_links": [
@@ -1808,6 +1810,7 @@
             },
             {
                 "name": "Naturalizing a Programming Language via Interactive Learning",
+                "doi": "",
                 "description": "Sida I. Wang, Samuel Ginn, Percy Liang, Christopher D. Manning, Naturalizing a Programming Language via Interactive Learning, Association for Computational Linguistics (ACL), 2017",
                 "published_on": "April 23, 2017",
                 "pdf_links": [
@@ -1848,6 +1851,7 @@
             },
             {
                 "name": "Optimal and Adaptive Algorithms for Online Boosting",
+                "doi": "",
                 "description": "Alina Beygelzimer, Satyen Kale and Haipeng Luo, Optimal and Adaptive Algorithms for Online Boosting, Proceedings of the Twenty-Fifth International Joint Conference on Artificial Intelligence (IJCAI-16), Best Paper Award winner",
                 "published_on": "February, 2015",
                 "pdf_links": [
@@ -2081,15 +2085,36 @@
             }
         ];
 
-        // vm.papers = vm.papers.slice(0, 9);
-
-
         vm.papers = lodash.map(vm.papers, function (paper) {
-            paper.image = 'https://i.ytimg.com/vi/' + paper.video.replace('https://youtu.be/', '') + '/maxresdefault.jpg';
+            paper.image = 'https://i.ytimg.com/vi/' + paper.yid + '/maxresdefault.jpg';
             return paper;
         });
 
-        vm.featured_papers = vm.papers.slice(0, 3);
+        // vm.paper = lodash.find(vm.papers, function (paper) {
+        //     return paper.id === parseInt($stateParams.id);
+        // });
+        //
+        Course.get($stateParams.id).then(function (response, status) {
+            vm.paper = response.data;
+            vm.paper.image = 'https://i.ytimg.com/vi/' + vm.paper.yid + '/maxresdefault.jpg';
+            vm.paper.video = 'https://youtu.be/' + vm.paper.yid + '/';
+        });
+
+        Course.listRelated($stateParams.id).then(function (response, status) {
+            vm.related = lodash.map(response.data, function (paper) {
+                paper.image = 'https://i.ytimg.com/vi/' + paper.yid + '/maxresdefault.jpg';
+                return paper;
+            });
+
+        });
+
+        vm.discusConfig = {
+            disqus_shortname: 'stanfordscholar',
+            disqus_identifier: $stateParams.id,
+            disqus_url: '#page/talk/' + $stateParams.id
+        };
+
+        // vm.featured_papers = vm.papers.slice(0, 3);
 
         function has_error(field_name) {
             var field = $scope.form[field_name];

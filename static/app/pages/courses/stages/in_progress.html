@@ -2,35 +2,49 @@
 
   <div class="col-sm-12 col-md-6 col-lg-4" ng-repeat="item in vm.courses">
     <!--<div class="panel-deck">-->
-    <div class="panel " ui-sref="talk({id:item.id})" style="margin-bottom: 10px">
+    <div class="panel " style="margin-bottom: 10px;">
       <div class="panel-heading" style="background-color: #8c1515; color:#fff;min-height: 70px;
-        overflow: hidden;padding: 15px 15px;">
-        {{item.name}}
+        overflow: hidden;padding: 15px 15px;cursor: pointer;" ng-click="vm.gotoPhase(item)" ng-text-truncate="item.name"
+           ng-tt-chars-threshold="75">
       </div>
       <!--<img class="panel-img-top" src="..." alt="Card image cap">-->
       <div class="panel-body">
 
-        <p class="muted"><a href="{{item.url}}" target="_blank">Published by
+        <p class="muted" style="min-height: 32px;"><span
+          ng-text-truncate="item.published_by_line" ng-tt-chars-threshold="90"></span> <a href="{{item.url}}" target="_blank"><i
+          class="ion-android-open"></i></a></p>
 
-          {{item.publisher}} on {{item.published_on| date}}</a></p>
+        <p style="font-weight: 400;font-size: 12px;margin-bottom: 10px;min-height: 32px;"><strong>Authors:</strong>
+          <span ng-text-truncate="item.authors" ng-tt-chars-threshold="100"></span></p>
 
-        <p style="font-weight: 400;font-size: 12px;margin-bottom: 10px"><strong>Authors:</strong>
-          {{item.authors}}</p>
+        <a class="btn btn-warning" ui-sref="proposed-join({id:item.id})" ng-show="!item.is_member">Join</a>
+        <a class="btn btn-warning" ng-show="item.is_member" ng-click="vm.gotoPhase(item)">Open</a></div>
 
-        <p class="panel-text">Needs 5 more members</p>
-        <a href="#" class="btn btn-warning" ui-sref="proposed-join({id:item.id})">Join</a>
-      </div>
       <div class="panel-footer">
-        <small class="text-muted pull-left">Proposed by {{item.owner.username}}</small>
-        <small class="text-muted pull-right">{{item.phase}}</small>
+        <!--<small class="text-muted pull-left">Proposed by {{item.owner.username}}</small>-->
+        <small class="text-muted pull-left">{{item.phase_display}}</small>
+        <small class="text-muted pull-right">
+          <ng-pluralize count="item.total_members" when="{'0': '',
+                     '1': '1 member',
+                     'other': '{{item.total_members | number:0}} members'}">
+          </ng-pluralize>
+        </small>
       </div>
     </div>
   </div>
 
-  <div class="col-xs-12" ng-if="vm.courses.length == 0">
-    <h3>Want to propose a new talk and work with a globally connected team?</h3>
+  <div class="col-sm-12 col-md-6 col-lg-4" ng-if="vm.courses.length == 0">
+    <div class="panel " style="margin-bottom: 10px">
+      <div class="panel-heading">
+        Join us today to make research globally accessible!
+      </div>
+      <div class="panel-body">
 
-    <button class="btn btn-warning" ui-sref="talks-add">Go!</button>
+        <p class="muted">Want to propose a new talk and work with a globally connected team?</p>
+
+        <button class="btn btn-warning" ui-sref="talks-add">Go!</button>
+      </div>
+    </div>
 
   </div>
 </div>

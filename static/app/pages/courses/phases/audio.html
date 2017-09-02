@@ -5,10 +5,17 @@
       <phase-header items="vm.phases"></phase-header>
 
       <div class="panel-body">
+        <phase-actions
+              items="vm.phases" current-phase="vm.currentPhase"
+              course="vm.course" is-dri="vm.is_dri"
+              can-previous="vm.canPrevious" can-next="vm.canNext"
+              move-previous="vm.movePrevious()" move-next="vm.moveNext()"
+            ></phase-actions>
+
         <h2>{{vm.course.name}}</h2>
 
         <div class="row">
-          <div class="col-lg-8 col-md-12 col-sm-12">
+          <div class="col-lg-9 col-md-12 col-sm-12">
             <div class="slider-box" style="margin-bottom: 10px">
               <div uib-carousel active="vm.activeSlideIndex" interval="0" no-wrap="noWrapSlides">
                 <div uib-slide ng-repeat="slide in vm.course.slides track by slide.id"
@@ -18,8 +25,9 @@
               </div>
             </div>
           </div>
-          <div class="col-lg-4 col-md-12 col-sm-12">
+          <div class="col-lg-3 col-md-12 col-sm-12">
 
+            <!--controls-->
             <ul class="list-inline list-unstyled" style="text-align: center">
               <li>
                 <button type="button" class="btn-warning" ng-click="vm.back(5)"
@@ -42,35 +50,17 @@
               </li>
             </ul>
 
+            <!--notes-->
             <h5 ng-bind-html="vm.activeSlide.notes"></h5>
 
-            <div ng-if="vm.activeSlide.status==0">
+            <!--audio user assignment-->
+            <div ng-if="vm.activeSlide.status==0" style="margin-bottom: 10px">
               <button class="btn btn-primary" ng-click="vm.assign()"><i class="ion-user"></i> Assign
               </button>
             </div>
 
-            <div ng-if="vm.activeSlide.status>2">
-              <audio controls ngf-src="vm.activeSlide.audio"></audio>
-            </div>
-            <div ng-if="vm.activeSlide.status==2">
-              <div class="alert bg-warning">
-                <p style="font-weight: 500;font-size: 14px;">Slide is ready. Please move to next slide.</p>
-              </div>
-
-              <div ng-if="vm.course.owner.username==vm.user.username">
-                <audio controls ngf-src="vm.activeSlide.audio"></audio>
-
-                <form name="form">
-                  <button class="btn btn-primary" ng-click="vm.approve()" ng-hide="vm.activeSlide.audio==null"><i
-                    class="ion-check"></i> Approve
-                  </button>
-                  <button class="btn btn-danger" ng-click="vm.reject()" ng-hide="vm.activeSlide.audio==null"><i
-                    class="ion-cross"></i> Reject
-                  </button>
-                </form>
-              </div>
-            </div>
-            <div ng-if="vm.activeSlide.status==1">
+            <!--audio recording-->
+            <div ng-if="vm.activeSlide.status==1" style="margin-bottom: 10px">
               <h4 ng-if="vm.activeSlide.assigned_to.id!=vm.user.id">Recording in progress...</h4>
 
               <div ng-if="vm.activeSlide.assigned_to.id==vm.user.id">
@@ -161,6 +151,34 @@
                 </form>
               </div>
             </div>
+
+            <!--audio recorded, waiting for approval-->
+            <div ng-if="vm.activeSlide.status==2" style="margin-bottom: 10px">
+              <div class="alert bg-warning">
+                <p style="font-weight: 500;font-size: 14px;">Slide is ready. Please move to next slide.</p>
+              </div>
+
+              <div ng-if="vm.is_dri">
+                <audio controls ngf-src="vm.activeSlide.audio"></audio>
+
+                <form name="form">
+                  <button class="btn btn-primary" ng-click="vm.approve()" ng-hide="vm.activeSlide.audio==null"><i
+                    class="ion-check"></i> Approve
+                  </button>
+                  <button class="btn btn-danger" ng-click="vm.reject()" ng-hide="vm.activeSlide.audio==null"><i
+                    class="ion-cross"></i> Reject
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <!--audio approved-->
+            <div ng-if="vm.activeSlide.status>2" style="margin-bottom: 10px">
+              <audio controls ngf-src="vm.activeSlide.audio"></audio>
+            </div>
+
+
+
           </div>
         </div>
         </h2>

@@ -4,12 +4,18 @@
     <div class="panel with-scroll animated zoom-in">
       <phase-header items="vm.phases"></phase-header>
       <div class="panel-body">
+        <phase-actions items="vm.phases" current-phase="vm.currentPhase"
+                       course="vm.course" is-dri="vm.is_dri"
+                       can-previous="vm.canPrevious" can-next="vm.canNext"
+                       move-previous="vm.movePrevious()" move-next="vm.moveNext()"
+        ></phase-actions>
+
         <h2>{{vm.course.name}}</h2>
 
-
         <div class="row">
-          <div class="col-lg-8 col-md-12 col-sm-12">
+          <div class="col-lg-9 col-md-12 col-sm-12">
             <div class="slider-box" style="margin-bottom: 10px">
+              <a href="{{vm.course.url}}" target="_blank" class="popup-url"><i class="ion-android-open"></i></a>
               <div uib-carousel active="vm.activeSlideIndex" interval="0" no-wrap="noWrapSlides">
                 <div uib-slide ng-repeat="slide in vm.course.slides track by slide.id"
                      index="slide.position">
@@ -17,15 +23,68 @@
                 </div>
               </div>
 
-              <iframe
-                src="https://docs.google.com/presentation/d/1Wf7BX7EVIH6GTYfOnrSLdLZF3AXNxO5OxVMf7qLEBWQ/embed?start=false&loop=false"
-                frameborder="0" width="100%" height="450" allowfullscreen="true" mozallowfullscreen="true"
-                webkitallowfullscreen="true"></iframe>
-
             </div>
           </div>
-          <div class="col-lg-4 col-md-12 col-sm-12">
+          <div class="col-lg-3 col-md-12 col-sm-12">
 
+            <!--controls-->
+            <ul class="list-inline list-unstyled" style="text-align: center">
+              <li>
+                <button type="button" class="btn-warning" ng-click="vm.back(5)"
+                        ng-disabled="vm.activeSlideIndex < 5"><i class="ion-ios-rewind"></i></button>
+              </li>
+              <li>
+                <button type="button" class="btn-warning" ng-click="vm.back(1)"
+                        ng-disabled="vm.activeSlideIndex < 1"><i class="ion-arrow-left-b"></i></button>
+              </li>
+              <li>Slide {{vm.activeSlideIndex + 1 }} of {{vm.course.slides.length}}</li>
+              <li>
+                <button type="button" class="btn-warning" ng-click="vm.forward(1)"
+                        ng-disabled="vm.activeSlideIndex >= vm.course.slides.length - 1"><i
+                  class="ion-arrow-right-b"></i></button>
+              </li>
+              <li>
+                <button type="button" class="btn-warning" ng-click="vm.forward(5)"
+                        ng-disabled="vm.activeSlideIndex >= vm.course.slides.length - 5"><i
+                  class="ion-ios-fastforward"></i></button>
+              </li>
+            </ul>
+
+            <h5 ng-bind-html="vm.activeSlide.notes"></h5>
+
+            <form class="form-vertical" name="form" ng-submit="vm.submitFeedback(form.$valid)" novalidate>
+              <div class="form-group has-feedback"
+                   ng-class="{ 'has-error': vm.has_error('feedback') }">
+                <label for="feedback" class="control-label">Submit Feedback</label>
+                <textarea class="form-control" rows="3" class="form-control" name="feedback" placeholder="Feedback"
+                          ng-model="vm.review.feedback" ng-required="true"></textarea>
+                <div class="help-block" ng-if="vm.has_error('feedback')"
+                     ng-messages="form.feedback.$error">
+                  <span ng-message="required">Feedback is required</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary" ng-disabled="!form.$valid">Submit</button>
+              </div>
+            </form>
+
+            <!--notes-->
+            <h4 style="margin-top: 10px" ng-hide="vm.activeSlide.reviews.length==0">Feedback</h4>
+
+            <form class="form-vertical" name="review-form">
+
+                <ul ng-class="{ 'list-unstyled':vm.is_dri}">
+                  <li ng-class="{'checkbox': vm.is_dri}"
+                      ng-repeat="review in vm.activeSlide.reviews| filter:{stage:vm.currentPhase.reviewStage}">
+                  <label style="font-weight: normal">
+                    <input type="checkbox" value="" ng-hide="!vm.is_dri" ng-model="review.status"
+                           ng-true-value="2" ng-false-value="1"
+                           ng-change="vm.toggleFeedback(review)">
+                    <span ng-class="{'strike-through':review.status==2}">{{review.feedback}}</span>
+                  </label>
+                  </li>
+                </ul>
+            </form>
 
           </div>
         </div>

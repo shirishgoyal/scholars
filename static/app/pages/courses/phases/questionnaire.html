@@ -5,23 +5,25 @@
       <phase-header items="vm.phases"></phase-header>
 
       <div class="panel-body">
-        <h2 style="margin:16px 0px 24px;">{{vm.course.name}}</h2>
+        <phase-actions items="vm.phases" current-phase="vm.currentPhase"
+                           course="vm.course" is-dri="vm.is_dri"
+                           can-previous="vm.canPrevious" can-next="vm.canNext"
+                           move-previous="vm.movePrevious()" move-next="vm.moveNext()"
+            ></phase-actions>
+
+        <h2>{{vm.course.name}}</h2>
 
 
         <div class="row">
-          <div class="col-xs-12 col-lg-8">
-              <iframe ng-if="vm.course.questionnaire_url" ng-src="{{trustSrc(vm.course.questionnaire_url)}}" style="width:100%;
+          <div class="col-xs-12 col-lg-12">
+            <iframe ng-if="vm.course.questionnaire_url" ng-src="{{trustSrc(vm.course.questionnaire_url)}}" style="width:100%;
               height:450px;"
-                      frameborder="0"></iframe>
-            </div>
-
-          <div class="col-xs-12 col-lg-4">
-            <h4 style="font-weight: 300; line-height: 26px; margin-bottom: 16px">You have {{vm.course.days_left}} days left to read, discuss and ask questions on this paper in Slack.</h4>
-
-            <button class="btn btn-outline-danger btn-lg btn-block" ui-sref="courses-add"><i class="fa fa-play" aria-hidden="true"></i> Getting Started</button>
-            <button class="btn btn-outline-danger btn-lg btn-block" ui-sref="courses-add"><i class="fa fa-star" aria-hidden="true"></i> Best Practices</button>
-            <button class="btn btn-outline-warning btn-lg btn-block" href="slack://channel?id=<CHANNEL-ID>&team=<TEAM-ID>" target="_blank"><i class="fa fa-slack" aria-hidden="true"></i> Discuss on Slack</button>
+                    frameborder="0"></iframe>
           </div>
+
+          <!--<div class="col-xs-12 col-lg-3">-->
+            <!---->
+          <!--</div>-->
         </div>
       </div>
     </div>

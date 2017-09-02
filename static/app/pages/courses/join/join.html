@@ -1,165 +1,202 @@
 <div class="row">
-<div class="col-xs-12 col-md-12 col-lg-10">
+  <div class="col-xs-12 col-md-12 col-lg-10">
 
-  <h3 style="font-weight: 300">Want to help make research accessible and in the process, learn more about <strong
-    style="color: #8c1515;">{{vm.course.name}}</strong>
-    working with a globally connected team?
-  </h3>
-</div>
+    <h3 style="font-weight: 300;line-height: 26px">Want to help make research accessible and in the process, learn more
+      about <strong
+      style="color: #8c1515;">{{vm.course.name}}</strong>
+      working with a globally connected team?
+    </h3>
+  </div>
 
-<div class="col-xs-12 col-md-12 col-lg-6">
-  <form name="form" ng-submit="!vm.pending && vm.submit(true)" novalidate>
-
-
-    <div class="form-group  has-feedback"
-         ng-class="{ 'has-error': vm.has_error('role') }">
-      <label for="role" class="control-label">Interested in</label>
-
-      <div class="form-check">
-        <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" value="vm.member.presentation">
-          Presentation
-        </label>
-      </div>
-      <div class="form-check">
-        <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" value="vm.member.graphics">
-          Graphics
-        </label>
-      </div>
-      <div class="form-check ">
-        <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" value="vm.member.scripting">
-          Scripting
-        </label>
-      </div>
-      <div class="form-check ">
-        <label class="form-check-label">
-          <input class="form-check-input" type="checkbox" value="vm.member.audio">
-          Audio
-        </label>
-      </div>
-
-      <div class="help-block" ng-if="vm.has_error('role')" ng-messages="form.role.$error">
-        <span ng-message="required">Atleast one role is required</span>
-        <span ng-message="backend">{{ vm.errors.role }}</span>
-      </div>
-
-    </div>
+  <div class="col-xs-12 col-md-12 col-lg-6">
+    <form name="form" ng-submit="!vm.pending && vm.submit(true)" novalidate>
 
 
-    <div class="form-group  has-feedback"
-         ng-class="{ 'has-error': vm.has_error('expertise') }">
-      <label for="expertise" class="control-label">Level of Expertise</label>
-      <br>
-      <div class="form-check form-check-inline">
-        <label class="form-check-label">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1">
-          Novice
-        </label>
-      </div>
-      <div class="form-check form-check-inline">
-        <label class="form-check-label">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
-          Primary
-        </label>
-      </div>
-      <div class="form-check form-check-inline">
-        <label class="form-check-label">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="3"
-                 > Medium
-        </label>
-      </div>
-      <div class="form-check form-check-inline">
-        <label class="form-check-label">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="4"
-                 > Advanced
-        </label>
-      </div>
+      <div class="form-group  has-feedback"
+           ng-class="{ 'has-error': vm.has_error('role') }">
+        <label for="role" class="control-label">I am interested in</label>
 
-      <div class="form-check form-check-inline">
-        <label class="form-check-label">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="5"
-                 > Expert
-        </label>
+        <div class="form-check">
+          <label for="presentation" class="form-check-label">
+            <input class="form-check-input" type="checkbox" ng-model="vm.member.presentation" backend-validity>
+             Presentation
+          </label>
+        </div>
+        <div class="form-check">
+          <label for="graphics" class="form-check-label">
+            <input name="role" class="form-check-input" type="checkbox" ng-model="vm.member.graphics" backend-validity>
+             Graphics
+          </label>
+        </div>
+        <div class="form-check ">
+          <label for="scripting" class="form-check-label">
+            <input name="role" class="form-check-input" type="checkbox" ng-model="vm.member.scripting" backend-validity>
+             Scripting
+          </label>
+        </div>
+        <div class="form-check ">
+          <label for="audio" class="form-check-label">
+            <input name="role" class="form-check-input" type="checkbox" ng-model="vm.member.audio" backend-validity>
+             Audio
+          </label>
+        </div>
+
+        <div class="help-block" ng-if="vm.has_error('role')" ng-messages="form.role.$error">
+          <span ng-message="required">Atleast one role is required</span>
+          <span ng-message="backend">{{ vm.errors.role }}</span>
+        </div>
+
       </div>
 
 
-      <div class="help-block" ng-if="vm.has_error('expertise')" ng-messages="form.expertise.$error">
-        <span ng-message="required">Please fill your level of expertise in the topic</span>
-        <span ng-message="backend">{{ vm.errors.expertise }}</span>
+      <div class="form-group  has-feedback"
+           ng-class="{ 'has-error': vm.has_error('expertise') }">
+        <label for="expertise" class="control-label">Level of Expertise</label>
+        <br>
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input ng-model="vm.member.expertise" class="form-check-input" type="radio" name="expertise" value="1"
+                   backend-validity>
+             Novice
+          </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input ng-model="vm.member.expertise" class="form-check-input" type="radio" name="expertise" value="2"
+                   backend-validity>
+             Primary
+          </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input ng-model="vm.member.expertise" class="form-check-input" type="radio" name="expertise" value="3"
+                   backend-validity> Medium
+          </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input ng-model="vm.member.expertise" class="form-check-input" type="radio" name="expertise" value="4"
+                   backend-validity> Advanced
+          </label>
+        </div>
+
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input ng-model="vm.member.expertise" class="form-check-input" type="radio" name="expertise" value="5"
+                   backend-validity> Expert
+          </label>
+        </div>
+
+
+        <div class="help-block" ng-if="vm.has_error('expertise')" ng-messages="form.expertise.$error">
+          <span ng-message="required">Please fill your level of expertise in the topic</span>
+          <span ng-message="backend">{{ vm.errors.expertise }}</span>
+        </div>
+
       </div>
 
-    </div>
+      <!-- Text input-->
+      <div class="form-group  has-feedback"
+           ng-class="{ 'has-error': vm.has_error('time_commitment') }">
+        <label for="time_commitment" class="control-label">Time commitment per week (in hours)</label>
 
-    <!-- Text input-->
-    <div class="form-group  has-feedback"
-         ng-class="{ 'has-error': vm.has_error('time_commitment') }">
-      <label for="time_commitment" class="control-label">Time commitment per week</label>
+        <input name="time_commitment" type="number" placeholder="# hours"
+               class="form-control" ng-required="true" ng-model="vm.member.time_commitment" ng-min="1" min="1" step="1"
+               backend-validity>
 
-      <input name="time_commitment" type="number" placeholder="# hours"
-             class="form-control input-sm" ng-required="true" ng-model="vm.member.time_commitment" backend-validity>
+        <div class="help-block" ng-if="vm.has_error('time_commitment')" ng-messages="form.time_commitment.$error">
+          <span ng-message="required">Please fill the number of hours you can commit</span>
+          <span ng-message="backend">{{ vm.errors.time_commitment }}</span>
+          <span ng-message="min">Value should be atleast 1</span>
+        </div>
 
-      <div class="help-block" ng-if="vm.has_error('time_commitment')" ng-messages="form.time_commitment.$error">
-        <span ng-message="required">Please fill the number of hours you can commit</span>
-        <span ng-message="backend">{{ vm.errors.time_commitment }}</span>
       </div>
 
-    </div>
+      <div class="form-group  has-feedback"
+           ng-class="{ 'has-error': vm.has_error('timezone') }">
+        <label for="timezone" class="control-label">Timezone</label>
 
-    <div class="form-group  has-feedback"
-         ng-class="{ 'has-error': vm.has_error('timezone') }">
-      <label for="timezone" class="control-label">Timezone</label>
+        <select name="timezone" class="form-control" ng-required="true" ng-model="vm.member.timezone"
+                ng-options="timezone.code as timezone.name for timezone in vm.timezones track by timezone.code"
+                backend-validity>
+          <option>Choose Timezone</option>
+        </select>
+        <div class="help-block" ng-if="vm.has_error('timezone')" ng-messages="form.timezone.$error">
+          <span ng-message="required">Please fill the timezone you are available in for atleast 75% of your time</span>
+          <span ng-message="backend">{{ vm.errors.timezone }}</span>
+        </div>
 
-      <input name="timezone" type="number" placeholder=""
-             class="form-control input-sm" ng-required="true" ng-model="vm.member.timezone" backend-validity>
-
-      <div class="help-block" ng-if="vm.has_error('timezone')" ng-messages="form.timezone.$error">
-        <span ng-message="required">Please fill the timezone you are available in for atleast 75% of your time</span>
-        <span ng-message="backend">{{ vm.errors.timezone }}</span>
       </div>
 
-    </div>
+      <div class="form-group  has-feedback"
+           ng-class="{ 'has-error': vm.has_error('dri') }">
+        <label for="dri" class="control-label">Do you want to be DRI for this talk?</label>
 
-    <div class="form-group  has-feedback"
-         ng-class="{ 'has-error': vm.has_error('dri_nomination') }">
-      <label for="dri_nomination" class="control-label">Do you want to be DRI for the talk?</label>
+        <br>
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input class="form-check-input" type="radio" name="dri" ng-value="true" ng-required="true"
+                   ng-model="vm.member.dri" backend-validity> Yes
+          </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input class="form-check-input" type="radio" name="dri" ng-value="false" ng-required="true"
+                   ng-model="vm.member.dri" backend-validity> No
+          </label>
+        </div>
 
-      <br>
-      <div class="form-check form-check-inline">
-        <label class="form-check-label">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="true"
-                 ng-model="vm.member.dri"> Yes
-        </label>
+        <div class="help-block" ng-if="vm.has_error('dri')" ng-messages="form.dri.$error">
+          <span ng-message="required">Please choose a value</span>
+          <span ng-message="backend">{{ vm.errors.dri }}</span>
+        </div>
+
+        <p class="jumbotron" style="padding:15px 20px;border-radius:5px;margin-top: 10px;line-height: 22px;">DRIs are individuals who
+          co-lead
+          and coordinate
+          teams toward
+          successful
+          completion of
+          talk
+          creation, along with other DRIs. DRIs play a critical role and are acknowledged accordingly for their leadership capabilities. After you fill this form, the community from Stanford Scholar will select minimum 2 DRIs per team.</p>
+
       </div>
-      <div class="form-check form-check-inline">
-        <label class="form-check-label">
-          <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="false" ng-model="vm.member.dri"> No
-        </label>
+
+      <div class="form-group  has-feedback"
+           ng-class="{ 'has-error': vm.has_error('been_dri') }" ng-if="vm.member.dri">
+        <label for="been_dri" class="control-label">Have you been a DRI before?</label>
+
+        <br>
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input class="form-check-input" type="radio" name="been_dri" ng-value="true" ng-required="vm.member.dri"
+                   ng-model="vm.member.been_dri" backend-validity> Yes
+          </label>
+        </div>
+        <div class="form-check form-check-inline">
+          <label class="form-check-label">
+            <input class="form-check-input" type="radio" name="been_dri" ng-value="false" g-required="vm.member.dri"
+                   ng-model="vm.member.been_dri" backend-validity> No
+          </label>
+        </div>
+
+        <div class="help-block" ng-if="vm.has_error('been_dri')" ng-messages="form.been_dri.$error">
+          <span ng-message="required">Please choose a value</span>
+          <span ng-message="backend">{{ vm.errors.been_dri }}</span>
+        </div>
+
       </div>
 
-      <p class="jumbotron" style="padding:15px">DRIs are individuals who co-lead and coordinate teams toward successful
-        completion of
-        talk
-        creation, along with other DRIs. DRIs play a critical role and are acknowledged accordingly. This is a highly sought after role, where they work directly with @rajanvaish. After you fill this form, @rajanvaish and the Scholar community will select 2 DRIs per team.</p>
-
-      <div class="help-block" ng-if="vm.has_error('dri_nomination')" ng-messages="form.dri_nomination.$error">
-        <!--<span ng-message="required"></span>-->
-        <span ng-message="backend">{{ vm.errors.dri_nomination }}</span>
+      <div class="form-group has-feedback" ng-class="{ 'has-error': vm.submitted && form.$error.form }">
+        <div class="help-block" ng-if="vm.submitted && form.$invalid" ng-messages="form.$error">
+          <span ng-message="form">{{ vm.errors.form }}</span>
+        </div>
       </div>
 
-    </div>
-
-    <div class="form-group has-feedback" ng-class="{ 'has-error': vm.submitted && form.$error.form }">
-      <div class="help-block" ng-if="vm.submitted && form.$invalid" ng-messages="form.$error">
-        <span ng-message="form">{{ vm.errors.form }}</span>
+      <!-- Button -->
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" ng-disabled="vm.pending">Submit</button>
       </div>
-    </div>
-
-    <!-- Button -->
-    <div class="form-group">
-      <button type="submit" class="btn btn-primary" ng-disabled="vm.pending">Submit</button>
-    </div>
-  </form>
-</div>
+    </form>
+  </div>
 </div>
