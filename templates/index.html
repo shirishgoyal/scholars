@@ -73,7 +73,7 @@
 </div>
 
 <div id="preloader" ng-hide="page.finishedLoading">
-<div></div>
+  <div></div>
 </div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
@@ -93,7 +93,9 @@
 <script type="text/javascript" src="{% static 'libs/wavesurfer.js/dist/wavesurfer.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/slick-carousel/slick/slick.js' %}"></script>
 <script type="text/javascript" src="{% static 'app/theme/components/backTop/jquery.backTop.min.js' %}"></script>
+{% endcompress %}
 
+{% compress js %}
 <script type="text/javascript" src="{% static 'libs/angular/angular.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-aria/angular-aria.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-animate/angular-animate.min.js' %}"></script>
@@ -109,8 +111,10 @@
 <script type="text/javascript" src="{% static 'libs/ng-lodash/build/ng-lodash.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-youtube-mb/dist/angular-youtube-embed.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/ng-file-upload/ng-file-upload.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'libs/angularAudioRecorder/dist/angular-audio-recorder.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'libs/angular-progress-button-styles/dist/angular-progress-button-styles.min.js' %}"></script>
+<script type="text/javascript"
+        src="{% static 'libs/angularAudioRecorder/dist/angular-audio-recorder.min.js' %}"></script>
+<script type="text/javascript"
+        src="{% static 'libs/angular-progress-button-styles/dist/angular-progress-button-styles.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-slimscroll/angular-slimscroll.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-ui-sortable/sortable.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-bootstrap/ui-bootstrap-tpls.min.js' %}"></script>
@@ -122,12 +126,6 @@
 <script type="text/javascript" src="{% static 'libs/opbeat-angular/opbeat-angular.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/raven-js/dist/raven.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/raven-js/dist/plugins/angular.js' %}"></script>
-<script>
-  Raven
-    .config('https://6b552a9d3c714aac9f510410d79a9202@sentry.io/207311')
-    .addPlugin(Raven.Plugins.Angular)
-    .install();
-</script>
 
 <script type="text/javascript" src="{% static 'app/app.js' %}"></script>
 
@@ -244,6 +242,15 @@
   ga('create', 'UA-85052875-1', 'auto');
   ga('send', 'pageview');
 
+</script>
+
+<script>
+  $(document).ready(function () {
+    Raven
+      .config('https://6b552a9d3c714aac9f510410d79a9202@sentry.io/207311')
+      .addPlugin(Raven.Plugins.Angular)
+      .install();
+  });
 </script>
 
 </body>
