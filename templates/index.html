@@ -123,10 +123,20 @@
 <script type="text/javascript" src="{% static 'libs/angular-toastr/dist/angular-toastr.tpls.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-disqus/angular-disqus.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-flexslider/angular-flexslider.js' %}"></script>
-<script type="text/javascript" src="{% static 'libs/opbeat-angular/opbeat-angular.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/raven-js/dist/raven.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/raven-js/dist/plugins/angular.js' %}"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    Raven
+      .config('https://6b552a9d3c714aac9f510410d79a9202@sentry.io/207311')
+      .addPlugin(Raven.Plugins.Angular)
+      .install();
+  });
+</script>
+<script type="text/javascript" src="{% static 'libs/opbeat-angular/opbeat-angular.min.js' %}"></script>
+{% endcompress %}
 
+{% compress js %}
 <script type="text/javascript" src="{% static 'app/app.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'app/theme/theme.module.js' %}"></script>
@@ -242,15 +252,6 @@
   ga('create', 'UA-85052875-1', 'auto');
   ga('send', 'pageview');
 
-</script>
-
-<script>
-  $(document).ready(function () {
-    Raven
-      .config('https://6b552a9d3c714aac9f510410d79a9202@sentry.io/207311')
-      .addPlugin(Raven.Plugins.Angular)
-      .install();
-  });
 </script>
 
 </body>
