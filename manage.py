@@ -1,14 +1,23 @@
 #!/usr/bin/env python
 import os
 import sys
+import environ
+
+ENV_DIR = environ.Path(__file__) - 1
+
+env = environ.Env()
+
+READ_DOT_ENV_FILE = env.bool('DJANGO_READ_DOT_ENV_FILE', default=True)
+
+if READ_DOT_ENV_FILE:
+    # Operating System Environment variables have precedence over variables defined in the .env file,
+    # that is to say variables from the .env files will only be used if not defined
+    # as environment variables.
+    env_file = str(ENV_DIR.path('.env'))
+    env.read_env(env_file)
 
 if __name__ == "__main__":
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.production")
-    # os.environ.setdefault("DJANGO_CONFIGURATION", "Local")
-
-    # from configurations.management import execute_from_command_line
-    #
-    # execute_from_command_line(sys.argv)
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", env("DJANGO_SETTINGS_MODULE", default="config.production"))
 
     try:
         from django.core.management import execute_from_command_line
