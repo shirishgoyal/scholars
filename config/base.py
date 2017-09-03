@@ -82,7 +82,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-SECURITY_MIDDLEWARE = 'django.middleware.security.SecurityMiddleware'
+SECURITY_MIDDLEWARE = ['django.middleware.security.SecurityMiddleware', ]
 
 # MIGRATIONS CONFIGURATION
 # ------------------------------------------------------------------------------
