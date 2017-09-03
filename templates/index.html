@@ -93,9 +93,7 @@
 <script type="text/javascript" src="{% static 'libs/wavesurfer.js/dist/wavesurfer.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/slick-carousel/slick/slick.js' %}"></script>
 <script type="text/javascript" src="{% static 'app/theme/components/backTop/jquery.backTop.min.js' %}"></script>
-{% endcompress %}
 
-{% compress js %}
 <script type="text/javascript" src="{% static 'libs/angular/angular.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-aria/angular-aria.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-animate/angular-animate.min.js' %}"></script>
@@ -130,9 +128,7 @@
     .addPlugin(Raven.Plugins.Angular)
     .install();
 </script>
-{% endcompress %}
 
-{% compress js %}
 <script type="text/javascript" src="{% static 'app/app.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'app/theme/theme.module.js' %}"></script>
@@ -232,23 +228,23 @@
 
 {% endcompress %}
 
-<!--<script>-->
-  <!--(function (i, s, o, g, r, a, m) {-->
-    <!--i['GoogleAnalyticsObject'] = r;-->
-    <!--i[r] = i[r] || function () {-->
-      <!--(i[r].q = i[r].q || []).push(arguments)-->
-    <!--}, i[r].l = 1 * new Date();-->
-    <!--a = s.createElement(o),-->
-      <!--m = s.getElementsByTagName(o)[0];-->
-    <!--a.async = 1;-->
-    <!--a.src = g;-->
-    <!--m.parentNode.insertBefore(a, m)-->
-  <!--})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');-->
+<script>
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+      m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-  <!--ga('create', 'UA-85052875-1', 'auto');-->
-  <!--ga('send', 'pageview');-->
+  ga('create', 'UA-85052875-1', 'auto');
+  ga('send', 'pageview');
 
-<!--</script>-->
+</script>
 
 </body>
 </html>
