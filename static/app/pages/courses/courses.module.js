@@ -2,17 +2,17 @@
  * @author shirishgoyal
  * created on 16.12.2015
  */
-(function () {
+(function() {
     'use strict';
 
     angular.module('BlurAdmin.pages.courses', [
-        'BlurAdmin.services'
-    ])
+            'BlurAdmin.services'
+        ])
         .config(routeConfig);
 
     /** @ngInject */
     function routeConfig($stateProvider) {
-        var getCourseState = function (status, phase) {
+        var getCourseState = function(status, phase) {
             // STATUS = Choices(
             //     (0, 'proposed', 'Proposed'),
             //     (1, 'in_progress', 'In Progress'),
@@ -30,10 +30,10 @@
             //     (7, 'pending_approval', 'Pending Approval'),
             // )
 
-            return function ($q, $state, $stateParams, Course) {
+            return function($q, $state, $stateParams, Course) {
                 var deferred = $q.defer();
                 Course.get($stateParams.id)
-                    .then(function (response) {
+                    .then(function(response) {
                         var course = response.data;
                         if (course.status === status && course.phase === phase) {
                             deferred.resolve(course);
@@ -41,7 +41,7 @@
                             $state.go('proposed');
                             deferred.reject('talk is not ready yet!');
                         }
-                    }, function (response, status) {
+                    }, function(response, status) {
                         deferred.reject('failed to fetch talk');
                     });
 
@@ -61,78 +61,78 @@
             .state('talk.reading', {
                 url: '/:id/reading',
                 templateUrl: 'static/app/pages/courses/phases/reading.html',
-                controller: 'ReadingPhaseCtrl',
+                controller: 'PhaseCtrl',
                 controllerAs: 'vm',
                 authenticate: true,
                 title: 'Research Talk',
                 resolve: {
-                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1,1)]
+                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1, 1)]
                 }
             })
             .state('talk.questionnaire', {
                 url: '/:id/questionnaire',
                 templateUrl: 'static/app/pages/courses/phases/questionnaire.html',
-                controller: 'ReadingPhaseCtrl',
+                controller: 'PhaseCtrl',
                 controllerAs: 'vm',
                 authenticate: true,
                 title: 'Research Talk',
                 resolve: {
-                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1,2)]
+                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1, 2)]
                 }
             })
             .state('talk.slides', {
                 url: '/:id/slides',
                 templateUrl: 'static/app/pages/courses/phases/slides.html',
-                controller: 'ReadingPhaseCtrl',
+                controller: 'PhaseCtrl',
                 controllerAs: 'vm',
                 authenticate: true,
                 title: 'Research Talk',
                 resolve: {
-                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1,3)]
+                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1, 3)]
                 }
             })
             .state('talk.peer_review', {
                 url: '/:id/peer_review',
                 templateUrl: 'static/app/pages/courses/phases/peer-review.html',
-                controller: 'ReadingPhaseCtrl',
+                controller: 'PhaseCtrl',
                 controllerAs: 'vm',
                 authenticate: true,
                 title: 'Research Talk',
                 resolve: {
-                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1,4)]
+                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1, 4)]
                 }
             })
             .state('talk.audio', {
                 url: '/:id/audio',
                 templateUrl: 'static/app/pages/courses/phases/audio.html',
-                controller: 'ReadingPhaseCtrl',
+                controller: 'PhaseCtrl',
                 controllerAs: 'vm',
                 authenticate: true,
                 title: 'Research Talk',
                 resolve: {
-                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1,5)]
+                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1, 5)]
                 }
             })
             .state('talk.refine', {
                 url: '/:id/refine',
                 templateUrl: 'static/app/pages/courses/phases/refine.html',
-                controller: 'ReadingPhaseCtrl',
+                controller: 'PhaseCtrl',
                 controllerAs: 'vm',
                 authenticate: true,
                 title: 'Research Talk',
                 resolve: {
-                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1,6)]
+                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1, 6)]
                 }
             })
             .state('talk.pending_approval', {
                 url: '/:id/pending_approval',
                 templateUrl: 'static/app/pages/courses/phases/approval.html',
-                controller: 'ReadingPhaseCtrl',
+                controller: 'PhaseCtrl',
                 controllerAs: 'vm',
                 authenticate: true,
                 title: 'Research Talk',
                 resolve: {
-                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1,7)]
+                    course: ['$q', '$state', '$stateParams', 'Course', getCourseState(1, 7)]
                 }
             })
             .state('in_progress', {
@@ -186,8 +186,7 @@
                 controllerAs: 'vm',
                 authenticate: true,
                 title: 'Add Research Talk'
-            })
-        ;
+            });
     }
 
 })();
