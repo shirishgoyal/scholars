@@ -123,17 +123,7 @@
 <script type="text/javascript" src="{% static 'libs/angular-toastr/dist/angular-toastr.tpls.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-disqus/angular-disqus.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'libs/angular-flexslider/angular-flexslider.js' %}"></script>
-<script type="text/javascript" src="{% static 'libs/raven-js/dist/raven.js' %}"></script>
-<script type="text/javascript" src="{% static 'libs/raven-js/dist/plugins/angular.js' %}"></script>
-<script type="text/javascript">
-  $(document).ready(function () {
-    Raven
-      .config('https://6b552a9d3c714aac9f510410d79a9202@sentry.io/207311')
-      .addPlugin(Raven.Plugins.Angular)
-      .install();
-  });
-</script>
-<!--<script type="text/javascript" src="{% static 'libs/opbeat-angular/opbeat-angular.min.js' %}"></script>-->
+<script type="text/javascript" src="{% static 'libs/opbeat-angular/opbeat-angular.min.js' %}"></script>
 
 <script type="text/javascript" src="{% static 'app/app.js' %}"></script>
 
@@ -233,6 +223,17 @@
 <script type="text/javascript" src="{% static 'app/pages/profile/ProfilePageCtrl.js' %}"></script>
 
 {% endcompress %}
+
+<script type="text/javascript" src="{% static 'libs/raven-js/dist/raven.js' %}"></script>
+<script type="text/javascript" src="{% static 'libs/raven-js/dist/plugins/angular.js' %}"></script>
+<script type="text/javascript">
+  $(document).ready(function () {
+    Raven
+      .config('https://6b552a9d3c714aac9f510410d79a9202@sentry.io/207311')
+      .addPlugin(Raven.Plugins.Angular)
+      .install();
+  });
+</script>
 
 <script>
   (function (i, s, o, g, r, a, m) {
