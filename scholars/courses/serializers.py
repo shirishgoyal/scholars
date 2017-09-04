@@ -282,12 +282,17 @@ class CourseSerializer(DynamicFieldsModelSerializer):
 
 
 class CreateCourseSerializer(serializers.ModelSerializer):
+    pdf = serializers.URLField(required=True)
     class Meta:
         model = Course
         fields = ('gid', 'name', 'id', 'owner', 'status', 'phase', 'doi', 'url', 'pdf', 'publisher', 'pages', 'type',
                   'published_on', 'lang', 'category',
                   'authors', 'slides')
         read_only_fields = ('id', 'owner', 'status', 'slides')
+        extra_kwargs = {
+            'category': {'allow_null': False, 'required': True},    
+            'lang': {'allow_null': False, 'required': True}    
+        }
 
 
 class CreateSlideReviewSerializer(serializers.ModelSerializer):

@@ -134,14 +134,22 @@
             return vm.course !== null ? vm.activeSlideIndex : null;
         }, function (newVal, oldVal) {
             if (newVal !== null && newVal !== oldVal && vm.course !== null && vm.course.hasOwnProperty('slides') && vm.course.slides) {
-                vm.activeSlide = vm.course.slides[newVal];
-                vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
+                if(vm.course.hasOwnProperty('slides')){
+                    vm.activeSlide = vm.course.slides[vm.activeSlideIndex];
+                    if(vm.activeSlide && vm.activeSlide.hasOwnProperty('notes') && vm.activeSlide.notes){
+                        vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
+                    }
+                }
             }
         });
 
         vm.activeSlideIndex = 0;
-        vm.activeSlide = vm.course.slides[vm.activeSlideIndex];
-        vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
+        if(vm.course.hasOwnProperty('slides')){
+            vm.activeSlide = vm.course.slides[vm.activeSlideIndex];
+            if(vm.activeSlide && vm.activeSlide.hasOwnProperty('notes') && vm.activeSlide.notes){
+                vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
+            }
+        }
 
         Auth.getAccount().then(function (response) {
             vm.user = response.data;

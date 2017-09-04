@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     angular.module('BlurAdmin.pages.courses')
@@ -21,7 +21,7 @@
         vm.submit = submit;
         vm.hasError = hasError;
 
-        vm.initialize = function () {
+        vm.initialize = function() {
             configureCalendar();
             getCategories();
             getLanguages();
@@ -41,18 +41,18 @@
                 }
             };
 
-            $scope.open = function () {
+            $scope.open = function() {
                 $scope.datepicker.opened = true;
             };
         }
 
         function watchDOI() {
-            $scope.$watch(function () {
+            $scope.$watch(function() {
                 return vm.course !== null && vm.course.doi !== null ? vm.course.doi : null;
-            }, function (newVal, oldVal) {
-                if (newVal !== null && newVal !== oldVal
-                    && vm.course !== null
-                    && vm.course.hasOwnProperty('doi') && vm.course.doi) {
+            }, function(newVal, oldVal) {
+                if (newVal !== null && newVal !== oldVal &&
+                    vm.course !== null &&
+                    vm.course.hasOwnProperty('doi') && vm.course.doi) {
                     onDOI();
                 }
             });
@@ -61,9 +61,9 @@
         function getLanguages() {
             Course
                 .listLanguages()
-                .then(function (response, status) {
+                .then(function(response, status) {
                     vm.languages = response.data;
-                }, function (response, status) {
+                }, function(response, status) {
                     console.log(response);
                 });
         }
@@ -71,9 +71,9 @@
         function getCategories() {
             Course
                 .listCategories()
-                .then(function (response, status) {
+                .then(function(response, status) {
                     vm.categories = response.data.results;
-                }, function (response, status) {
+                }, function(response, status) {
                     console.log(response);
                 });
         }
@@ -81,25 +81,25 @@
         function onDOI() {
             vm.search.submitted = true;
 
-            Course.info(vm.course).then(function (response, status) {
+            Course.info(vm.course).then(function(response, status) {
                 var info = response.data.message;
                 vm.search.found = true;
 
-                vm.course.name = info.title.join(' ');//info.subtitle.join(' ');
+                vm.course.name = info.title.join(' '); //info.subtitle.join(' ');
                 vm.course.url = info['URL'];
                 vm.course.publisher = info['container-title'].join(' ');
                 vm.course.type = info['type'];
-                vm.course.authors = lodash.map(info['author'], function (author) {
+                vm.course.authors = lodash.map(info['author'], function(author) {
                     return author['given'] + ' ' + author['family'];
                 }).join(', ');
                 // vm.course.published_on = info['published-online']['date-parts'][0][0] + '-' +  info['published-online']['date-parts'][0][1] + '-' + info['published-online']['date-parts'][0][2];
                 vm.course.pages = info['page'];
 
-            }, function (response, status) {
+            }, function(response, status) {
                 // console.log(response);
                 vm.search.found = false;
 
-            }).finally(function () {
+            }).finally(function() {
 
             });
         }
@@ -121,11 +121,11 @@
             }
 
             if (isValid) {
-                Course.add(course).then(function (response, status) {
+                Course.add(course).then(function(response, status) {
                     // $mdToast.showSimple('Course is being synced with google presentation...');
                     var courseId = response.data.id;
-                    $state.go('proposed-join', {id: courseId});
-                }, function (response, status) {
+                    $state.go('proposed-join', { id: courseId });
+                }, function(response, status) {
 
                     // console.log(response);
 
@@ -134,15 +134,17 @@
                         vm.errors['form'] = response.data.non_field_errors.join(', ');
                     }
 
-                    angular.forEach(response.data, function (errors, field_name) {
+                    angular.forEach(response.data, function(errors, field_name) {
                         //Field level errors
                         var field = $scope.form[field_name];
-                        field.$setValidity('backend', false);
-                        field.$dirty = true;
-                        vm.errors[field_name] = errors.join(', ');
+                        if (field) {
+                            field.$setValidity('backend', false);
+                            field.$dirty = true;
+                            vm.errors[field_name] = errors.join(', ');
+                        }
                     });
 
-                }).finally(function () {
+                }).finally(function() {
                     vm.pending = false;
                 });
             }
