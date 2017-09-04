@@ -106,8 +106,12 @@
 
         function hasError(field_name) {
             var field = $scope.form[field_name];
-            return field && (field.$touched || vm.submitted) && field.$invalid;
-
+            
+            if(field){
+                return field && (field.$touched || vm.submitted) && field.$invalid;
+            }else{
+                return false;
+            }
         }
 
         function submit(isValid) {
@@ -137,11 +141,13 @@
                     angular.forEach(response.data, function(errors, field_name) {
                         //Field level errors
                         var field = $scope.form[field_name];
+
                         if (field) {
                             field.$setValidity('backend', false);
                             field.$dirty = true;
-                            vm.errors[field_name] = errors.join(', ');
                         }
+
+                        vm.errors[field_name] = errors.join(', ');
                     });
 
                 }).finally(function() {
