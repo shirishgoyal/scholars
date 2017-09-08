@@ -1,4 +1,4 @@
-(function () {
+(function() {
     'use strict';
 
     angular.module('BlurAdmin.pages.courses')
@@ -8,12 +8,11 @@
     function PhaseCtrl($scope, $state, $stateParams, $log, $sce, lodash, gTemplates, Auth, Course, Slide, course) {
         var vm = this;
 
-        $scope.trustSrc = function (src) {
+        $scope.trustSrc = function(src) {
             return $sce.trustAsResourceUrl(src);
         };
 
-        vm.phases = [
-            {
+        vm.phases = [{
                 index: 1,
                 name: 'Reading',
                 duration: 5,
@@ -53,7 +52,7 @@
                 state: 'talk.peer_review',
                 prevCompletionDate: 'slides_at',
                 currCompletionDate: 'peer_review_at',
-                reviewStage:1
+                reviewStage: 1
             },
             {
                 index: 5,
@@ -74,7 +73,7 @@
                 state: 'talk.refine',
                 prevCompletionDate: 'audio_at',
                 currCompletionDate: 'refine_at',
-                reviewStage:2
+                reviewStage: 2
             },
             {
                 index: 7,
@@ -89,7 +88,7 @@
         ];
 
         var currentPhase = lodash
-            .find(vm.phases, function (phase) {
+            .find(vm.phases, function(phase) {
                 return phase.state === $state.current.name;
             });
         if (currentPhase) currentPhase.isCurrent = true;
@@ -98,7 +97,7 @@
         vm.course = course;
 
         vm.course.pdf_url = 'https://docs.google.com/gview?url=' + vm.course.pdf + '&embedded=true';
-        vm.course.questionnaire_url = 'http://docs.google.com/document/d/' + vm.course.qid + '/edit?embedded=true';
+        vm.course.questionnaire_url = 'https://docs.google.com/document/d/' + vm.course.qid + '/edit?embedded=true';
         vm.course.best_practices_url = 'https://drive.google.com/open?id=' + gTemplates.BEST_PRACTICES_TEMPLATE;
         vm.course.getting_started_url = 'https://drive.google.com/open?id=' + gTemplates.WORKFLOW_TEMPLATE;
         vm.course.presentation_url = 'https://docs.google.com/presentation/d/' + vm.course.gid + '/preview?start=false&loop=false';
@@ -106,12 +105,12 @@
 
         vm.review = {
             feedback: null,
-            stage:vm.currentPhase.reviewStage
+            stage: vm.currentPhase.reviewStage
         };
 
 
         // calculate time deadlines
-        lodash.map(vm.phases, function (phase) {
+        lodash.map(vm.phases, function(phase) {
             var expectedPhaseAt = moment(vm.course['in_progress_at']).days(phase['cumDuration']);
 
             if (vm.course[phase['currCompletionDate']]) {
@@ -130,13 +129,13 @@
         vm.canPrevious = currentPhase.name !== 'Reading';
         vm.canNext = currentPhase.name !== 'Publish';
 
-        $scope.$watch(function ($scope) {
+        $scope.$watch(function($scope) {
             return vm.course !== null ? vm.activeSlideIndex : null;
-        }, function (newVal, oldVal) {
+        }, function(newVal, oldVal) {
             if (newVal !== null && newVal !== oldVal && vm.course !== null && vm.course.hasOwnProperty('slides') && vm.course.slides) {
-                if(vm.course.hasOwnProperty('slides')){
+                if (vm.course.hasOwnProperty('slides')) {
                     vm.activeSlide = vm.course.slides[vm.activeSlideIndex];
-                    if(vm.activeSlide && vm.activeSlide.hasOwnProperty('notes') && vm.activeSlide.notes){
+                    if (vm.activeSlide && vm.activeSlide.hasOwnProperty('notes') && vm.activeSlide.notes) {
                         vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
                     }
                 }
@@ -144,39 +143,39 @@
         });
 
         vm.activeSlideIndex = 0;
-        if(vm.course.hasOwnProperty('slides')){
+        if (vm.course.hasOwnProperty('slides')) {
             vm.activeSlide = vm.course.slides[vm.activeSlideIndex];
-            if(vm.activeSlide && vm.activeSlide.hasOwnProperty('notes') && vm.activeSlide.notes){
+            if (vm.activeSlide && vm.activeSlide.hasOwnProperty('notes') && vm.activeSlide.notes) {
                 vm.activeSlide.notes = vm.activeSlide.notes.split("\n").join("<br \>");
             }
         }
 
-        Auth.getAccount().then(function (response) {
+        Auth.getAccount().then(function(response) {
             vm.user = response.data;
 
-            vm.is_dri = lodash.filter(vm.course.members, function (member) {
+            vm.is_dri = lodash.filter(vm.course.members, function(member) {
                 return member.member === vm.user.id && member.is_dri;
             }).length > 0;
 
         });
 
-        vm.gotoPhase = function (talk) {
-            var phase = vm.phases.find(function (phase) {
+        vm.gotoPhase = function(talk) {
+            var phase = vm.phases.find(function(phase) {
                 return phase.index === talk.phase;
             });
-            $state.go(phase.state, {id: talk.id});
+            $state.go(phase.state, { id: talk.id });
         };
 
-        vm.movePrevious = function () {
+        vm.movePrevious = function() {
             Course.rejectPhase(vm.course.id, vm.course.phase)
-                .then(function (response) {
+                .then(function(response) {
                     vm.gotoPhase(response.data)
                 });
         };
 
-        vm.moveNext = function () {
+        vm.moveNext = function() {
             Course.approvePhase(vm.course.id, vm.course.phase)
-                .then(function (response) {
+                .then(function(response) {
                     vm.gotoPhase(response.data)
                 });
         };
@@ -184,7 +183,7 @@
 
         // ============================================================================================================
         // audio interface functions
-        vm.back = function (position) {
+        vm.back = function(position) {
             if ((vm.activeSlideIndex - position) <= 0) {
                 vm.activeSlideIndex = 0;
             } else {
@@ -192,7 +191,7 @@
             }
         };
 
-        vm.forward = function (position) {
+        vm.forward = function(position) {
             if ((vm.activeSlideIndex + position) >= (vm.course.slides.length - 1)) {
                 vm.activeSlideIndex = vm.course.slides.length - 1;
             } else {
@@ -200,30 +199,30 @@
             }
         };
 
-        vm.assign = function () {
+        vm.assign = function() {
             Slide.assign(vm.activeSlide.id, vm.course.id)
-                .then(function (response) {
+                .then(function(response) {
                     updateSlide(response);
                 });
         };
 
-        vm.release = function () {
+        vm.release = function() {
             Slide.release(vm.activeSlide.id, vm.course.id)
-                .then(function (response) {
+                .then(function(response) {
                     updateSlide(response);
                 });
         };
 
-        vm.approve = function () {
+        vm.approve = function() {
             Slide.approve(vm.activeSlide.id, vm.course.id)
-                .then(function (response) {
+                .then(function(response) {
                     updateSlide(response);
                 });
         };
 
-        vm.reject = function () {
+        vm.reject = function() {
             Slide.reject(vm.activeSlide.id, vm.course.id)
-                .then(function (response) {
+                .then(function(response) {
                     updateSlide(response);
                 });
         };
@@ -235,17 +234,17 @@
             return blob;
         }
 
-        vm.updateAudio = function (recorder) {
+        vm.updateAudio = function(recorder) {
             vm.audio = blobToFile(recorder.audioModel, vm.activeSlideIndex + ".mp3");
         };
 
-        vm.submit = function () {
+        vm.submit = function() {
             vm.upload(vm.audio);
         };
 
-        vm.upload = function (file) {
+        vm.upload = function(file) {
             Slide.update(vm.activeSlide.id, vm.course.id, file)
-                .then(function (response) {
+                .then(function(response) {
                     updateSlide(response);
                 });
 
@@ -261,16 +260,16 @@
             vm.course.slides[vm.activeSlideIndex] = response.data;
         }
 
-        vm.submitFeedback = function () {
+        vm.submitFeedback = function() {
             Slide.submitFeedback(vm.activeSlide.id, vm.review)
-                .then(function (response) {
+                .then(function(response) {
                     vm.activeSlide.reviews.push(response.data)
                 });
         };
 
-        vm.toggleFeedback = function(review){
+        vm.toggleFeedback = function(review) {
             Slide.updateFeedbackStatus(review.id, review.status)
-                .then(function (response) {
+                .then(function(response) {
 
                 });
         }
