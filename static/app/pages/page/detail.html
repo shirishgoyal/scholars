@@ -93,27 +93,27 @@
         </div>
       </div>
 
-      <!--<div class="jumbotron-flat">-->
-        <!--<h3 style="font-weight: 400;line-height: 32px;">Production Team</h3>-->
+      <div class="jumbotron-flat">
+        <h3 style="font-weight: 400;line-height: 32px;">Production Team</h3>
 
-        <!--<p ng-if="vm.paper.scripting.length>0"><span style="font-weight: 400">Presentation:</span> <span-->
-          <!--style="font-weight: 300"-->
-          <!--ng-repeat="user in vm.paper.scripting">-->
-        <!--{{user}} {{$last ? '' : ($index==vm.paper.scripting.length-2) ? ' and ' : ', '}}</span></p>-->
+        <p ng-if="vm.paper.scripting_team.length>0"><span style="font-weight: 500">Presentation:</span> <span
+          style="font-weight: 300"
+          ng-repeat="user in vm.paper.scripting_team">
+        {{user}} {{$last ? '' : ($index==vm.paper.scripting_team.length-2) ? ' and ' : ', '}}</span></p>
 
-        <!--<p ng-if="vm.paper.audio.length>0"><span style="font-weight: 400">Audio:</span> <span-->
-          <!--style="font-weight: 300" ng-repeat="user in vm.paper.audio">-->
-        <!--{{user}} {{$last ? '' : ($index==vm.paper.audio.length-2) ? ' and ' : ', '}}</span></p>-->
+        <p ng-if="vm.paper.audio_team.length>0"><span style="font-weight: 500">Audio:</span> <span
+          style="font-weight: 300" ng-repeat="user in vm.paper.audio_team">
+        {{user}} {{$last ? '' : ($index==vm.paper.audio_team.length-2) ? ' and ' : ', '}}</span></p>
 
-        <!--<p><span style="font-weight: 400">DRIs:</span> <span style="font-weight: 300"-->
-                                                             <!--ng-repeat="user in vm.paper.dri">-->
-        <!--{{user}} {{$last ? '' : ($index==vm.paper.dri.length-2) ? ' and ' : ', '}}</span></p>-->
+        <p><span style="font-weight: 500">DRIs:</span> <span style="font-weight: 300"
+                                                             ng-repeat="user in vm.paper.dri_team">
+        {{user}} {{$last ? '' : ($index==vm.paper.dri_team.length-2) ? ' and ' : ', '}}</span></p>
 
-        <!--<p ng-if="vm.paper.super_dri.length>0"><strong>Super DRI Team:</strong> <span-->
-        <!--ng-repeat="user in vm.paper.super_dri">{{user}} {{$last ? '' : ($index==vm.paper.super_dri.length-2) ? ' and ' : ', '}}</span>-->
-        <!--</p>-->
+        <p ng-if="vm.paper.super_dri_team.length>0"><span style="font-weight: 500">Super DRI Team:</span> <span
+        ng-repeat="user in vm.paper.super_dri_team">{{user}} {{$last ? '' : ($index==vm.paper.super_dri_team.length-2) ? ' and ' : ', '}}</span>
+        </p>
 
-      <!--</div>-->
+      </div>
 
 
       <div class="jumbotron-flat">

@@ -2085,19 +2085,33 @@
             }
         ];
 
-        vm.papers = lodash.map(vm.papers, function (paper) {
-            paper.image = 'https://i.ytimg.com/vi/' + paper.yid + '/maxresdefault.jpg';
-            return paper;
-        });
-
-        // vm.paper = lodash.find(vm.papers, function (paper) {
-        //     return paper.id === parseInt($stateParams.id);
+        // vm.papers = lodash.map(vm.papers, function (paper) {
+        //     paper.image = 'https://i.ytimg.com/vi/' + paper.yid + '/maxresdefault.jpg';
+        //     return paper;
         // });
-        //
+
+
         Course.get($stateParams.id).then(function (response, status) {
             vm.paper = response.data;
             vm.paper.image = 'https://i.ytimg.com/vi/' + vm.paper.yid + '/maxresdefault.jpg';
             vm.paper.video = 'https://youtu.be/' + vm.paper.yid + '/';
+
+            vm.old_paper = lodash.find(vm.papers, function (paper) {
+                return paper.id === parseInt($stateParams.id);
+            });
+
+            if (vm.old_paper) {
+                vm.paper.scripting_team = vm.old_paper.scripting;
+                vm.paper.audio_team = vm.old_paper.audio;
+                vm.paper.dri_team = vm.old_paper.dri;
+                vm.paper.super_dri_team = vm.old_paper.super_dri;
+            } else {
+                // todo : bring data from member roles
+                vm.paper.scripting_team = [];
+                vm.paper.audio_team = [];
+                vm.paper.dri_team = [];
+                vm.paper.super_dri_team = [];
+            }
         });
 
         Course.listRelated($stateParams.id).then(function (response, status) {
