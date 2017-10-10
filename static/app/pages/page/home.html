@@ -45,7 +45,7 @@
 
             <img ng-src="{{paper.image}}" style="width: 100%;height:auto;margin-bottom: 8px"
                  ui-sref="page.talk({id:paper.id})">
-            <h3 style="font-weight: 400;min-height: 44px;" ui-sref="page.talk({id:paper.id})"><a><span
+            <h3 style="font-weight: 400;min-height: 44px;"><a ui-sref="page.talk({id:paper.id})"><span
               ng-text-truncate="paper.name"
               ng-tt-chars-threshold="60"></span></a></h3>
 
