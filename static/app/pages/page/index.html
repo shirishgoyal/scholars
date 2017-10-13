@@ -65,13 +65,17 @@
                           <ul class="nav navbar-nav pull-right" aria-label="primary navigation">
                             <li>
                               <button class="btn btn-primary" style="margin-top: 30px;margin-right:10px"
-                                      ui-sref="page.join">Join the community
+                                      ui-sref="page.join">Join us
                               </button>
                             </li>
-                            <li>
-                              <button class="btn btn-primary" style="margin-top: 30px"
-                                      ui-sref="proposed">Sign-in
+                            <li ng-show="vm.isAuthenticated">
+                              <button class="btn btn-primary" style="margin-top: 30px; margin-right:10px"
+                                      ui-sref="in_progress">Participate
                               </button>
+                            </li>
+                            <li ng-show="!vm.isAuthenticated">
+                              <a class="google-signin" style="margin-top: 28px;"
+                                      ng-click="vm.signin()">&nbsp;</a>
                             </li>
                           </ul>
                         </div>

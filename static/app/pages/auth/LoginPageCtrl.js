@@ -15,44 +15,33 @@
         vm.account = {};
         vm.submitted = false;
         vm.errors = {};
+        vm.isAuthenticated = Auth.isAuthenticated();
 
         vm.signin = signin;
-        // vm.has_error = has_error;
-        //
-        // function has_error(field_name) {
-        //     var field = $scope.form[field_name];
-        //     return (field.$touched || vm.submitted) && field.$invalid;
-        // }
+
 
         function signin(isValid) {
             vm.submitted = true;
 
             // if (isValid) {
                 Auth.login().then(function (response) {
-                    $state.go('proposed');
+                    $state.go('in_progress');
                 }, function (error) {
 
                     toastr.error('Authentication failed!', 'Error');
-
-                    // console.log(error);
-                    // if (response.data.hasOwnProperty('non_field_errors')) {
-                    //     $scope.form.$setValidity('form', false);
-                    //     vm.errors['form'] = response.data.non_field_errors.join(', ');
-                    // }
-                    //
-                    // angular.forEach(response.data.errors, function (errors, field_name) {
-                    //     //Field level errors
-                    //     var field = $scope.form[field_name];
-                    //     field.$setValidity('backend', false);
-                    //     field.$dirty = true;
-                    //     vm.errors[field_name] = errors.join(', ');
-                    // });
 
                 }).finally(function () {
 
                 });
             // }
         }
+
+        // vm.has_error = has_error;
+        //
+        // function has_error(field_name) {
+        //     var field = $scope.form[field_name];
+        //     return (field.$touched || vm.submitted) && field.$invalid;
+        // }
     }
 
 })();

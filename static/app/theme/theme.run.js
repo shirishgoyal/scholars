@@ -43,20 +43,24 @@
 
         $rootScope.$on("$stateChangeStart",
             function (event, toState, toParams, fromState, fromParams) {
+                // console.log(toState);
+
                 if(!toState.hasOwnProperty('authenticate')){
                     toState.authenticate = false;
                 }
 
                 if (toState.authenticate && !Auth.isAuthenticated()) {
                     event.preventDefault();
-                    $state.go('auth.login');
-                } else {
-                    //check if login page and already logged in
-                    if ((toState.name === 'auth.login' || toState.name === 'auth.register' ) && Auth.isAuthenticated()) {
-                        event.preventDefault();
-                        $state.go('proposed');
-                    }
+                    $state.go('page.home');
                 }
+
+                // else {
+                //     //check if login page and already logged in
+                //     // if ((toState.name === 'auth.login' || toState.name === 'auth.register' ) && Auth.isAuthenticated()) {
+                //     //     event.preventDefault();
+                //     //     $state.go('proposed');
+                //     // }
+                // }
             }
         );
     }

@@ -37,7 +37,7 @@
 
         function logout() {
             $auth.logout();
-            $state.go('auth.login');
+            $state.go('page.home');
         }
 
         function unauthenticate() {

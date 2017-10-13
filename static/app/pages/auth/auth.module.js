@@ -30,12 +30,12 @@
             //     controller: 'RegisterPageCtrl',
             //     controllerAs: 'vm'
             // })
-            .state('auth.login', {
-                url: '/login',
-                templateUrl: 'static/app/pages/auth/login.html',
-                controller: 'LoginPageCtrl',
-                controllerAs: 'vm'
-            })
+            // .state('auth.login', {
+            //     url: '/login',
+            //     templateUrl: 'static/app/pages/auth/login.html',
+            //     controller: 'LoginPageCtrl',
+            //     controllerAs: 'vm'
+            // })
         ;
     }
 

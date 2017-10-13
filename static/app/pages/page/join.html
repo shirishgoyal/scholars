@@ -26,7 +26,12 @@
         Stanford Scholar Team</a>. And please spread the word. Let's make it big!
       </p>
 
-      <p style="text-align: center"><a class="btn btn-primary" ui-sref="proposed">Sign-in now</a></p>
+      <p style="text-align: center">
+        <button class="btn btn-primary" ng-show="vm.isAuthenticated"
+                ui-sref="in_progress">Participate
+        </button>
+
+        <a class="google-signin" ng-click="vm.signin()" ng-show="!vm.isAuthenticated">&nbsp;</a></p>
 
     </div>
     <!--  End #main-content (Center) -->

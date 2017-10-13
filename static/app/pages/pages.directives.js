@@ -73,7 +73,6 @@
             };
         })
 
-
         .factory("CharBasedTruncation", ["$compile", function ($compile) {
             return {
                 truncationApplies: function ($scope, threshold) {
@@ -108,7 +107,6 @@
                 }
             };
         }])
-
 
         .factory("WordBasedTruncation", ["$compile", function ($compile) {
             return {

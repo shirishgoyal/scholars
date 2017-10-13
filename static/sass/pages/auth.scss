@@ -9,15 +9,15 @@ $text-color: #ffffff;
     height: 100%;
     width: 100%;
 
-    .google-signin {
-        background: url($images-root + 'btn_google_signin.png') no-repeat 0 0;
-        width: 250px;
-        height:92px;
-        display: block;
-        margin: 0 auto;
-        background-size: contain;
-        cursor: pointer;
-    }
+    //.google-signin {
+    //    background: url($images-root + 'btn_google_signin.png') no-repeat 0 0;
+    //    width: 250px;
+    //    height:92px;
+    //    display: block;
+    //    margin: 0 auto;
+    //    background-size: contain;
+    //    cursor: pointer;
+    //}
 
     .form-control, .form-control:focus {
         @include placeholderStyle($text-color, 0.5);

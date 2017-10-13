@@ -6,11 +6,31 @@
   margin-bottom: 0;
 }
 
+a.google-signin {
+  background: url(/static/img/btn_google_signin.png) no-repeat 0 0;
+  width: 250px;
+  height: 60px;
+  display: block;
+  margin: 0 auto;
+  background-size: contain;
+  cursor: pointer;
+}
+
 .navbar-default .navbar-nav > li > a {
   color: white;
 
   &:hover {
     color: #8c1515;
+  }
+
+  &.google-signin {
+    background: url(/static/img/btn_google_signin.png) no-repeat 0 0;
+    width: 149px;
+    height: 36px;
+    display: block;
+    margin: 0 auto;
+    background-size: contain;
+    cursor: pointer;
   }
 }
 
@@ -358,8 +378,8 @@ audio {
   .panel-body {
     padding: 15px 15px;
 
-    h2{
-      margin:0px 0px 20px;
+    h2 {
+      margin: 0px 0px 20px;
     }
   }
 
@@ -597,7 +617,8 @@ $jumbotron-font-size: 16px;
   text-shadow: 1px 0px white;
 }
 
-.strike-through{
-  text-decoration:line-through;
+.strike-through {
+  text-decoration: line-through;
 }
+
 

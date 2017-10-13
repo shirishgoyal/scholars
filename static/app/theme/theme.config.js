@@ -22,8 +22,8 @@
         $compileProvider.imgSrcSanitizationWhitelist(/^\s*(https?|local|data|chrome-extension):/);
 
         $authProvider.baseUrl = '/';
-        $authProvider.loginUrl = '/auth/login';
-        $authProvider.signupUrl = '/auth/login';
+        $authProvider.loginUrl = '/';
+        $authProvider.signupUrl = '/';
         // $authProvider.unlinkUrl = '/auth/unlink/';
         $authProvider.tokenName = 'token';
         $authProvider.tokenPrefix = 'scholars';

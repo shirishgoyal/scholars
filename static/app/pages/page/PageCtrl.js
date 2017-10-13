@@ -5,13 +5,27 @@
         .controller('PageCtrl', PageCtrl);
 
     /** @ngInject */
-    function PageCtrl($scope, $state, $log, lodash, Auth, Course) {
+    function PageCtrl($scope, $state, $log, lodash, toastr, Auth, Course) {
         var vm = this;
 
         vm.account = {};
         vm.isAuthenticated = Auth.isAuthenticated();
         vm.submitted = false;
         vm.errors = {};
+
+        vm.signin = function () {
+            vm.submitted = true;
+
+            Auth.login().then(function (response) {
+                $state.go('proposed');
+            }, function (error) {
+                toastr.error('Authentication failed!', 'Error');
+
+            }).finally(function () {
+                vm.submitted = false;
+            });
+
+        };
 
         // vm.has_error = has_error;
 
@@ -30,7 +44,7 @@
             autoplay: false,
             arrows: true,
             // mobileFirst: true,
-            respondTo:'window',
+            respondTo: 'window',
 
             responsive: [
                 {
@@ -2183,7 +2197,7 @@
                     .map(response.data.results, function (paper) {
                         paper.image = 'https://i.ytimg.com/vi/' + paper.yid + '/maxresdefault.jpg';
 
-                        if (['Programming Languages', 'Databases', 'Computer Vision', 'Cryptography'].indexOf(paper.category_display)>=0){
+                        if (['Programming Languages', 'Databases', 'Computer Vision', 'Cryptography'].indexOf(paper.category_display) >= 0) {
                             paper.category_display = 'Others'
                         }
 

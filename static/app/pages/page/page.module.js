@@ -16,9 +16,12 @@
                 abstract: true,
                 views: {
                     'full_screen': {
-                        templateUrl: 'static/app/pages/page/index.html'
+                        templateUrl: 'static/app/pages/page/index.html',
+                        controller: 'LoginPageCtrl',
+                        controllerAs: 'vm',
                     }
                 },
+
                 authenticate: false
             })
             .state('page.home', {

@@ -20,6 +20,7 @@
                 var vm = this;
 
                 vm.is_logged_in = Auth.isAuthenticated();
+
                 Auth.getAccount().then(function(response) {
                     vm.account = response.data;
                     if (vm.account.hasOwnProperty('avatar') && vm.account.avatar) {
@@ -29,7 +30,7 @@
 
                 vm.logout = function() {
                     Auth.logout();
-                    $state.go('auth.login');
+                    $state.go('page.home');
                 }
             },
             controllerAs: 'vm'
