@@ -45,9 +45,16 @@
               target="_blank" class="btn btn-outline-danger btn-block"><i class="fa fa-star"></i> Best Practices
       </a>
     </div>
+  </div>
+  <div class="btn-group" role="group" aria-label="...">
     <div class="btn-group" role="group" ng-if="currentPhase.index>=2">
       <a ng-href="{{course.pdf_url}}"
               target="_blank" class="btn btn-outline-danger btn-block"><i class="fa fa-file-text"></i> Research Paper
+      </a>
+    </div>
+    <div class="btn-group" role="group" ng-if="currentPhase.index>=2">
+      <a ng-href="{{course.questionnaire_url}}"
+              target="_blank" class="btn btn-outline-danger btn-block"><i class="fa fa-file-text"></i> Questionnaire
       </a>
     </div>
     <div class="btn-group" role="group" ng-if="currentPhase.index>=4">
@@ -57,7 +64,7 @@
     </div>
     <div class="btn-group" role="group">
       <a ng-href="{{trustSrc(course.slack_url)}}"
-              target="_blank" class="btn btn-outline-warning btn-block"><i class="fa fa-slack"></i> Discuss on Slack
+              target="_blank" class="btn btn-outline-danger btn-block"><i class="fa fa-slack"></i> Discuss on Slack
       </a>
     </div>
   </div>
